@@ -25,7 +25,20 @@ class AlphaBetaAgent(agent.Agent):
     # NOTE: make sure the column is legal, or you'll lose the game.
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
-        # Your code here
+
+        possible_moves = self.get_successors(brd)
+        max_node = float("-inf") # negative infinity 
+        best_state = None
+        dic = {}
+        for state in possible_moves:
+            #found_min_node = find_min_node()
+            found_min_node = 1
+            if found_min_node > max_node:
+                max_node = found_min_node
+                best_state = state
+            
+        next_move = best_state[1]
+        return next_move
 
     # Get the successors of the given board.
     #
