@@ -31,6 +31,7 @@ class AlphaBetaAgent(agent.Agent):
 
         for i in range(0, self.max_depth, 1):
         	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
+        	print(move_score)
 
         	if move_score >= float('inf'):
         		return 1 
@@ -59,7 +60,7 @@ class AlphaBetaAgent(agent.Agent):
     	max_board = None 
 
     	if self.__terminal_test(depth):
-    		return brd, 1
+    		return brd, self.__heuristic(brd)
     		
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
@@ -87,7 +88,7 @@ class AlphaBetaAgent(agent.Agent):
     	min_board = None 
 
     	if self.__terminal_test(depth):
-    		return brd, 1
+            return brd, self.__heuristic(brd)
 
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__max_value(state[0], depth-1, alpha, beta)
@@ -108,7 +109,6 @@ class AlphaBetaAgent(agent.Agent):
     def __terminal_test(self, depth):
     	if depth == 0:
     		return True
->>>>>>> cf73bdbd21511fc8017443a6cb17445b7e1f6b3a
 
     # Get the successors of the given board.
     #
@@ -135,6 +135,12 @@ class AlphaBetaAgent(agent.Agent):
             succ.append((nb,col))
         return succ
 
+    # TODO: 
+    # 1) Check if there is a block
+    # 2) Subtract value on a block (e.g. is there a player? Is there a hole in a sequence?)
+    # 3) Add value if there is a hole
+    # 4) Find best heuristic equation to use
+
     # ---------------------------------------------------------------------------------
     ##
     # @Brief calculates the heuristic value of the board
@@ -149,25 +155,34 @@ class AlphaBetaAgent(agent.Agent):
         # Square: n^2 -> 1: 1 | 2: 4
 
         player = brd.player
+        value = 0
 
         for width in range(brd.w):
             for height in range(brd.h):
                 
-                token = brd.board[width][height]
+                if width >= brd.w - 1 or height >= brd.h - 1:
+                    continue
 
+                token = brd.board[width][height]
                 # if checking player
                 if token == player:
+                    diagNeg = self.__countDiagonalNeg(brd, width, height)
+                    diagPos = self.__countDiagonalPos(brd, width, height)
+                    vert = self.__countVertical(brd, width, height)
+                    hor = self.__countHorizontal(brd, width, height)
 
-                    for vertical in range(brd.n):
+                    if diagNeg > value:
+                        value = diagNeg
+                    if diagPos > value:
+                        value = diagPos
+                    if vert > value:
+                        value = vert
+                    if hor > value:
+                        value = hor
 
-                    for horizontal in range(brd.n):
+        return value
 
-                    for diagonalPos in range(brd.n):
-
-                    for diagonalNeg in range(brd.n):
-
-
-    def __diagonalNeg(self, brd, x, y):
+    def __countDiagonalNeg(self, brd, x, y):
         
         points = 0
         duplicates = 1
@@ -178,7 +193,7 @@ class AlphaBetaAgent(agent.Agent):
             xPos = x + diag
             yPos = y - diag
 
-            if xPos >= brd.w - 1 and yPos < 0:
+            if xPos >= brd.w - 1 or yPos < 0:
                 break
             
             token = brd.board[xPos][yPos]
@@ -189,7 +204,7 @@ class AlphaBetaAgent(agent.Agent):
         return points
 
 
-    def __diagonalPos(self, brd, x, y):
+    def __countDiagonalPos(self, brd, x, y):
         
         points = 0
         duplicates = 1
@@ -200,10 +215,10 @@ class AlphaBetaAgent(agent.Agent):
             xPos = x + diag
             yPos = y + diag
 
-            if xPos >= brd.w - 1 and yPos >= brd.h - 1:
+            if xPos >= brd.w - 1 or yPos >= brd.h - 1:
                 break
             
-            token = brd.board[x+diag][y+diag]
+            token = brd.board[xPos][yPos]
             if token == player:
                 points += 2 * duplicates
                 duplicates += 1
@@ -217,10 +232,12 @@ class AlphaBetaAgent(agent.Agent):
         player = brd.player
 
         for vert in range(brd.n):
-            if vert >= brd.h - 1:
+
+            yPos = y + vert
+            if yPos >= brd.h - 1:
                 break
             
-            token = brd.board[x][y+vert]
+            token = brd.board[x][yPos]
             if token == player:
                 points += 2 * duplicates
                 duplicates += 1
@@ -233,10 +250,11 @@ class AlphaBetaAgent(agent.Agent):
         player = brd.player
 
         for hor in range(brd.n):
-            if hor >= brd.w - 1:
+            xPos = x + hor
+            if xPos >= brd.w - 1:
                 break
             
-            token = brd.board[x+hori][y]
+            token = brd.board[xPos][y]
             if token == player:
                 points += 2 * duplicates
                 duplicates += 1
