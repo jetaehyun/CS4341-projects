@@ -160,16 +160,13 @@ class AlphaBetaAgent(agent.Agent):
         for width in range(brd.w):
             for height in range(brd.h):
                 
-                if width >= brd.w - 1 or height >= brd.h - 1:
-                    continue
-
                 token = brd.board[width][height]
-                # if checking player
+                # check correct player
                 if token == player:
-                    diagNeg = self.__countDiagonalNeg(brd, width, height)
-                    diagPos = self.__countDiagonalPos(brd, width, height)
-                    vert = self.__countVertical(brd, width, height)
-                    hor = self.__countHorizontal(brd, width, height)
+                    diagNeg = self.__calcTokens(brd, width, height, 1, -1)
+                    diagPos = self.__calcTokens(brd, width, height, 1, 1)
+                    vert = self.__calcTokens(brd, width, height, 0, 1)
+                    hor = self.__calcTokens(brd, width, height, 1, 0)
 
                     if diagNeg > value:
                         value = diagNeg
@@ -182,102 +179,22 @@ class AlphaBetaAgent(agent.Agent):
 
         return value
 
-    def __countDiagonalNeg(self, brd, x, y):
-        
-        points = 0
-        duplicates = 1
+    def __calcTokens(self, brd, x, y, dx, dy):
+        points, duplicates = 0, 1
         player = brd.player
 
-        for diag in range(brd.n):
-            
-            xPos = x + diag
-            yPos = y - diag
+        for direction in range(brd.n):
+            xPos = x + (direction * dx)
+            yPos = y + (direction * dy)
 
-            if xPos >= brd.w - 1 or yPos < 0:
+            if xPos >= brd.w - 1 or yPos >= brd.h - 1 or yPos < 0:
                 break
-            
+
             token = brd.board[xPos][yPos]
+
             if token == player:
                 points += 2 * duplicates
                 duplicates += 1
 
         return points
-
-
-    def __countDiagonalPos(self, brd, x, y):
-        
-        points = 0
-        duplicates = 1
-        player = brd.player
-
-        for diag in range(brd.n):
-
-            xPos = x + diag
-            yPos = y + diag
-
-            if xPos >= brd.w - 1 or yPos >= brd.h - 1:
-                break
-            
-            token = brd.board[xPos][yPos]
-            if token == player:
-                points += 2 * duplicates
-                duplicates += 1
-
-        return points
-
-    def __countVertical(self, brd, x, y):
-        
-        points = 0
-        duplicates = 1
-        player = brd.player
-
-        for vert in range(brd.n):
-
-            yPos = y + vert
-            if yPos >= brd.h - 1:
-                break
-            
-            token = brd.board[x][yPos]
-            if token == player:
-                points += 2 * duplicates
-                duplicates += 1
-
-        return points
-
-    def __countHorizontal(self, brd, x, y):
-        points = 0
-        duplicates = 1
-        player = brd.player
-
-        for hor in range(brd.n):
-            xPos = x + hor
-            if xPos >= brd.w - 1:
-                break
-            
-            token = brd.board[xPos][y]
-            if token == player:
-                points += 2 * duplicates
-                duplicates += 1
-
-        return points
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
