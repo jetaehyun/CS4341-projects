@@ -26,19 +26,88 @@ class AlphaBetaAgent(agent.Agent):
     def go(self, brd):
         """Search for the best move (choice of column for the token)"""
 
-        possible_moves = self.get_successors(brd)
-        max_node = float("-inf") # negative infinity 
-        best_state = None
-        dic = {}
-        for state in possible_moves:
-            #found_min_node = find_min_node()
-            found_min_node = 1
-            if found_min_node > max_node:
-                max_node = found_min_node
-                best_state = state
-            
-        next_move = best_state[1]
-        return next_move
+        best_move_score = 0
+        best_state = (None, None)
+
+        for i in range(0, self.max_depth, 1):
+        	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
+
+        	if move_score >= float('inf'):
+        		return 1 
+
+        	elif move_score <= float('-inf'):
+        		return 1 
+
+
+        	if move_score > best_move_score:
+        		best_move_score = move_score
+        		best_state = board 
+
+        	else:
+        		best_state = board 
+
+        return best_state
+
+    # Find the board state that has the maximum value 
+    #
+    # PARAM [board.Board] successor_states: the successor board 
+    # PARAM [int] my_depth: the current depth where this function is called
+    # PARAM [int] alpha: the current alpha value
+    # PARAM [int] beta: the current beta value
+    def __max_value(self, brd, depth, alpha, beta):
+    	max_move_score = float("-inf")
+    	max_board = None 
+
+    	if self.__terminal_test(depth):
+    		return brd, 1
+    		
+    	for state in self.get_successors(brd):
+    		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
+
+    		if move_score < max_move_score:
+    			max_move_score = move_score
+    			max_board = state 
+
+    		if move_score >= beta:
+    			break
+
+    		if move_score >= alpha:
+    			alpha = move_score
+
+    	return (max_board, max_move_score)
+
+    # Find the board state that has the minimum value 
+    #
+    # PARAM [board.Board] successor_states: the successor board 
+    # PARAM [int] my_depth: the current depth where this function is called
+    # PARAM [int] alpha: the current alpha value
+    # PARAM [int] beta: the current beta value
+    def __min_value(self, brd, depth, alpha, beta):
+    	min_move_score = float("inf")
+    	min_board = None 
+
+    	if self.__terminal_test(depth):
+    		return brd, 1
+
+    	for state in self.get_successors(brd):
+    		(board, move_score) = self.__max_value(state[0], depth-1, alpha, beta)
+
+    		if move_score < min_move_score:
+    			min_move_score = move_score
+    			min_board = state 
+
+    		if move_score <= alpha:
+    			break
+
+    		if move_score <= beta:
+    			beta = move_score
+
+    	return (min_board, min_move_score)
+
+
+    def __terminal_test(self, depth):
+    	if depth == 0:
+    		return True
 
     # Get the successors of the given board.
     #
