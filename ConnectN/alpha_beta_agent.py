@@ -169,13 +169,13 @@ class AlphaBetaAgent(agent.Agent):
                     hor = self.__calcTokens(brd, width, height, 1, 0)
 
                     if diagNeg > value:
-                        value = diagNeg
+                        value += diagNeg
                     if diagPos > value:
-                        value = diagPos
+                        value += diagPos
                     if vert > value:
-                        value = vert
+                        value += vert
                     if hor > value:
-                        value = hor
+                        value += hor
 
         return value
 
@@ -190,11 +190,13 @@ class AlphaBetaAgent(agent.Agent):
             if wPos >= brd.w - 1 or hPos >= brd.h - 1 or wPos < 0:
                 break
 
-            token = brd.board[hPos][wPos]
+            token = brd.board[hPos][wPos] # 0 - empty
 
-            if token == player:
+            if token == 0:
                 points += 2 * duplicates
                 duplicates += 1
+            else:
+                break
 
         return points
 
