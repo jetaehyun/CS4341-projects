@@ -32,6 +32,7 @@ class AlphaBetaAgent(agent.Agent):
 
         for i in range(0, self.max_depth, 1):
         	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
+        	print(move_score)
 
         	'''
         	if move_score >= float('inf'):
@@ -66,7 +67,7 @@ class AlphaBetaAgent(agent.Agent):
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
 
-    		if move_score < max_move_score:
+    		if move_score > max_move_score:
     			max_board, max_move_score = state, move_score
 
     		if move_score >= beta:
@@ -148,58 +149,71 @@ class AlphaBetaAgent(agent.Agent):
     #
     # @return value of board
     # ---------------------------------------------------------------------------------
+
     def __heuristic(self, brd):
         
         # linear: 2n  -> 1: 2 | 2: 4 
         # Square: n^2 -> 1: 1 | 2: 4
 
-        player = brd.player
-        value = 0
+        valuePlayer, valueEnemy = 0, 0
 
-        for width in range(brd.w):
-            for height in range(brd.h):
+        for height in range(brd.h):
+            for width in range(brd.w):
                 
+                value = 0
                 token = brd.board[height][width]
                 # check correct player
-                if token == player:
-                    diagNeg = self.__calcTokens(brd, width, height, 1, -1)
-                    diagPos = self.__calcTokens(brd, width, height, 1, 1)
-                    vert = self.__calcTokens(brd, width, height, 0, 1)
-                    hor = self.__calcTokens(brd, width, height, 1, 0)
+                diagNeg = self.__calcTokens(brd, token, width, height, 1, -1)
+                diagPos = self.__calcTokens(brd, token, width, height, 1, 1)
+                vert = self.__calcTokens(brd, token, width, height, 0, 1)
+                hor = self.__calcTokens(brd, token, width, height, 1, 0)
 
-                    if diagNeg > value:
-                        value += diagNeg
-                    if diagPos > value:
-                        value += diagPos
-                    if vert > value:
-                        value += vert
-                    if hor > value:
-                        value += hor
+                if diagNeg > value:
+                    value += diagNeg
+                if diagPos > value:
+                    value += diagPos
+                if vert > value:
+                    value += vert
+                if hor > value:
+                    value += hor
 
-        return value
+                if token == 0 or token == brd.player:
+                    valuePlayer += value
+                else:
+                    valueEnemy += value
+                    
+        #print(valuePlayer - valueEnemy)
+        return valuePlayer - valueEnemy
 
-    def __calcTokens(self, brd, width, height, dHeight, dWidth):
+    def __calcTokens(self, brd, playerPersp, width, height, dh, dw):
         points, duplicates = 0, 1
         player = brd.player
 
         for direction in range(brd.n):
-            wPos = width + (direction * dWidth)
-            hPos = height + (direction * dHeight)
+            wPos = width + (direction * dw)
+            hPos = height + (direction * dh)
 
             if wPos >= brd.w - 1 or hPos >= brd.h - 1 or wPos < 0:
                 break
 
-            token = brd.board[hPos][wPos] # 0 - empty
+            token = brd.board[hPos][wPos]
 
-            if token == 0:
-                points += 2 * duplicates
-                duplicates += 1
-            else:
-<<<<<<< HEAD
-                break
-=======
-            	break
->>>>>>> 4af17fde4e877aa5363eb39c84b9ae35b41c276b
+            if player == playerPersp: # gather points for the player we want to win
+                if token == player or token == 0:
+                    points += 2 * duplicates
+                    duplicates += 1
+                else:
+                    return -99999 # not possible to win
+            else: # gather points for enemy player
+                if token != player or token != 0:
+                    points += 2 * duplicates
+                    duplicates += 1
+                else:
+                    break
+
 
         return points
+
+
+
 
