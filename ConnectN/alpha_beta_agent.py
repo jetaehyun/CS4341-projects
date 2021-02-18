@@ -60,14 +60,13 @@ class AlphaBetaAgent(agent.Agent):
     	max_board = None 
 
     	if self.__terminal_test(depth):
-    		return brd, self.__heuristic(brd)
+    		return None, self.__heuristic(brd)
     		
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
 
     		if move_score < max_move_score:
-    			max_move_score = move_score
-    			max_board = state 
+    			max_board, max_move_score = state, move_score
 
     		if move_score >= beta:
     			break
@@ -88,14 +87,13 @@ class AlphaBetaAgent(agent.Agent):
     	min_board = None 
 
     	if self.__terminal_test(depth):
-            return brd, self.__heuristic(brd)
+            return None, self.__heuristic(brd)
 
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__max_value(state[0], depth-1, alpha, beta)
 
     		if move_score < min_move_score:
-    			min_move_score = move_score
-    			min_board = state 
+    			min_board, min_move_score = state, move_score
 
     		if move_score <= alpha:
     			break
