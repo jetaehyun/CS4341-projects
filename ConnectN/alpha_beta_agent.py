@@ -179,18 +179,18 @@ class AlphaBetaAgent(agent.Agent):
 
         return value
 
-    def __calcTokens(self, brd, x, y, dx, dy):
+    def __calcTokens(self, brd, width, height, dHeight, dWidth):
         points, duplicates = 0, 1
         player = brd.player
 
         for direction in range(brd.n):
-            xPos = x + (direction * dx)
-            yPos = y + (direction * dy)
+            wPos = width + (direction * dWidth)
+            hPos = height + (direction * dHeight)
 
-            if xPos >= brd.w - 1 or yPos >= brd.h - 1 or yPos < 0:
+            if wPos >= brd.w - 1 or hPos >= brd.h - 1 or wPos < 0:
                 break
 
-            token = brd.board[yPos][xPos]
+            token = brd.board[hPos][wPos]
 
             if token == player:
                 points += 2 * duplicates
