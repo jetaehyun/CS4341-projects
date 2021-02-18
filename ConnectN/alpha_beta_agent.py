@@ -27,18 +27,19 @@ class AlphaBetaAgent(agent.Agent):
         """Search for the best move (choice of column for the token)"""
 
         best_move_score = 0
+        # best_state = (board, token)
         best_state = (None, None)
 
         for i in range(0, self.max_depth, 1):
         	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
-        	print(move_score)
 
+        	'''
         	if move_score >= float('inf'):
         		return 1 
 
         	elif move_score <= float('-inf'):
         		return 1 
-
+        	'''
 
         	if move_score > best_move_score:
         		best_move_score = move_score
@@ -47,7 +48,7 @@ class AlphaBetaAgent(agent.Agent):
         	else:
         		best_state = board 
 
-        return best_state
+        return best_state[1]
 
     # Find the board state that has the maximum value 
     #
@@ -66,8 +67,7 @@ class AlphaBetaAgent(agent.Agent):
     		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
 
     		if move_score < max_move_score:
-    			max_move_score = move_score
-    			max_board = state 
+    			max_board, max_move_score = state, move_score
 
     		if move_score >= beta:
     			break
@@ -94,8 +94,7 @@ class AlphaBetaAgent(agent.Agent):
     		(board, move_score) = self.__max_value(state[0], depth-1, alpha, beta)
 
     		if move_score < min_move_score:
-    			min_move_score = move_score
-    			min_board = state 
+    			min_board, min_move_score = state, move_score
 
     		if move_score <= alpha:
     			break
@@ -196,7 +195,11 @@ class AlphaBetaAgent(agent.Agent):
                 points += 2 * duplicates
                 duplicates += 1
             else:
+<<<<<<< HEAD
                 break
+=======
+            	break
+>>>>>>> 4af17fde4e877aa5363eb39c84b9ae35b41c276b
 
         return points
 
