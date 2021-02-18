@@ -160,7 +160,7 @@ class AlphaBetaAgent(agent.Agent):
         for width in range(brd.w):
             for height in range(brd.h):
                 
-                token = brd.board[width][height]
+                token = brd.board[height][width]
                 # check correct player
                 if token == player:
                     diagNeg = self.__calcTokens(brd, width, height, 1, -1)
@@ -190,7 +190,7 @@ class AlphaBetaAgent(agent.Agent):
             if xPos >= brd.w - 1 or yPos >= brd.h - 1 or yPos < 0:
                 break
 
-            token = brd.board[xPos][yPos]
+            token = brd.board[yPos][xPos]
 
             if token == player:
                 points += 2 * duplicates
