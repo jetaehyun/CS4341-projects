@@ -199,8 +199,7 @@ class AlphaBetaAgent(agent.Agent):
                     if token == player:
                         points += 2 ** duplicates
                         duplicates += 1
-                        if(duplicates == brd.n):
-                            points = points + 10000000
+
                 else:
                     return 0 # not possible to win
             else: # gather points for enemy player
