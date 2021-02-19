@@ -17,6 +17,14 @@ class AlphaBetaAgent(agent.Agent):
         # Max search depth
         self.max_depth = max_depth
 
+
+    def inBoard(self, brd, w, h):
+    	if h >= 0 and h < brd.h:
+    		if w >= 0 and w < brd.w:
+    			return True 
+
+    	return False
+
     # Pick a column.
     #
     # PARAM [board.Board] brd: the current board state
@@ -180,8 +188,8 @@ class AlphaBetaAgent(agent.Agent):
             wPos = width + (direction * dw)
             hPos = height + (direction * dh)
 
-            if wPos >= brd.w - 1 or hPos >= brd.h - 1 or wPos < 0:
-                break
+            if self.inBoard(brd, wPos, hPos) is False:
+                return points
 
             token = brd.board[hPos][wPos]
 
