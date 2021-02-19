@@ -161,6 +161,8 @@ class AlphaBetaAgent(agent.Agent):
                 
                 value = 0
                 token = brd.board[height][width]
+                if token == 0:
+                    continue
                 # check correct player
                 diagNeg = self.__calcTokens(brd, token, width, height, 1, -1)
                 diagPos = self.__calcTokens(brd, token, width, height, 1, 1)
@@ -170,9 +172,9 @@ class AlphaBetaAgent(agent.Agent):
 
                 value += diagNeg + diagPos + vert +  hor
 
-                if token == 0 or token == brd.player:
+                if token == brd.player:
                     valuePlayer += value
-                else:
+                elif token != 0:
                     valueEnemy += value
                     
         #print(valuePlayer - valueEnemy)
@@ -198,6 +200,8 @@ class AlphaBetaAgent(agent.Agent):
                     if token == player:
                         points += 2 ** duplicates
                         duplicates += 1
+                        if(duplicates == brd.n):
+                            points = points + 10000000
 
                 else:
                     return 0 # not possible to win
@@ -206,8 +210,6 @@ class AlphaBetaAgent(agent.Agent):
                     if token!= player and token !=0:
                         points += 2 ** duplicates
                         duplicates += 1
-                        if(duplicates == brd.n):
-                            points = points + 10000000
                 else:
                     return 0
 
