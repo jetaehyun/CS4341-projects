@@ -17,6 +17,14 @@ class AlphaBetaAgent(agent.Agent):
         # Max search depth
         self.max_depth = max_depth
 
+
+    def inBoard(self, brd, w, h):
+    	if h >= 0 and h < brd.h:
+    		if w >= 0 and w < brd.w:
+    			return True 
+
+    	return False
+
     # Pick a column.
     #
     # PARAM [board.Board] brd: the current board state
@@ -32,15 +40,6 @@ class AlphaBetaAgent(agent.Agent):
 
         for i in range(0, self.max_depth, 1):
         	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
-        	print(move_score)
-
-        	'''
-        	if move_score >= float('inf'):
-        		return 1 
-
-        	elif move_score <= float('-inf'):
-        		return 1 
-        	'''
 
         	if move_score > best_move_score:
         		best_move_score = move_score
@@ -49,7 +48,7 @@ class AlphaBetaAgent(agent.Agent):
         	else:
         		best_state = board 
 
-        return best_state[1]
+        return best_state[1] #if best_state is not None else random.choice(brd.free_cols)
 
     # Find the board state that has the maximum value 
     #
@@ -62,7 +61,7 @@ class AlphaBetaAgent(agent.Agent):
     	max_board = None 
 
     	if self.__terminal_test(depth):
-    		return brd, self.__heuristic(brd)
+    		return None, self.__heuristic(brd)
     		
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__min_value(state[0], depth-1, alpha, beta)
@@ -89,7 +88,7 @@ class AlphaBetaAgent(agent.Agent):
     	min_board = None 
 
     	if self.__terminal_test(depth):
-            return brd, self.__heuristic(brd)
+            return None, self.__heuristic(brd)
 
     	for state in self.get_successors(brd):
     		(board, move_score) = self.__max_value(state[0], depth-1, alpha, beta)
@@ -189,8 +188,8 @@ class AlphaBetaAgent(agent.Agent):
             wPos = width + (direction * dw)
             hPos = height + (direction * dh)
 
-            if wPos >= brd.w - 1 or hPos >= brd.h - 1 or wPos < 0:
-                break
+            if self.inBoard(brd, wPos, hPos) is False:
+                return points
 
             token = brd.board[hPos][wPos]
 
