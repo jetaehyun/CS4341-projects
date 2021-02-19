@@ -178,7 +178,7 @@ class AlphaBetaAgent(agent.Agent):
                     
         #print(valuePlayer - valueEnemy)
         print("PV: " + str(valuePlayer))
-        print("EV"+ str(valueEnemy))
+        print("EV" + str(valueEnemy))
         return valuePlayer - valueEnemy
 
     def __calcTokens(self, brd, playerPersp, width, height, dh, dw):
@@ -197,15 +197,19 @@ class AlphaBetaAgent(agent.Agent):
             if player == playerPersp: # gather points for the player we want to win
                 if token == player or token == 0:
                     if token == player:
-                        points += 2 * duplicates
+                        points += 2 ** duplicates
                         duplicates += 1
+                        if(duplicates == brd.n):
+                            points = points + 10000000
                 else:
                     return 0 # not possible to win
             else: # gather points for enemy player
                 if token != player or token == 0:
                     if token!= player and token !=0:
-                        points += 2 * duplicates
+                        points += 2 ** duplicates
                         duplicates += 1
+                        if(duplicates == brd.n):
+                            points = points + 10000000
                 else:
                     return 0
 
