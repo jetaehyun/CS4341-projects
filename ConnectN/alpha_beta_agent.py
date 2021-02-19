@@ -167,8 +167,8 @@ class AlphaBetaAgent(agent.Agent):
                 diagNeg = self.__calcTokens(brd, token, width, height, 1, -1)
                 diagPos = self.__calcTokens(brd, token, width, height, 1, 1)
                 vert = self.__calcTokens(brd, token, width, height, 0, 1)
-                horRight = self.__calcTokens(brd, token, width, height, 1, 0)
-                horLeft = self.__calcTokens(brd, token, width, height, -1, 0)
+                horRight = self.__calcTokens(brd, token, width, height, 0, 1)
+                horLeft = self.__calcTokens(brd, token, width, height, 0, -1)
 
                 value += diagNeg + diagPos + vert + horRight + horLeft
 
