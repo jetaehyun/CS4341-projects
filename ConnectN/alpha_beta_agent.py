@@ -166,12 +166,12 @@ class AlphaBetaAgent(agent.Agent):
                 # check correct player
                 diagNeg = self.__calcTokens(brd, token, width, height, 1, -1)
                 diagPos = self.__calcTokens(brd, token, width, height, 1, 1)
-                vert = self.__calcTokens(brd, token, width, height, 1, 0)
-                vertNeg = self.__calcTokens(brd, token, width, height, -1, 0)
+                vertUp = self.__calcTokens(brd, token, width, height, 1, 0)
+                vertDown = self.__calcTokens(brd, token, width, height, -1, 0)
                 horRight = self.__calcTokens(brd, token, width, height, 0, 1)
                 horLeft = self.__calcTokens(brd, token, width, height, 0, -1)
 
-                value += diagNeg + diagPos + vert + horRight + horLeft + vertNeg
+                value += diagNeg + diagPos + vertUp + horRight + horLeft + vertDown
 
                 if token == brd.player:
                     valuePlayer += value
