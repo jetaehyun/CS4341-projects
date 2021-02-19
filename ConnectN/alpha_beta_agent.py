@@ -168,14 +168,8 @@ class AlphaBetaAgent(agent.Agent):
                 vert = self.__calcTokens(brd, token, width, height, 0, 1)
                 hor = self.__calcTokens(brd, token, width, height, 1, 0)
 
-                if diagNeg > value:
-                    value += diagNeg
-                if diagPos > value:
-                    value += diagPos
-                if vert > value:
-                    value += vert
-                if hor > value:
-                    value += hor
+
+                value += diagNeg + diagPos + vert +  hor
 
                 if token == 0 or token == brd.player:
                     valuePlayer += value
@@ -203,9 +197,9 @@ class AlphaBetaAgent(agent.Agent):
                     points += 2 * duplicates
                     duplicates += 1
                 else:
-                    return -99999 # not possible to win
+                    return 0 # not possible to win
             else: # gather points for enemy player
-                if token != player or token != 0:
+                if token != player:
                     points += 2 * duplicates
                     duplicates += 1
                 else:
