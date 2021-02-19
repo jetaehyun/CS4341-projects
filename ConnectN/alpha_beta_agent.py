@@ -167,10 +167,10 @@ class AlphaBetaAgent(agent.Agent):
                 diagNeg = self.__calcTokens(brd, token, width, height, 1, -1)
                 diagPos = self.__calcTokens(brd, token, width, height, 1, 1)
                 vert = self.__calcTokens(brd, token, width, height, 0, 1)
-                hor = self.__calcTokens(brd, token, width, height, 1, 0)
+                horRight = self.__calcTokens(brd, token, width, height, 1, 0)
+                horLeft = self.__calcTokens(brd, token, width, height, -1, 0)
 
-
-                value += diagNeg + diagPos + vert +  hor
+                value += diagNeg + diagPos + vert + horRight + horLeft
 
                 if token == brd.player:
                     valuePlayer += value
@@ -178,8 +178,8 @@ class AlphaBetaAgent(agent.Agent):
                     valueEnemy += value
                     
         #print(valuePlayer - valueEnemy)
-        print("PV: " + str(valuePlayer))
-        print("EV" + str(valueEnemy))
+        #print("PV: " + str(valuePlayer))
+        #print("EV" + str(valueEnemy))
         return valuePlayer - valueEnemy
 
     def __calcTokens(self, brd, playerPersp, width, height, dh, dw):
