@@ -8,6 +8,9 @@ import agent
 class AlphaBetaAgent(agent.Agent):
     """Agent that uses alpha-beta search"""
 
+    #winPlayer = False
+    #winEnemy = False
+    
     # Class constructor.
     #
     # PARAM [string] name:      the name of this player
@@ -16,6 +19,8 @@ class AlphaBetaAgent(agent.Agent):
         super().__init__(name)
         # Max search depth
         self.max_depth = max_depth
+        #self.winEnemy = False
+        #self.winPlayer = False
 
 
     def inBoard(self, brd, w, h):
@@ -171,6 +176,8 @@ class AlphaBetaAgent(agent.Agent):
                 horRight = self.__calcTokens(brd, token, width, height, 0, 1)
                 horLeft = self.__calcTokens(brd, token, width, height, 0, -1)
 
+                
+
                 value += diagNeg + diagPos + vertUp + horRight + horLeft + vertDown
 
                 if token == brd.player:
@@ -181,18 +188,29 @@ class AlphaBetaAgent(agent.Agent):
         #print(valuePlayer - valueEnemy)
         #print("PV: " + str(valuePlayer))
         #print("EV" + str(valueEnemy))
+
+        #if self.winEnemy is True:
+        #    return -9999999
+        #print(valuePlayer)
         return valuePlayer - valueEnemy
 
     def __calcTokens(self, brd, playerPersp, width, height, dh, dw):
         points, duplicates = 0, 1
         player = brd.player
 
+        widthBound = brd.n - 1 + width
+        heightBound = brd.n - 1 + height
+
+        if self.inBoard(brd, widthBound, heightBound) is False:
+            return 0
+
         for direction in range(brd.n):
             wPos = width + (direction * dw)
             hPos = height + (direction * dh)
 
+
             if self.inBoard(brd, wPos, hPos) is False:
-                return points
+                return 0
 
             token = brd.board[hPos][wPos]
 
@@ -201,19 +219,23 @@ class AlphaBetaAgent(agent.Agent):
                     if token == player:
                         points += 2 ** duplicates
                         duplicates += 1
-                        if(duplicates == brd.n):
+                        if duplicates == brd.n:
+                            #self.winPlayer = True
                             points = points + 10000000
+                    #else:
+                        # this is when it's 0, so should have values
 
                 else:
                     return 0 # not possible to win
             else: # gather points for enemy player
                 if token != player or token == 0:
-                    if token!= player and token !=0:
+                    if token != player and token !=0:
                         points += 2 ** duplicates
                         duplicates += 1
+                        if duplicates == brd.n:
+                            #self.winEnemy = True
                 else:
                     return 0
-
 
         return points
 
