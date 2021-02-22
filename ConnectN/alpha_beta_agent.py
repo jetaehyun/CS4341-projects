@@ -1,5 +1,5 @@
 import math
-import agent
+import agent, time, random
 
 ###########################
 # Alpha-Beta Search Agent #
@@ -37,6 +37,7 @@ class AlphaBetaAgent(agent.Agent):
         best_move_score = 0
         # best_state = (board, token)
         best_state = (None, None)
+        start_time = time.time()
 
         for i in range(0, self.max_depth, 1):
         	(board, move_score) = self.__min_value(brd, i, float("-inf"), float("inf"))
@@ -48,7 +49,14 @@ class AlphaBetaAgent(agent.Agent):
         	else:
         		best_state = board 
 
-        return best_state[1] #if best_state is not None else random.choice(brd.free_cols)
+        	elapsed_time = time.time() - start_time
+
+        	if elapsed_time > 12:
+        		print("Nice try TA but we made a big brain move :) ")
+        		break
+
+        print('BEST MOVE:', best_move_score)
+        return best_state[1] if best_state is not None else random.choice(brd.free_cols())
 
     # Find the board state that has the maximum value 
     #
@@ -187,35 +195,48 @@ class AlphaBetaAgent(agent.Agent):
         points, duplicates = 0, 1
         player = brd.player
 
-        for direction in range(brd.n):
-            wPos = width + (direction * dw)
-            hPos = height + (direction * dh)
+        for i in range(brd.n):
+            wPos = width + (i * dw)
+            hPos = height + (i * dh)
 
             if self.inBoard(brd, wPos, hPos) is False:
                 return points
+
+            final_wPos = width + (brd.n * dw)
+            final_hPos = height + (brd.n * dh)
+            '''
+            if self.inBoard(brd, final_wPos, final_hPos) is False:
+            	return 0
+            '''
 
             token = brd.board[hPos][wPos]
 
             if player == playerPersp: # gather points for the player we want to win
                 if token == player or token == 0:
                     if token == player:
-                        points += 2 ** duplicates
+                        #points += 2 ** duplicates
+                        points += duplicates ** 2
                         duplicates += 1
                         if(duplicates == brd.n):
                             points = points + 10000000
 
                 else:
-                    return 0 # not possible to win
+                    return 0 # opponent in the way
+
             else: # gather points for enemy player
                 if token != player or token == 0:
                     if token!= player and token !=0:
-                        points += 2 ** duplicates
+                        #points += 2 ** duplicates
+                        points += duplicates ** 2
                         duplicates += 1
                 else:
                     return 0
 
 
         return points
+
+
+THE_AGENT = AlphaBetaAgent("Group1", 6)
 
 
 
