@@ -7,10 +7,10 @@ from colorama import Fore, Back
 
 class TestCharacter(CharacterEntity):
 
-	def __init__(self, name, avatar, x, y, varientFlag):
+	def __init__(self, name, avatar, x, y, variantFlag):
 		CharacterEntity.__init__(self, name, avatar, x, y)
 
-		self.varient = varientFlag
+		self.variant = variantFlag
 
 	###
 	# Description: gets the coordinate of the exit location
