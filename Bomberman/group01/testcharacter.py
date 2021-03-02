@@ -7,6 +7,23 @@ from colorama import Fore, Back
 
 class TestCharacter(CharacterEntity):
 
+	def __init__(self, name, avatar, x, y, varientFlag):
+		CharacterEntity.__init__(self, name, avatar, x, y)
+
+		self.varient = varientFlag
+
+	###
+	# Description: gets the coordinate of the exit location
+	# PARAMS: wrld - world object
+	# RETURN: (width, height) - tuple of the exit coordinate
+	###
+	def get_exit_location(self, wrld):
+		for w in range(wrld.width()):
+			for h in range(wrld.h()):
+				if wrld.exit_at(w, h):
+					return (w, h)
+
+
     def do(self, wrld):
-        # Your code here
+        # need to know where the exit is - function 
         pass

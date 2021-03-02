@@ -21,9 +21,10 @@ g.add_monster(StupidMonster("stupid", # name
 ))
 
 # TODO Add your character
-g.add_character(TestCharacter("me", # name
-                              "C",  # avatar
-                              0, 0  # position
+g.add_character(TestCharacter("me", 	# name
+                              "C",  	# avatar
+                              0, 0,  	# position
+                              1			# varient		
 ))
 
 # Run!
