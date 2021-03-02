@@ -27,9 +27,10 @@ g = Game.fromfile('map.txt')
 # ))
 
 # Uncomment this if you want the interactive character
-g.add_character(InteractiveCharacter("me", # name
-                                     "C",  # avatar
-                                     0, 0  # position
+g.add_character(InteractiveCharacter("me", 		# name
+                                     "C",  		# avatar
+                                     0, 0,  	# position
+                                     1			# variant
 ))
 
 # Run!

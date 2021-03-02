@@ -26,4 +26,12 @@ class TestCharacter(CharacterEntity):
 
     def do(self, wrld):
         # need to know where the exit is - function 
-        pass
+        
+        if self.variant <= 2:
+        	print('call a*')
+
+        elif self.variant == 3:
+        	print('call mini-max')
+
+        else:
+        	print('idk which to call')
