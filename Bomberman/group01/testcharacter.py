@@ -26,9 +26,8 @@ class TestCharacter(CharacterEntity):
 
 
     def do(self, wrld):
-        # need to know where the exit is - function 
         if self.variant <= 2:
-        	print('call a*')
+        	self.perform_aStar(wrld)
 
         elif self.variant == 3:
         	print('call mini-max')
@@ -36,7 +35,16 @@ class TestCharacter(CharacterEntity):
         else:
         	print('idk which to call')
 
-    def _variant_numero_uno(self, wrld, position):
+
+    # --------------------------------------------------------------------------
+    ##
+    # @Brief performs the a star search to the the exit
+    #
+    # @Param wrld world object
+    #
+    # @Returns None
+    # --------------------------------------------------------------------------  	
+    def perform_aStar(self, wrld):
         searchResults = self._aStar(wrld, self.x, self.y)
 
         # unravel path from A*
