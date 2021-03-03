@@ -28,10 +28,18 @@ g.add_character(TestCharacter("me", # name
 ))
 
 # Uncomment this if you want the interactive character
+<<<<<<< HEAD
 # g.add_character(InteractiveCharacter("me", # name
 #                                      "C",  # avatar
 #                                      0, 0  # position
 # ))
+=======
+g.add_character(InteractiveCharacter("me", 		# name
+                                     "C",  		# avatar
+                                     0, 0,  	# position
+                                     1			# variant
+))
+>>>>>>> 69de55f45e4fa4c552a349fecad8014ac1a7e147
 
 # Run!
 

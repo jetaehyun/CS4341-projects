@@ -27,6 +27,16 @@ class TestCharacter(CharacterEntity):
 
     def do(self, wrld):
         # need to know where the exit is - function 
+        if self.variant <= 2:
+        	print('call a*')
+
+        elif self.variant == 3:
+        	print('call mini-max')
+
+        else:
+        	print('idk which to call')
+
+    def _variant_numero_uno(self, wrld, position):
         searchResults = self._aStar(wrld, self.x, self.y)
 
         # unravel path from A*
@@ -111,6 +121,3 @@ class TestCharacter(CharacterEntity):
 
 
         return came_from
-                    
-
-
