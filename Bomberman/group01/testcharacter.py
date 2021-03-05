@@ -32,16 +32,7 @@ class TestCharacter(CharacterEntity):
         if self.state == "aStar":
             self.perform_aStar(wrld)
         else:
-            # default
-
-        # if self.variant <= 2:
-                # self.perform_aStar(wrld)
-
-        # elif self.variant == 3:
-                # print('call mini-max')
-
-        # else:
-                # print('idk which to call')
+            print("Default")
 
 
     # --------------------------------------------------------------------------
