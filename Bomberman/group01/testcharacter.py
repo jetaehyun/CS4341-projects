@@ -31,9 +31,55 @@ class TestCharacter(CharacterEntity):
 
         if self.state == "aStar":
             self.perform_aStar(wrld)
+            isThere = self._checkRadius(wrld)
+            print(str(self.x) + " " + str(self.y))
+            if isThere[2] != "":
+                print(isThere)
+            else:
+                print(isThere)
         else:
             print("Default")
 
+    # --------------------------------------------------------------------------
+    ##
+    # @Brief check to see if a monster is line of sight
+    #
+    # @Param wrld world object
+    #
+    # @Returns x, y, and direction of monster (x, y, direction)
+    # --------------------------------------------------------------------------
+    def _checkRadius(self, wrld):
+        x, y = self.x, self.y
+        whereIsMonster = ""
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] # left, right, down, up
+
+        for i in range(len(directions)):
+            lineOfSight = directions[i]
+            dx = lineOfSight[0]
+            dy = lineOfSight[1]
+
+            xAhead = x
+            yAhead = y
+            for j in range(2):
+                xAhead += dx
+                yAhead += dy
+
+                if xAhead >= wrld.width() or xAhead < 0 or yAhead >= wrld.height() or yAhead < 0:
+                    continue
+
+                if wrld.monsters_at(xAhead, yAhead) != None:
+                    if i == 0:
+                        whereIsMonster = "left"
+                    elif i == 1:
+                        whereIsMonster = "right"
+                    elif i == 2:
+                        whereIsMonster = "up"
+                    else:
+                        whereIsMonster = "down"
+                    return (xAhead, yAhead, whereIsMonster)
+                    
+
+        return (x, y, whereIsMonster)
 
     # --------------------------------------------------------------------------
     ##

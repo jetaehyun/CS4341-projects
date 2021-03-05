@@ -24,7 +24,6 @@ g.add_monster(StupidMonster("stupid", # name
 g.add_character(TestCharacter("me", 	# name
                               "C",  	# avatar
                               0, 0,  	# position
-                              2			# variant		
 ))
 
 # Run!
