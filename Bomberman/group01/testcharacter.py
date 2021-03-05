@@ -9,9 +9,11 @@ from queue import PriorityQueue
 
 class TestCharacter(CharacterEntity):
 
-    def __init__(self, name, avatar, x, y, variantFlag):
+    state = None
+
+    def __init__(self, name, avatar, x, y):
         CharacterEntity.__init__(self, name, avatar, x, y)
-        self.variant = variantFlag
+        self.state = "aStar"
 
 	###
 	# Description: gets the coordinate of the exit location
@@ -26,14 +28,20 @@ class TestCharacter(CharacterEntity):
 
 
     def do(self, wrld):
-        if self.variant <= 2:
-        	self.perform_aStar(wrld)
 
-        elif self.variant == 3:
-        	print('call mini-max')
-
+        if self.state == "aStar":
+            self.perform_aStar(wrld)
         else:
-        	print('idk which to call')
+            # default
+
+        # if self.variant <= 2:
+                # self.perform_aStar(wrld)
+
+        # elif self.variant == 3:
+                # print('call mini-max')
+
+        # else:
+                # print('idk which to call')
 
 
     # --------------------------------------------------------------------------
