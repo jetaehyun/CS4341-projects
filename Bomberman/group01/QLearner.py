@@ -63,7 +63,7 @@ class QLearner:
 
 			if my_wrld.me(character) is not None:
 				# TODO: calculate the Q value
-				curr_q = Q_Function()
+				curr_q = Q_Function(next_wrld)
 
 			else:
 				# either character just died or exited 
@@ -88,7 +88,6 @@ class QLearner:
 	def Q_Function(self, wrld):
 		totalSum = 0
 
-		
 		for i in range(len(self.features)):
 			w = self.weights[i]	# corresponding weight for the current feature
 
