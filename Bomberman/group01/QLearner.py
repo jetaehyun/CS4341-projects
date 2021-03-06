@@ -32,7 +32,7 @@ class QLearner:
     # @Returns (max q value, best action move)
     # -------------------------------------------------------------------------- 
 	def getBestMove(self, wrld, character):
-		maxQ = float('-INF')
+		maxQ = float('-inf')
 
 		best_action = None
 
