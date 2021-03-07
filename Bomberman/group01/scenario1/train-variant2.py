@@ -37,8 +37,7 @@ for i in range(0, 500):
                                0, 0,  # position
                                qlearner,
                                True,
-                               i,
-                               1000)
+                               i)
 
 	#Uncomment this if you want the interactive character
 	g.add_character(q_character)

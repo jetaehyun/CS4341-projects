@@ -8,13 +8,12 @@ import QLearner
 
 class QCharacter(CharacterEntity):
 
-	def __init__(self, name, avatar, x, y, q_learner, train, iteration, max_iteration):
+	def __init__(self, name, avatar, x, y, q_learner, train, iteration):
 		CharacterEntity.__init__(self, name, avatar, x, y)
 
 		self.q_learner = q_learner
 		self.train = train
 		self.iteration = iteration 
-		self.max_iteration = max_iteration
 
 		self.epsilon = (1 / (iteration + 1)) ** 0.1
 		self.prev_wrld = None
@@ -22,6 +21,7 @@ class QCharacter(CharacterEntity):
 
 	def do(self, wrld):
 		self.prev_wrld = wrld
+
 		if self.train is True:
 			if random.random() < self.epsilon:
 				# choose random move
@@ -43,9 +43,9 @@ class QCharacter(CharacterEntity):
 			else:
 				maxQ, best_action = self.q_learner.getBestMove(wrld, self)
 
-				x, y, bomb = best_action
+				x, y, place_bomb = best_action
 
-				if bomb is True:
+				if place_bomb is True:
 					self.place_bomb()
 
 				self.move(x, y)
@@ -55,9 +55,9 @@ class QCharacter(CharacterEntity):
 			
 			maxQ, best_action = self.q_learner.getBestMove(wrld, self)
 
-			x, y, bomb = best_action
+			x, y, place_bomb = best_action
 
-			if bomb is True:
+			if place_bomb is True:
 				self.place_bomb()
 
 			self.move(x, y)
