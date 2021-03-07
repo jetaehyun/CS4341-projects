@@ -46,7 +46,7 @@ class TestCharacter(CharacterEntity):
     def _checkRadius(self, wrld):
         x, y = self.x, self.y
         whereIsMonster = ""
-        directions = [(-1, 0), (1, 0), (0, -1), (0, 1)] # left, right, down, up
+        directions = [(-1, 0), (1, 0), (0, -1), (0, 1), (1, 1), (1, -1), (-1, -1), (-1, 1)] # left, right, down, up, diagonal up right, diagonal down right, diagonal up left, diagonal down left 
 
         for i in range(len(directions)):
             lineOfSight = directions[i]
@@ -69,8 +69,17 @@ class TestCharacter(CharacterEntity):
                         whereIsMonster = "right"
                     elif i == 2:
                         whereIsMonster = "up"
-                    else:
+                    elif i == 3:
                         whereIsMonster = "down"
+                    elif i == 4:
+                        whereIsMonster = "DUR"
+                    elif i == 5:
+                        whereIsMonster = "DDR"
+                    elif i == 6:
+                        whereIsMonster = "DUL"
+                    else:
+                        whereIsMonster = "DDL"
+
                     return (xAhead, yAhead, whereIsMonster)
                     
 
