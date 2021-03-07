@@ -5,7 +5,7 @@ sys.path.insert(0, '../bomberman')
 from sensed_world import SensedWorld
 
 ALPHA = 0.9
-GAMMA = 0.1
+GAMMA = 0.4
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation

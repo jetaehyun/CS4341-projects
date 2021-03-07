@@ -17,11 +17,11 @@ class QCharacter(CharacterEntity):
 		self.max_iteration = max_iteration
 
 		self.epsilon = (1 / (iteration + 1)) ** 0.1
-		self.wrld = None
+		self.prev_wrld = None
 
 
 	def do(self, wrld):
-		self.wrld = wrld
+		self.prev_wrld = wrld
 		if self.train is True:
 			if random.random() < self.epsilon:
 				# choose random move
@@ -33,7 +33,7 @@ class QCharacter(CharacterEntity):
 				place_bomb = bomb_actions[random.randint(0, 1)]
 
 				x = direction_x
-				y = direction_y if x == 0 else 0
+				y = direction_y
 
 				if place_bomb is True:
 					self.place_bomb()
@@ -62,8 +62,6 @@ class QCharacter(CharacterEntity):
 
 			self.move(x, y)
 
-	def getWorld(self):
-		return self.wrld 
 
 	def updateCharacterWeights(self, wrld, won, lost):
 		reward = 0
@@ -78,7 +76,7 @@ class QCharacter(CharacterEntity):
 			else:
 				reward = 5
 
-			self.q_learner.updateWeights(wrld, wrld, reward)
+			self.q_learner.updateWeights(self.prev_wrld, wrld, reward)
 			
 
 
