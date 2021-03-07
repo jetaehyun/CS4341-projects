@@ -16,7 +16,7 @@ from testcharacter import TestCharacter
 # from interactivecharacter import InteractiveCharacter
 
 # Create the game
-g = Game.fromfile('wall.txt')
+g = Game.fromfile('map.txt')
 
 # TODO Add your character
 

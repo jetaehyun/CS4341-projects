@@ -158,7 +158,8 @@ class TestCharacter(CharacterEntity):
 
             # create a list of neighbors at current position
             neighX, neighY = current
-            neighbors = [(neighX-1,neighY), (neighX+1,neighY), (neighX,neighY+1), (neighX,neighY-1)] # left, right, up, down
+            neighbors = [(neighX-1,neighY), (neighX+1,neighY), (neighX,neighY+1), (neighX,neighY-1), (neighX+1,neighY+1),
+                    (neighX+1,neighY-1), (neighX-1, neighY+1), (neighX-1,neighY-1)] # left, right, up, down
 
             # check each neighbor
             for i in neighbors:
