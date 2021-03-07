@@ -30,13 +30,8 @@ class TestCharacter(CharacterEntity):
     def do(self, wrld):
 
         if self.state == "aStar":
-            self.perform_aStar(wrld)
-            isThere = self._checkRadius(wrld)
-            print(str(self.x) + " " + str(self.y))
-            if isThere[2] != "":
-                print(isThere)
-            else:
-                print(isThere)
+            if self.perform_aStar(wrld) == None:
+                print("None")
         else:
             print("Default")
 
@@ -92,18 +87,21 @@ class TestCharacter(CharacterEntity):
     def perform_aStar(self, wrld):
         searchResults = self._aStar(wrld, self.x, self.y)
 
+        if searchResults == None:
+            return None
+
         # unravel path from A*
         path = []
         current = self.get_exit_location(wrld)
         path.append(current)
         while(True): 
             came_from = searchResults[current] # find out where this path came from
-            if came_from == None: # we found the exit
+            if came_from == None:              # we found the exit
                 break
             path.append(current)
-            current = came_from # set next search
+            current = came_from                # set next search
 
-        pathRev = path[::-1][0] # reverse the list to get the correct direction
+        pathRev = path[::-1][0]                # reverse the list to get the correct direction
 
         # calculate the direction to go to
         dx = pathRev[0] - self.x   
@@ -172,5 +170,7 @@ class TestCharacter(CharacterEntity):
                     frontier.put(i, priority)
                     came_from[i] = current
 
+        if not goal in came_from.keys():
+            return None
 
         return came_from
