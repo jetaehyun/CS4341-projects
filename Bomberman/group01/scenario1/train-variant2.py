@@ -16,10 +16,10 @@ from QCharacter import QCharacter
 from features1 import *
 
 features = [distToMonster, distToExit, distToBomb, distToWall, bombDropped]
+weights = [-8.547008547008543, -4.273504273504272, -38.46153846153847, -12.820512820512818, -42.73504273504273]
+qlearner = QLearner(weights, features)
 
-qlearner = QLearner(None, features)
-
-for i in range(0, 100):
+for i in range(0, 10):
 	print('Iteration #', i)
 
 	# Create the game
@@ -43,7 +43,7 @@ for i in range(0, 100):
 	#Uncomment this if you want the interactive character
 	g.add_character(q_character)
 
-	g.go(1)
+	g.go()
 	wrld = q_character.getWorld()
 	print(g.world.scores["me"])
 	q_character.updateCharacterWeights(wrld, False, True)
