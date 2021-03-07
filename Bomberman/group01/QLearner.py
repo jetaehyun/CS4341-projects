@@ -75,9 +75,6 @@ class QLearner:
 					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
 						curr_q = float('inf')
 
-					
-				curr_q = 0
-
 			if curr_q > maxQ:
 				maxQ = curr_q
 				best_action = move 
