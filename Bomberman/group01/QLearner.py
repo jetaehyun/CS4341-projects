@@ -67,7 +67,15 @@ class QLearner:
 
 			else:
 				# either character just died or exited 
-				# TODO: set q value to proper value depending on situation
+				
+				for event in next_events:
+					if event.tpe == Event.BOMB_HIT_CHARACTER || event.tpe == CHARACTER_KILLED_BY_MONSTER:
+						curr_q = float('-inf')
+
+					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
+						curr_q = float('inf')
+
+					
 				curr_q = 0
 
 			if curr_q > maxQ:
