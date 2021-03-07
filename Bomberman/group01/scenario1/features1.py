@@ -4,7 +4,7 @@ def distToMonster():
     return 0.2
 
 def distToExit():
-    return 0.1
+    return 0.5
 
 def distToBomb():
     return 0.9

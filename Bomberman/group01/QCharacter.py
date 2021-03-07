@@ -15,7 +15,7 @@ class QCharacter(CharacterEntity):
 		self.train = train
 		self.iteration = iteration 
 
-		self.epsilon = (1 / (iteration + 1)) ** 0.1
+		self.epsilon = (1 / (iteration + 1)) ** 0.5
 		self.prev_wrld = None
 
 
@@ -68,10 +68,10 @@ class QCharacter(CharacterEntity):
 
 		if self.train is True:
 			if won is True:
-				reward = 100
+				reward = 10
 
 			elif lost is True:
-				reward = -50
+				reward = -10
 
 			else:
 				reward = 5
