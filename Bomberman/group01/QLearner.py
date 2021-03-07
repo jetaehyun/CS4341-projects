@@ -2,10 +2,10 @@
 import sys
 sys.path.insert(0, '../bomberman')
 
-import SensedWorld
+from sensed_world import SensedWorld
 
-ALPHA = 0.5
-GAMMA = 0.5
+ALPHA = 0.9
+GAMMA = 0.1
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation
@@ -16,7 +16,7 @@ class QLearner:
 		self.features = features 
 
 		if self.weights is None:
-			self.weights = [0 * len(features)]	# all weights start with 0
+			self.weights = [0] * len(self.features)	# all weights start with 0
 
 		# tuple - (x, y, placeBomb?)
 		self.available_moves = [
@@ -63,13 +63,13 @@ class QLearner:
 
 			if my_wrld.me(character) is not None:
 				# TODO: calculate the Q value
-				curr_q = Q_Function(next_wrld)
+				curr_q = self.Q_Function(next_wrld)
 
 			else:
 				# either character just died or exited 
 				
 				for event in next_events:
-					if event.tpe == Event.BOMB_HIT_CHARACTER || event.tpe == CHARACTER_KILLED_BY_MONSTER:
+					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == CHARACTER_KILLED_BY_MONSTER:
 						curr_q = float('-inf')
 
 					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
@@ -96,7 +96,7 @@ class QLearner:
 		for i in range(len(self.features)):
 			w = self.weights[i]	# corresponding weight for the current feature
 
-			totalSum += (w * self.features[i](wrld))
+			totalSum += (w * self.features[i]())
 	
 		return totalSum
 
@@ -116,4 +116,4 @@ class QLearner:
 		delta = (r + (GAMMA * self.Q_Function(prime_wrld))) - self.Q_Function(wrld)
 
 		for i in range(len(self.features)):
-			self.weights[i] = self.weights[i] + (ALPHA * delta * self.features[i](wrld))
+			self.weights[i] += (ALPHA * delta * self.features[i]())

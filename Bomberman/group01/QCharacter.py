@@ -2,59 +2,84 @@
 import sys, random
 sys.path.insert(0, '../bomberman')
 
+from entity import CharacterEntity
+from sensed_world import SensedWorld
+import QLearner
+
 class QCharacter(CharacterEntity):
 
 	def __init__(self, name, avatar, x, y, q_learner, train, iteration, max_iteration):
-        CharacterEntity.__init__(self, name, avatar, x, y)
+		CharacterEntity.__init__(self, name, avatar, x, y)
 
-        self.q_learner = q_learner
-        self.train = train
-        self.iteration = iteration 
-        self.max_iteration = max_iteration
+		self.q_learner = q_learner
+		self.train = train
+		self.iteration = iteration 
+		self.max_iteration = max_iteration
 
-        self.epsilon = (1 / (iteration + 1)) ** 0.1
+		self.epsilon = (1 / (iteration + 1)) ** 0.1
+		self.wrld = None
 
 
-    def do(self, wrld):
+	def do(self, wrld):
+		self.wrld = wrld
+		if self.train is True:
+			if random.random() < self.epsilon:
+				# choose random move
+				allowed_direction = [-1, 0, 1]
+				bomb_actions = [False, True]
 
-    	if self.train is True:
-    		if random.random() < self.epsilon:
-    			# choose random move
-    			allowed_direction = [-1, 0, 1]
-    			bomb_actions = [False, True]
+				direction_x = allowed_direction[random.randint(0, 2)]
+				direction_y = allowed_direction[random.randint(0, 2)]
+				place_bomb = bomb_actions[random.randint(0, 1)]
 
-    			direction_x = allowed_direction[random.randint(0, 2)]
-    			direction_y = allowed_direction[random.randint(0, 2)]
-    			place_bomb = bombactions[random.randint(0, 1)]
+				x = direction_x
+				y = direction_y if x == 0 else 0
 
-    			x = direction_x
-    			y = direction_y if x == 0 else 0
+				if place_bomb is True:
+					self.place_bomb()
 
-    			if place_bomb is True:
-    				self.place_bomb()
+				self.move(x, y)
 
-    			self.move(x, y)
+			else:
+				maxQ, best_action = self.q_learner.getBestMove(wrld, self)
 
-    		else:
-    			maxQ, best_action = self.q_learner.getBestMove(wrld, self)
+				x, y, bomb = best_action
 
-    			x, y, bomb = best_action
+				if bomb is True:
+					self.place_bomb()
 
-    			if bomb is True:
-    				self.place_bomb()
+				self.move(x, y)
 
-    			self.move(x, y)
+		else:
+			# use the converged values 
+			
+			maxQ, best_action = self.q_learner.getBestMove(wrld, self)
 
-    	else:
-    		# use the converged values 
-    		
-    		maxQ, best_action = self.q_learner.getBestMove(wrld, self)
+			x, y, bomb = best_action
 
-    		x, y, bomb = best_action
+			if bomb is True:
+				self.place_bomb()
 
-    		if bomb is True:
-    			self.place_bomb()
+			self.move(x, y)
 
-    		self.move(x, y)
+	def getWorld(self):
+		return self.wrld 
+
+	def updateCharacterWeights(self, wrld, won, lost):
+		reward = 0
+
+		if self.train is True:
+			if won is True:
+				reward = 100
+
+			elif lost is True:
+				reward = -50
+
+			else:
+				reward = 5
+
+			self.q_learner.updateWeights(wrld, wrld, reward)
+			
+
 
 
