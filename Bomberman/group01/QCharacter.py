@@ -23,7 +23,7 @@ class QCharacter(CharacterEntity):
 		self.prev_wrld = SensedWorld.from_world(wrld)
 
 		if self.train is True:
-			if random.random() < self.epsilon:
+			if random.random() < 0.2:
 				# choose random move
 				allowed_direction = [-1, 0, 1]
 				bomb_actions = [False, True]
@@ -35,6 +35,29 @@ class QCharacter(CharacterEntity):
 				x = direction_x
 				y = direction_y
 
+				for bomb in self.find_all_bombs(self.prev_wrld):
+					dx = self.x + x 
+					dy = self.y + y
+
+					escape_directions = [-1, 1] 
+
+					print(f'X: {dx}, Y: {dy}')
+					print(f'BOMB: X: {bomb[0]}, Y: {bomb[1]}')
+
+					if dx == bomb[0]:
+						y = escape_directions[random.randint(0, 1)]
+
+						if self.in_world(self.prev_wrld, x, y) is False:
+							y *= -1
+
+					if dy == bomb[1]:
+						x = escape_directions[random.randint(0, 1)]
+
+						if self.in_world(self.prev_wrld, x, y) is False:
+							x *= -1
+
+				print(f'\nMY MOVE: X:{x}, Y:{y}\n')
+
 				self.move(x, y)
 
 				if place_bomb is True:
@@ -45,10 +68,33 @@ class QCharacter(CharacterEntity):
 
 				x, y, place_bomb = best_action
 
-				if place_bomb is True:
-					self.place_bomb()
+				for bomb in self.find_all_bombs(self.prev_wrld):
+					dx = self.x + x 
+					dy = self.y + y
+
+					escape_directions = [-1, 1] 
+
+					print(f'X: {dx}, Y: {dy}')
+					print(f'BOMB: X: {bomb[0]}, Y: {bomb[1]}')
+
+					if dx == bomb[0]:
+						y = escape_directions[random.randint(0, 1)]
+
+						if self.in_world(self.prev_wrld, x, y) is False:
+							y *= -1
+
+					if dy == bomb[1]:
+						x = escape_directions[random.randint(0, 1)]
+
+						if self.in_world(self.prev_wrld, x, y) is False:
+							x *= -1
+
+				print(f'\nMY MOVE: X:{x}, Y:{y}\n')
 
 				self.move(x, y)
+
+				if place_bomb is True:
+					self.place_bomb()
 
 				self.updateCharacterWeights(best_wrld, False, False)
 
@@ -81,6 +127,23 @@ class QCharacter(CharacterEntity):
 				reward = 5
 
 			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
+
+	def in_world(self, wrld, x, y):
+		if x >= 0 and x < wrld.width():
+			if y >= 0 and y < wrld.height():
+				return True 
+
+		return False 
+
+	def find_all_bombs(self, wrld):
+		bombs = []
+
+		for x in range(wrld.width()):
+			for y in range(wrld.height()):
+				if wrld.bomb_at(x, y) is not None:
+					bombs.append((x,y))
+
+		return bombs
 			
 
 

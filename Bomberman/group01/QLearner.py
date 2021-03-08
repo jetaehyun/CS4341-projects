@@ -1,5 +1,5 @@
 # This is necessary to find the main code
-import sys
+import sys, random
 sys.path.insert(0, '../bomberman')
 
 from sensed_world import SensedWorld
@@ -27,15 +27,15 @@ class QLearner:
 		]
 
 	# --------------------------------------------------------------------------
-    ##
-    # @Brief - performs all possible moves at the character's current state and
+	##
+	# @Brief - performs all possible moves at the character's current state and
 	#		   determining the best Q value and best action
-    #
-    # @Param - wrld: world object
-    # @Param - character: charcter object
-    #
-    # @Returns (max q value, best action move)
-    # -------------------------------------------------------------------------- 
+	#
+	# @Param - wrld: world object
+	# @Param - character: charcter object
+	#
+	# @Returns (max q value, best action move)
+	# -------------------------------------------------------------------------- 
 	def getBestMove(self, wrld, character):
 		maxQ = float('-inf')
 
@@ -84,15 +84,14 @@ class QLearner:
 
 		return (maxQ, best_action, best_wrld)
 
-
 	# --------------------------------------------------------------------------
-    ##
-    # @Brief - perfoms the Q-Function with Feature Representation
-    #
-    # @Param - wrld: world object
-    #
-    # @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
-    # -------------------------------------------------------------------------- 
+	##
+	# @Brief - perfoms the Q-Function with Feature Representation
+	#
+	# @Param - wrld: world object
+	#
+	# @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
+	# -------------------------------------------------------------------------- 
 	def Q_Function(self, wrld, character):
 		totalSum = 0
 
@@ -105,15 +104,15 @@ class QLearner:
 
 
 	# --------------------------------------------------------------------------
-    ##
-    # @Brief - updates the weights by following the algorithm for Approximate Q-Learning
-    #
-    # @Param - wrld: world object
-    # @Param - prime_wrld: the next world object
-    # @Param - r - the reward
-    #
-    # @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
-    # -------------------------------------------------------------------------- 
+	##
+	# @Brief - updates the weights by following the algorithm for Approximate Q-Learning
+	#
+	# @Param - wrld: world object
+	# @Param - prime_wrld: the next world object
+	# @Param - r - the reward
+	#
+	# @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
+	# -------------------------------------------------------------------------- 
 	def updateWeights(self, character, wrld, prime_wrld, r):
 
 		delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)

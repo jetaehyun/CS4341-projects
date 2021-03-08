@@ -19,9 +19,9 @@ from features1 import *
 features = [distToMonster, distToExit, distToBomb, distToWall, inBombExplosionRange]
 #[-19.3896499238949, -48.4741248097407, -87.25342465753285, -29.08447488584545, -96.9482496194814]
 
-weights = [-24.477947236340455, -1.2238973618170195, -48.95589447268091, -24.477947236340455, -55.35263663944667]
+#weights = [-24.477947236340455, -1.2238973618170195, -48.95589447268091, -24.477947236340455, -55.35263663944667]
 
-#weights = None
+weights = None
 qlearner = QLearner(weights, features)
 prev_wrld = None
 for i in range(0, 15):
