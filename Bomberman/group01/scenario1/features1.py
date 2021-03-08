@@ -11,7 +11,7 @@ def distToExit(wrld, character):
     if path == None:
         return 0
 
-    return 1 / path
+    return 1 / (1 + path)**2
 
 def distToBomb(wrld, character):
     return 0.8
