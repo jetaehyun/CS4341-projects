@@ -2,31 +2,17 @@ from math import sqrt
 from queue import PriorityQueue
 
 
-def get_exit_location(wrld):
-    for w in range(wrld.width()):
-        for h in range(wrld.height()):
-            if wrld.exit_at(w, h):
-                return (w, h)
-
-    # --------------------------------------------------------------------------
-    ##
-    # @Brief performs the a star search to the the exit
-    #
-    # @Param wrld world object
-    #
-    # @Returns None
-    # --------------------------------------------------------------------------  	
-def perform_aStar(wrld, position, getFullPath):
+def perform_aStar(wrld, position, destination, getFullPath):
 
     x,y = position
-    searchResults = _aStar(wrld, x, y)
+    searchResults = _aStar(wrld, x, y, destination)
 
     if searchResults == None:
         return None
 
     # unravel path from A*
     path = []
-    current = get_exit_location(wrld)
+    current = destination
     path.append(current)
     while(True): 
         came_from = searchResults[current] # find out where this path came from
@@ -50,30 +36,10 @@ def perform_aStar(wrld, position, getFullPath):
 
 
 
-    # --------------------------------------------------------------------------
-    ##
-    # @Brief calculate the distance from current to goal
-    #
-    # @Param goal where we want to go
-    # @Param current where we are
-    #
-    # @Returns distance
-    # --------------------------------------------------------------------------
 def _heuristic(goal, current):
     return sqrt((goal[0] - current[0])**2 + (goal[1] - current[1])**2)
 
-
-    # --------------------------------------------------------------------------
-    ##
-    # @Brief A* algorithm
-    #
-    # @Param wrld world object
-    # @Param x x position of character
-    # @Param y y position of character
-    #
-    # @Returns dictionary of where each (x,y) came from
-    # --------------------------------------------------------------------------
-def _aStar(wrld, x, y):
+def _aStar(wrld, x, y, destination):
     frontier = PriorityQueue()
     frontier.put((x,y), 0)
     came_from = {}
@@ -81,7 +47,7 @@ def _aStar(wrld, x, y):
     came_from[(x,y)] = None
     cost_so_far[(x,y)] = 0
 
-    goal = get_exit_location(wrld)
+    goal = destination
 
     while not frontier.empty():
         current = frontier.get()
