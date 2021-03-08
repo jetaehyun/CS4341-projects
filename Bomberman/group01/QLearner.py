@@ -5,7 +5,7 @@ sys.path.insert(0, '../bomberman')
 from sensed_world import SensedWorld
 
 ALPHA = 0.9
-GAMMA = 0.4
+GAMMA = 0.8
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation
@@ -40,13 +40,14 @@ class QLearner:
 		maxQ = float('-inf')
 
 		best_action = None
+		best_wrld = wrld 
 
 		for move in self.available_moves:
 			my_wrld = SensedWorld.from_world(wrld) # creates a copy of the current world state
 
 			# check if character in the world right now
 			if my_wrld.me(character) is None:
-				break
+				continue
 
 			x = move[0]
 			y = move[1]
@@ -63,7 +64,7 @@ class QLearner:
 
 			if my_wrld.me(character) is not None:
 				# TODO: calculate the Q value
-				curr_q = self.Q_Function(next_wrld)
+				curr_q = self.Q_Function(next_wrld, my_wrld.me(character))
 
 			else:
 				# either character just died or exited 
@@ -72,14 +73,16 @@ class QLearner:
 					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == CHARACTER_KILLED_BY_MONSTER:
 						curr_q = float('-inf')
 
+
 					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
 						curr_q = float('inf')
 
 			if curr_q > maxQ:
 				maxQ = curr_q
 				best_action = move 
+				best_wrld = next_wrld
 
-		return (maxQ, best_action)
+		return (maxQ, best_action, best_wrld)
 
 
 	# --------------------------------------------------------------------------
@@ -90,13 +93,13 @@ class QLearner:
     #
     # @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
     # -------------------------------------------------------------------------- 
-	def Q_Function(self, wrld):
+	def Q_Function(self, wrld, character):
 		totalSum = 0
 
 		for i in range(len(self.features)):
 			w = self.weights[i]	# corresponding weight for the current feature
 
-			totalSum += (w * self.features[i]())
+			totalSum += (w * self.features[i](wrld, character))
 	
 		return totalSum
 
@@ -111,9 +114,9 @@ class QLearner:
     #
     # @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
     # -------------------------------------------------------------------------- 
-	def updateWeights(self, wrld, prime_wrld, r):
+	def updateWeights(self, character, wrld, prime_wrld, r):
 
-		delta = (r + (GAMMA * self.Q_Function(prime_wrld))) - self.Q_Function(wrld)
+		delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)
 
 		for i in range(len(self.features)):
-			self.weights[i] += (ALPHA * delta * self.features[i]())
+			self.weights[i] += (ALPHA * delta * self.features[i](wrld, character))

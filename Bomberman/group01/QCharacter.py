@@ -20,7 +20,7 @@ class QCharacter(CharacterEntity):
 
 
 	def do(self, wrld):
-		self.prev_wrld = wrld
+		self.prev_wrld = SensedWorld.from_world(wrld)
 
 		if self.train is True:
 			if random.random() < self.epsilon:
@@ -35,13 +35,13 @@ class QCharacter(CharacterEntity):
 				x = direction_x
 				y = direction_y
 
+				self.move(x, y)
+
 				if place_bomb is True:
 					self.place_bomb()
 
-				self.move(x, y)
-
 			else:
-				maxQ, best_action = self.q_learner.getBestMove(wrld, self)
+				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 
 				x, y, place_bomb = best_action
 
@@ -50,10 +50,12 @@ class QCharacter(CharacterEntity):
 
 				self.move(x, y)
 
+				self.updateCharacterWeights(best_wrld, False, False)
+
 		else:
 			# use the converged values 
 			
-			maxQ, best_action = self.q_learner.getBestMove(wrld, self)
+			maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 
 			x, y, place_bomb = best_action
 
@@ -63,12 +65,14 @@ class QCharacter(CharacterEntity):
 			self.move(x, y)
 
 
+
+
 	def updateCharacterWeights(self, wrld, won, lost):
 		reward = 0
 
 		if self.train is True:
 			if won is True:
-				reward = 10
+				reward = 100
 
 			elif lost is True:
 				reward = -10
@@ -76,7 +80,7 @@ class QCharacter(CharacterEntity):
 			else:
 				reward = 5
 
-			self.q_learner.updateWeights(self.prev_wrld, wrld, reward)
+			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
 			
 
 
