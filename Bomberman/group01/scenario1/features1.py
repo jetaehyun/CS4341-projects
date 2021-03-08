@@ -1,10 +1,17 @@
+from patrick_star import perform_aStar
 
 
 def distToMonster(wrld, character):
     return 0.4
 
 def distToExit(wrld, character):
-    return 0.02
+
+    path = perform_aStar(wrld, character, True)
+
+    if path == None:
+        return 0
+
+    return 1 / (1 + path)**2
 
 def distToBomb(wrld, character):
     return 0.8
