@@ -16,7 +16,7 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distToMonster, distToExit, distToBomb, distToWall, inBombExplosionRange]
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange]
 #[-19.3896499238949, -48.4741248097407, -87.25342465753285, -29.08447488584545, -96.9482496194814]
 
 weights = [-33.91234165781769, 0.0, -67.82468331563538, -33.91234165781769, -73.97666801287497]
@@ -25,7 +25,7 @@ weights = [-33.91234165781769, 0.0, -67.82468331563538, -33.91234165781769, -73.
 #weights = None
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 1):
+for i in range(0, 500):
 	print('Iteration #', i)
 
 	# Create the game

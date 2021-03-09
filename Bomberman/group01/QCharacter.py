@@ -34,15 +34,15 @@ class QCharacter(CharacterEntity):
 
 				x = direction_x
 				y = direction_y
-				print(f'PREVIOUS: {self.x}, {self.y}')
-				print(f'ATTEMPT: ({x}, {y})')
+				#print(f'PREVIOUS: {self.x}, {self.y}')
+				#print(f'ATTEMPT: ({x}, {y})')
 
-				x, y = self.bomb_handler(self.prev_wrld, x, y)
+				#x, y = self.bomb_handler(self.prev_wrld, x, y)
 
-				x, y = self.explosion_handler(self.prev_wrld, x, y)
+				#x, y = self.explosion_handler(self.prev_wrld, x, y)
 
 				
-				print(f'MOVE: ({x}, {y})\n')
+				#print(f'MOVE: ({x}, {y})\n')
 
 				self.move(x, y)
 
@@ -52,19 +52,19 @@ class QCharacter(CharacterEntity):
 
 			else:
 				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
-				print(f'PREVIOUS: {self.x}, {self.y}')
+				#print(f'PREVIOUS: {self.x}, {self.y}')
 
 				x, y, place_bomb = best_action
 
-				print(f'ATTEMPT: ({x}, {y})')
+				#print(f'ATTEMPT: ({x}, {y})')
 
 				x, y = self.bomb_handler(self.prev_wrld, x, y)
 
 				x, y = self.explosion_handler(self.prev_wrld, x, y)
 
 				
-				print(f'MOVE: ({x}, {y})\n')
-				
+				#print(f'MOVE: ({x}, {y})\n')
+
 				self.move(x, y)
 
 				if place_bomb is True:
