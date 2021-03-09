@@ -39,6 +39,41 @@ def findNearestEntity(wrld, character, entity):
 	return coord
 
 
+def getListOfMonsters(wrld):
+
+    monsterList = []
+    width, height = wrld.width(), wrld.height()
+
+    for w in range(width):
+        for h in range(height):
+            if len(wrld.monsters_at(w,h)) != 0:
+                monsterList.append((w,h))
+
+    return monsterList
+
+def getPathToClosestMonster(wrld, character):
+
+    monsterList = getListOfMonsters(wrld)
+    x,y = character.x, character.y
+
+    if len(monsterList) == 0:
+        return 0
+
+    shortestPath = 99999
+    coord = (0,0)
+
+    for pos in monsterList:
+        xPos, yPos = pos.x, pos.y
+        dist = _heuristic(pos, (xPos,yPos))
+
+        if dist<shortestPath:
+            shortestPath = dist
+            coord = (xPos, yPos)
+
+    path = perform_aStar(wrld, character, coord, True)
+    
+    return path
+    
 	
 def distanceToExit(wrld, character):
 	entityPosition = findNearestEntity(wrld, character, "exit")
