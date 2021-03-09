@@ -6,8 +6,8 @@ def distToMonster(wrld, character):
 
 def distToExit(wrld, character):
 
-    path = perform_aStar(wrld, character, True)
-
+    #path = perform_aStar(wrld, character, True)
+    path = None 
     if path == None:
         return 0
 
