@@ -21,11 +21,11 @@ def findNearestEntity(wrld, character, entity):
 		for h in range(height):
 			distanceToFound = 99999
 			if entity == "monster":
-				if wrld.monsters_at(w, h) != None:
+				if wrld.monsters_at(w, h) is not None:
 					distanceToFound = _heuristic((w,h), (x,y))
 
 			elif entity == "bomb":
-				if wrld.bomb_at(w,h) != None:
+				if wrld.bomb_at(w,h) is not None:
 					distanceToFound = _heuristic((w,h), (x,y))
 
 			elif entity == "exit":
@@ -47,8 +47,8 @@ def distanceToExit(wrld, character):
 		return 0
 
 	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition)
-	distance = float(len(path))
+	path = perform_aStar(wrld, pos, entityPosition, True)
+	distance = float(len(path)) if path is not None else 0
 	return 1 / (1+distance)**2
 
 
@@ -59,8 +59,8 @@ def distanceToBomb(wrld, character):
 		return 0
 
 	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition)
-	distance = float(len(path))
+	path = perform_aStar(wrld, pos, entityPosition, True)
+	distance = float(len(path)) if path is not None else 0
 	return 1 / (1+distance)**2
 
 
@@ -72,8 +72,8 @@ def distanceToMonster(wrld, character):
 		return 0
 
 	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition)
-	distance = float(len(path))
+	path = perform_aStar(wrld, pos, entityPosition, True)
+	distance = float(len(path)) if path is not None else 0
 	return 1 / (1+distance)**2
 
 

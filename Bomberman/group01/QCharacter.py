@@ -47,7 +47,7 @@ class QCharacter(CharacterEntity):
 				self.move(x, y)
 
 				if place_bomb is True:
-					print('PLACING BOMB')
+					#print('PLACING BOMB')
 					self.place_bomb()
 
 			else:
@@ -68,7 +68,7 @@ class QCharacter(CharacterEntity):
 				self.move(x, y)
 
 				if place_bomb is True:
-					print('PLACING BOMB')
+					#print('PLACING BOMB')
 					self.place_bomb()
 
 				self.updateCharacterWeights(best_wrld, False, False)
@@ -134,39 +134,39 @@ class QCharacter(CharacterEntity):
 
 	def bomb_handler(self, wrld, x, y):
 		for bomb in self.find_all_bombs(wrld):
-			print('FOUND BOMB')
+			#print('FOUND BOMB')
 			dx = self.x + x 
 			dy = self.y + y
 
-			print(f'BX: {bomb[0]}, BY: {bomb[1]}')
-			print(f'DX: {dx}, DY: {dy}')
+			#print(f'BX: {bomb[0]}, BY: {bomb[1]}')
+			#print(f'DX: {dx}, DY: {dy}')
 			escape_directions = [-1, 1] 
 
 			if dx == bomb[0]:
-				print('DX:', dx)
-				print('BOMB_X:', bomb[0])
-				print("FOUND IN COLUMN\n")
+				#print('DX:', dx)
+				#print('BOMB_X:', bomb[0])
+				#print("FOUND IN COLUMN\n")
 				'''
 				if abs(bomb[1] - dy) > 4:
 					pass
 				'''
 				x = escape_directions[random.randint(0, 1)] if x == 0 else (x * -1)
 
-				print(f'RANDOM X: {x}')
+				#print(f'RANDOM X: {x}')
 				if self.can_move(self.prev_wrld, x, y) is False:
 					x = 0
 
 			if dy == bomb[1]:
-				print('DY:', dy)
-				print('BOMB_Y:', bomb[1])
-				print("FOUND IN ROW\n")
+				#print('DY:', dy)
+				#print('BOMB_Y:', bomb[1])
+				#print("FOUND IN ROW\n")
 				'''
 				if abs(bomb[1] - dy) > 4:
 					continue 
 				'''
 
 				y = escape_directions[random.randint(0, 1)] if y == 0 else (y * -1)
-				print(f'RANDOM y: {y}')
+				#print(f'RANDOM y: {y}')
 				if self.can_move(self.prev_wrld, x, y) is False:
 					y = 0
 
