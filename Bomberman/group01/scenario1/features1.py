@@ -50,6 +50,29 @@ def getListOfMonsters(wrld):
                 monsterList.append((w,h))
 
     return monsterList
+
+def getPathToClosestMonster(wrld, character):
+
+    monsterList = getListOfMonsters(wrld)
+    x,y = character.x, character.y
+
+    if len(monsterList) == 0:
+        return 0
+
+    shortestPath = 99999
+    coord = (0,0)
+
+    for pos in monsterList:
+        xPos, yPos = pos.x, pos.y
+        dist = _heuristic(pos, (xPos,yPos))
+
+        if dist<shortestPath:
+            shortestPath = dist
+            coord = (xPos, yPos)
+
+    path = perform_aStar(wrld, character, coord, True)
+    
+    return path
     
 	
 def distanceToExit(wrld, character):
