@@ -5,7 +5,6 @@ from queue import PriorityQueue
 def perform_aStar(wrld, position, destination, getFullPath):
 	x, y = position[0], position[1]
 	searchResults = _aStar(wrld, x, y, destination)
-
 	if searchResults == None:
 		return None
 
@@ -21,7 +20,6 @@ def perform_aStar(wrld, position, destination, getFullPath):
 		current = came_from                # set next search
 
 	pathRev = path[::-1]                   # reverse the list to get the correct direction
-
 	if getFullPath:
 		return pathRev
 
@@ -64,7 +62,7 @@ def _aStar(wrld, x, y, destination):
 			if x1 < 0 or x1 >= wrld.width() or y1 < 0 or y1 >= wrld.height(): # out of bounds
 				continue
 				
-			if wrld.wall_at(x1, y1) or wrld.monsters_at(x1, y1) != None: # wall or monster(s)
+			if wrld.wall_at(x1, y1): # wall or monster(s)
 				continue
 
 			distStartToCur = sqrt((x1-x)**2 + (y1-y)**2)        # calculate the cost it took to get here from starting node
@@ -76,7 +74,7 @@ def _aStar(wrld, x, y, destination):
 				frontier.put(i, priority)
 				came_from[i] = current
 
-	if not goal in came_from.keys():
+	if not goal in came_from:
 		return None
 
 	return came_from
