@@ -50,6 +50,8 @@ class QCharacter(CharacterEntity):
 					#print('PLACING BOMB')
 					self.place_bomb()
 
+				self.updateCharacterWeights(self.prev_wrld, False, False)
+
 			else:
 				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 				#print(f'PREVIOUS: {self.x}, {self.y}')

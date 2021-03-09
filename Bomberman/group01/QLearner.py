@@ -4,7 +4,7 @@ sys.path.insert(0, '../bomberman')
 
 from sensed_world import SensedWorld
 
-ALPHA = 0.9
+ALPHA = 0.2
 GAMMA = 0.8
 
 ###
@@ -115,7 +115,7 @@ class QLearner:
 	# -------------------------------------------------------------------------- 
 	def updateWeights(self, character, wrld, prime_wrld, r):
 
-		delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)
+		delta = r - self.Q_Function(wrld, character)
 
 		for i in range(len(self.features)):
 			self.weights[i] += (ALPHA * delta * self.features[i](wrld, character))

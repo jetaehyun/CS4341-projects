@@ -66,7 +66,7 @@ def distanceToBomb(wrld, character):
 
 
 def distanceToMonster(wrld, character):
-	entityPosition = findNearestEntity(wrld, character, "exit")
+	entityPosition = findNearestEntity(wrld, character, "monster")
 
 	if entityPosition == None:
 		return 0

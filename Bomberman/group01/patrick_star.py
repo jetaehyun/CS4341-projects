@@ -3,7 +3,6 @@ from queue import PriorityQueue
 
 
 def perform_aStar(wrld, position, destination, getFullPath):
-	print(position)
 	x, y = position[0], position[1]
 	searchResults = _aStar(wrld, x, y, destination)
 

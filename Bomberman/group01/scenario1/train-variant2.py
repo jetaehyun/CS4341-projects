@@ -25,7 +25,7 @@ features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRa
 weights = None
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 500):
+for i in range(0, 100):
 	print('Iteration #', i)
 
 	# Create the game
@@ -49,7 +49,7 @@ for i in range(0, 500):
 	g.add_character(q_character)
 
 	g.go(1)
-	#print(g.world.scores["me"])
+	print(g.world.scores["me"])
 	wrld = SensedWorld.from_world(g.world)
 	q_character.updateCharacterWeights(wrld, False, True)
 
