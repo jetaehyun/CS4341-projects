@@ -31,8 +31,7 @@ class TestCharacter(CharacterEntity):
     def do(self, wrld):
 
         if self.state == "aStar":
-            if self.seek_path(wrld) == None:
-                print("None")
+            self.seek_path(wrld)
         else:
             print("Default")
 

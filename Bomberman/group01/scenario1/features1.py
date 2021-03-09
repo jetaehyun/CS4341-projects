@@ -8,7 +8,7 @@ from patrick_star import perform_aStar, _heuristic
 # @Param character position of character (x,y)
 # @Param entity desired entity to find
 #
-# @Returns None: nothing found, list(): of positions
+# @Returns None: nothing found, position tuple (x,y)
 # --------------------------------------------------------------------------
 def findNearestEntity(wrld, character, entity):
     x,y = character
