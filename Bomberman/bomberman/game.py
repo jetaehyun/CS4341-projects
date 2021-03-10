@@ -101,7 +101,7 @@ class Game:
             def step():
                 pygame.time.wait(abs(wait))
 
-        colorama.init(autoreset=True)
+        #colorama.init(autoreset=True)
         #self.display_gui()
         #self.draw()
         step()

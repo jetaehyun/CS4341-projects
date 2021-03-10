@@ -71,7 +71,8 @@ def getPathToClosestMonster(wrld, character):
             coord = (xPos, yPos)
     pos = (character.x,character.y)
     path = perform_aStar(wrld, pos, coord, True)
-    return 1 / (1+len(path))**2
+
+    return (1 / (1+len(path)))**2
     
 	
 def distanceToExit(wrld, character):
@@ -83,7 +84,7 @@ def distanceToExit(wrld, character):
 	pos = (character.x, character.y)
 	path = perform_aStar(wrld, pos, entityPosition, True)
 	distance = float(len(path)) if path is not None else 0
-	return 1 / (1+distance)**2
+	return (1 / (1+distance))**2
 
 
 def distanceToBomb(wrld, character):
@@ -95,7 +96,7 @@ def distanceToBomb(wrld, character):
 	pos = (character.x, character.y)
 	path = perform_aStar(wrld, pos, entityPosition, True)
 	distance = float(len(path)) if path is not None else 0
-	return 1 / (1+distance)**2
+	return (1 / (1+distance))**2
 
 
 
@@ -124,3 +125,5 @@ def inBombExplosionRange(wrld, character):
 		wlrd, events = wrld.next()
 
 	return 0
+
+
