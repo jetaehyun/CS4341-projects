@@ -6,6 +6,7 @@ from entity import CharacterEntity
 from sensed_world import SensedWorld
 from events import Event
 import QLearner
+from features1 import *
 
 class QCharacter(CharacterEntity):
 
@@ -16,67 +17,57 @@ class QCharacter(CharacterEntity):
 		self.train = train
 		self.iteration = iteration 
 
-		self.epsilon = (1 / (iteration + 1)) ** 0.5
+		self.epsilon = 1 / (self.iteration + 1) ** 0.5
 		self.prev_wrld = None
+		self.best_wrld = None
 
 
 	def do(self, wrld):
 		self.prev_wrld = SensedWorld.from_world(wrld)
 
 		if self.train is True:
+			exploringFlag = False
+			best_wrld = None
 			if random.random() < self.epsilon:
+				exploringFlag = True
 				# choose random move
 				allowed_direction = [-1, 0, 1]
 				bomb_actions = [False, True]
 
-				direction_x = allowed_direction[random.randint(0, 2)]
-				direction_y = allowed_direction[random.randint(0, 2)]
-				place_bomb = bomb_actions[random.randint(0, 1)]
-
-				x = direction_x
-				y = direction_y
+				x = random.choice(allowed_direction)
+				y = random.choice(allowed_direction)
+				place_bomb = random.choice(bomb_actions)
 
 				self.move(x, y)
 
 				if place_bomb is True:
-					#print('PLACING BOMB')
 					self.place_bomb()
+
+				
+
 			else:
-				#print('BEST MOVE')
+				exploringFlag = False
 				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
-				#print(f'PREVIOUS: {self.x}, {self.y}')
 
 				x, y, place_bomb = best_action
 
-				#print(f'ATTEMPT: ({x}, {y})')
-
-				#x, y = self.bomb_handler(self.prev_wrld, x, y)
-
-				#x, y = self.explosion_handler(self.prev_wrld, x, y)
-
-				
-				#print(f'MOVE: ({x}, {y})\n')
-
 				self.move(x, y)
 
 				if place_bomb is True:
-					#print('PLACING BOMB')
 					self.place_bomb()
 
-				#self.updateCharacterWeights(best_wrld, False, False)
 			
-			tmp_wrld = SensedWorld.from_world(wrld)
-			next_wrld, next_events = tmp_wrld.next()
+			next_wrld, next_events = SensedWorld.from_world(wrld).next()
 
 			for event in next_events:
 				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
-					self.updateCharacterWeights(next_wrld, False, True)
+					self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
 
 				elif event.tpe == Event.CHARACTER_FOUND_EXIT:
-					self.updateCharacterWeights(next_wrld, True, False)
+					self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
 
-				else:
-					self.updateCharacterWeights(next_wrld, False, False)
+			self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
+
 			
 
 		else:
@@ -86,30 +77,33 @@ class QCharacter(CharacterEntity):
 
 			x, y, place_bomb = best_action
 
+			x, y = self.bomb_handler(wrld, x, y)
+			x, y = self.explosion_handler(wrld, x, y)
+
+			self.move(x, y)
+
 			if place_bomb is True:
 				self.place_bomb()
 
 
-			self.move(x, y)
-
-
-
-
-
-	def updateCharacterWeights(self, wrld, won, lost):
+	def updateCharacterWeights(self, wrld, exploring, win, exitConition):
 		reward = 0
 
 		if self.train is True:
-			if won is True:
-				reward = 100
-
-			elif lost is True:
-				reward = -50
+			if exitConition is True:
+				if win is True:
+					reward = 100
+				else:
+					reward = -100
 
 			else:
-				reward = -0.5
+				reward = ((distanceToExit(wrld, self) ** 0.5) * 10)
 
-			self.q_learner.updateWeights(self, wrld, reward)
+			if exploring is False:
+				self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
+
+			else:
+				self.q_learner.updateWeights(self, None, wrld, reward)
 
 
 	def can_move(self, wrld, x, y):

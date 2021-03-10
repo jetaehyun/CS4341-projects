@@ -5,7 +5,7 @@ sys.path.insert(1, '..')
 
 # Import necessary stuff
 from game import Game
-from monsters.stupid_monster import StupidMonster
+from monsters.selfpreserving_monster import SelfPreservingMonster
 from sensed_world import SensedWorld
 
 # TODO This is your code!
@@ -34,10 +34,10 @@ for i in range(0, 100):
 
 	# TODO Add your character
 
-	g.add_monster(StupidMonster("stupid", # name
-                            "S",      # avatar
-                            3, 9      # position
-	))
+	g.add_monster(SelfPreservingMonster("selfpreserving", # name
+										"S",              # avatar
+                                    	3, 9,             # position
+                                    	1))                 # detection range
 
 	q_character = QCharacter("me", # name
                                "C",  # avatar

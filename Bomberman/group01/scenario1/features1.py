@@ -1,147 +1,74 @@
+# This is necessary to find the main code
+import sys
+sys.path.insert(0, '../../bomberman')
+sys.path.insert(1, '..')
+
 from patrick_star import perform_aStar, _heuristic
+from queue import PriorityQueue
 
-# --------------------------------------------------------------------------
-##
-# @Brief find the nearest entity to the character
-#
-# @Param wrld world object
-# @Param character position of character (x,y)
-# @Param entity desired entity to find
-#
-# @Returns None: nothing found, position tuple (x,y)
-# --------------------------------------------------------------------------
-def findNearestEntity(wrld, character, entity):
-	x,y = character.x, character.y
-	width,height = wrld.width(), wrld.height()
-	
-	distanceTo = 99999
-	coord = None
-
-	for w in range(width):
-		for h in range(height):
-			distanceToFound = 99999
-			if entity == "monster":
-				if wrld.monsters_at(w, h) is not None:
-					distanceToFound = _heuristic((w,h), (x,y))
-
-			elif entity == "bomb":
-				if wrld.bomb_at(w,h) is not None:
-					distanceToFound = _heuristic((w,h), (x,y))
-
-			elif entity == "exit":
-				if wrld.exit_at(w,h):
-					return (w,h)
-
-			if distanceToFound<distanceTo:
-				distanceTo = distanceToFound
-				coord = (w,h)
-
-	return coord
+from helpers import *
 
 
-def getListOfMonsters(wrld):
-
-    monsterList = []
-    width, height = wrld.width(), wrld.height()
-
-    for w in range(width):
-        for h in range(height):
-            if wrld.monsters_at(w,h) is not None:
-                monsterList.append((w,h))
-
-    return monsterList
-
-
-def getListOfBombs(wrld):
-
-	bombs = []
-	for w in range(wrld.width()):
-		for h in range(wrld.height()):
-			if wrld.bomb_at(w,h):
-				bombs.append((w,h))
-
-	return bombs
-
-
-def anyDroppedBombs(wrld, character):
-	if len(getListOfBombs(wrld)) > 0:
-		return 1
-
-	else:
-		return 0
-
-def getPathToClosestMonster(wrld, character):
-
-    monsterList = getListOfMonsters(wrld)
-    x,y = character.x, character.y
-
-    if len(monsterList) == 0:
-        return 0
-
-    shortestPath = 99999
-    coord = (0,0)
-
-    for pos in monsterList:
-        xPos, yPos = pos[0], pos[1]
-        dist = _heuristic(pos, (xPos,yPos))
-
-        if dist<shortestPath:
-            shortestPath = dist
-            coord = (xPos, yPos)
-    pos = (character.x,character.y)
-    path = perform_aStar(wrld, pos, coord, True)
-    return (1 / (1+len(path))**2)
-    
-	
 def distanceToExit(wrld, character):
-	entityPosition = findNearestEntity(wrld, character, "exit")
+	exit = findAll(wrld, 0)
 
-	if entityPosition == None:
+	if len(exit) == 0: 
 		return 0
+
+	nearest_exit = findNearestEntity(wrld, character, exit)
 
 	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition, True)
-	distance = float(len(path)) if path is not None else 0
-	return 1-(1 / (1+distance)**2)
+	distance = float(perform_a_star(wrld, pos, nearest_exit))
+
+	return (1 / (distance + 1)) ** 2
 
 
 def distanceToBomb(wrld, character):
-	entityPosition = findNearestEntity(wrld, character, "bomb")
+	bombs = findAll(wrld, 1)
 
-	if entityPosition == None:
+	if len(bombs) == 0: 
 		return 0
 
-	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition, True)
-	distance = float(len(path)) if path is not None else 0
-	return 1-(1 / (1+distance)**2)
+	nearest_bomb = findNearestEntity(wrld, character, bombs)
 
+	pos = (character.x, character.y)
+	distance = float(perform_a_star(wrld, pos, nearest_bomb))
+
+	return (1 / (distance + 1)) ** 2
 
 
 def distanceToMonster(wrld, character):
-	entityPosition = findNearestEntity(wrld, character, "monster")
+	monsters = findAll(wrld, 2)
 
-	if entityPosition == None:
+	if len(monsters) == 0: 
 		return 0
 
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+
 	pos = (character.x, character.y)
-	path = perform_aStar(wrld, pos, entityPosition, True)
-	distance = float(len(path)) if path is not None else 0
-	return 1 / (1+distance)**2
+	distance = float(perform_a_star(wrld, pos, nearest_monster))
+
+	return (1 / (distance + 1)) ** 2
 
 
-
+	
 def inBombExplosionRange(wrld, character):
    
 	for i in range(3):
-		if wrld.me(character) is None:
-			return 1
-
 		if wrld.explosion_at(character.x, character.y) is not None:
 			return 1
 
 		wlrd, events = wrld.next()
 
 	return 0
+
+
+def anyDroppedBombs(wrld, character):
+	if len(findAll(wrld, 1)) > 0:
+		return 1
+
+	else:
+		return 0
+
 
 
