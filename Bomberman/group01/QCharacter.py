@@ -4,6 +4,7 @@ sys.path.insert(0, '../bomberman')
 
 from entity import CharacterEntity
 from sensed_world import SensedWorld
+from events import Event
 import QLearner
 
 class QCharacter(CharacterEntity):
@@ -34,7 +35,19 @@ class QCharacter(CharacterEntity):
 
 				x = direction_x
 				y = direction_y
+
+				self.move(x, y)
+
+				if place_bomb is True:
+					#print('PLACING BOMB')
+					self.place_bomb()
+			else:
+				#print('BEST MOVE')
+				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 				#print(f'PREVIOUS: {self.x}, {self.y}')
+
+				x, y, place_bomb = best_action
+
 				#print(f'ATTEMPT: ({x}, {y})')
 
 				#x, y = self.bomb_handler(self.prev_wrld, x, y)
@@ -50,30 +63,21 @@ class QCharacter(CharacterEntity):
 					#print('PLACING BOMB')
 					self.place_bomb()
 
-				self.updateCharacterWeights(self.prev_wrld, False, False)
+				#self.updateCharacterWeights(best_wrld, False, False)
+			
+			tmp_wrld = SensedWorld.from_world(wrld)
+			next_wrld, next_events = tmp_wrld.next()
 
-			else:
-				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
-				#print(f'PREVIOUS: {self.x}, {self.y}')
+			for event in next_events:
+				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
+					self.updateCharacterWeights(next_wrld, False, True)
 
-				x, y, place_bomb = best_action
+				elif event.tpe == Event.CHARACTER_FOUND_EXIT:
+					self.updateCharacterWeights(next_wrld, True, False)
 
-				#print(f'ATTEMPT: ({x}, {y})')
-
-				x, y = self.bomb_handler(self.prev_wrld, x, y)
-
-				x, y = self.explosion_handler(self.prev_wrld, x, y)
-
-				
-				#print(f'MOVE: ({x}, {y})\n')
-
-				self.move(x, y)
-
-				if place_bomb is True:
-					#print('PLACING BOMB')
-					self.place_bomb()
-
-				self.updateCharacterWeights(best_wrld, False, False)
+				else:
+					self.updateCharacterWeights(next_wrld, False, False)
+			
 
 		else:
 			# use the converged values 
@@ -91,6 +95,7 @@ class QCharacter(CharacterEntity):
 
 
 
+
 	def updateCharacterWeights(self, wrld, won, lost):
 		reward = 0
 
@@ -99,12 +104,12 @@ class QCharacter(CharacterEntity):
 				reward = 100
 
 			elif lost is True:
-				reward = -10
+				reward = -50
 
 			else:
-				reward = 5
+				reward = -0.5
 
-			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
+			self.q_learner.updateWeights(self, wrld, reward)
 
 
 	def can_move(self, wrld, x, y):

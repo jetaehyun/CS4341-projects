@@ -3,6 +3,7 @@ import sys, random
 sys.path.insert(0, '../bomberman')
 
 from sensed_world import SensedWorld
+from events import Event
 
 ALPHA = 0.2
 GAMMA = 0.8
@@ -41,7 +42,7 @@ class QLearner:
 	def getBestMove(self, wrld, character):
 		maxQ = float('-inf')
 
-		best_action = None
+		best_action = (0, 0, False)
 		best_wrld = wrld 
 
 		for move in self.available_moves:
@@ -64,15 +65,14 @@ class QLearner:
 
 			curr_q = float('-inf')
 
-			if my_wrld.me(character) is not None:
-				# TODO: calculate the Q value
+			if next_wrld.me(character) is not None:
 				curr_q = self.Q_Function(next_wrld, my_wrld.me(character))
 
 			else:
 				# either character just died or exited 
-				
 				for event in next_events:
-					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == CHARACTER_KILLED_BY_MONSTER:
+					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
+						#print('CHARACTETR DIED')
 						curr_q = float('-inf')
 
 
@@ -115,7 +115,7 @@ class QLearner:
 	#
 	# @Returns totalSum - the total sum of the weights * feature (aka value of Q(s, a))
 	# -------------------------------------------------------------------------- 
-	def updateWeights(self, character, wrld, prime_wrld, r):
+	def updateWeights(self, character, wrld, r):
 
 		delta = r - self.Q_Function(wrld, character)
 

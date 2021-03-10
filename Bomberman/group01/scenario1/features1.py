@@ -51,6 +51,25 @@ def getListOfMonsters(wrld):
 
     return monsterList
 
+
+def getListOfBombs(wrld):
+
+	bombs = []
+	for w in range(wrld.width()):
+		for h in range(wrld.height()):
+			if wrld.bomb_at(w,h):
+				bombs.append((w,h))
+
+	return bombs
+
+
+def anyDroppedBombs(wrld, character):
+	if len(getListOfBombs(wrld)) > 0:
+		return 1
+
+	else:
+		return 0
+
 def getPathToClosestMonster(wrld, character):
 
     monsterList = getListOfMonsters(wrld)
@@ -124,3 +143,5 @@ def inBombExplosionRange(wrld, character):
 		wlrd, events = wrld.next()
 
 	return 0
+
+
