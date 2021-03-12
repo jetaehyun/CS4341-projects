@@ -101,4 +101,4 @@ def perform_a_star(wrld, start, destination):
 	my_path.append(start)
 	my_path[::-1] 
 
-	return len(my_path)
+	return cost_so_far[destination]

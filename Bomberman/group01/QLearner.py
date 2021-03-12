@@ -5,7 +5,7 @@ sys.path.insert(0, '../bomberman')
 from sensed_world import SensedWorld
 from events import Event
 
-ALPHA = 0.5
+ALPHA = 0.2
 GAMMA = 0.1
 
 ###
@@ -118,6 +118,7 @@ class QLearner:
 	# -------------------------------------------------------------------------- 
 	def updateWeights(self, character, prime_wrld, wrld, r):
 		delta = None 
+		
 		if prime_wrld is not None:
 			delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)
 

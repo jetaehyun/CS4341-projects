@@ -61,10 +61,10 @@ class QCharacter(CharacterEntity):
 
 			for event in next_events:
 				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
-					self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
+					self.updateCharacterWeights(next_wrld, exploringFlag, False, True)
 
 				elif event.tpe == Event.CHARACTER_FOUND_EXIT:
-					self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
+					self.updateCharacterWeights(next_wrld, exploringFlag, True, True)
 
 			self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
 
@@ -94,10 +94,10 @@ class QCharacter(CharacterEntity):
 				if win is True:
 					reward = 100
 				else:
-					reward = -100
+					reward = -50
 
 			else:
-				reward = ((distanceToExit(wrld, self) ** 0.5) * 10)
+				reward = ((distanceToExit(wrld, self) ** 0.5) * 10) - ((distanceToMonster(wrld, self) ** 0.5) * 5)
 
 			if exploring is False:
 				self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
