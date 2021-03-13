@@ -58,7 +58,7 @@ def inBombExplosionRange(wrld, character):
 		if wrld.explosion_at(character.x, character.y) is not None:
 			return 1
 
-		wlrd, events = wrld.next()
+		wrld, events = wrld.next()
 
 	return 0
 
