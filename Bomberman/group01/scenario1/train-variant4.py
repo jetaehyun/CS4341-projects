@@ -16,20 +16,14 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster,distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
 
-#weights = [0.07454250024312192, -1.3927287666669574, 0.5408097345211125, -42.307289465625345, -12.534558900002617]
-#weights = [48.22191700745971, -3.960068253593247, -6.948051352419573, -7.29968753572757, 5.742455559360193]
-#weights = [7.936803258605797, -0.16809098876621326, -2.487543588003159, 4.05296286434909, 5.68763111356333]
-#weights = [151.8339062609312, -3.797528809195254, -18.788182544708963, -2.3597287470390147, -20.21465181426199, 2.616117293788106]
-
-#weights = [158.2321605318441, -1.8480947526392106, -19.85272152516951, 0.47593996481356093, -20.806451798407036, 2.8326522788742654]
-#weights = [-0.0014731353844448809, 0.63982395598296, -19.88923508228701, -22.022121698144286, -0.26396478487768343]
-
-
+weights = None
+#weights = [182.6988963919609, -0.06697338907055363, -25.595194698516, -22.38475360886873, -1.6742679285951199]
+#weights = [178.6559472181669, -1.0851218606775932, -30.45498158628978, -22.38871482591737, -2.978455290846071]
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 150):
+for i in range(0, 200):
 	print('Iteration #', i)
 
 	# Create the game
@@ -37,10 +31,10 @@ for i in range(0, 150):
 
 	# TODO Add your character
 
-	g.add_monster(SelfPreservingMonster("selfpreserving", # name
-										"S",              # avatar
-                                    	3, 9,             # position
-                                    	1))                 # detection range
+	g.add_monster(SelfPreservingMonster("agressive", # name
+										"A",              # avatar
+                                    	3, 13,             # position
+                                    	2))                 # detection range
 
 	q_character = QCharacter("me", # name
                                "C",  # avatar
