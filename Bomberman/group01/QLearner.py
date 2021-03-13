@@ -123,7 +123,7 @@ class QLearner:
 		delta = None 
 
 		if prime_wrld is not None:
-			delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)
+			delta =  (r + ( GAMMA * self.Q_Function(prime_wrld, character)) -self.Q_Function(wrld, character))
 
 		else:
 			delta = r - self.Q_Function(wrld, character)

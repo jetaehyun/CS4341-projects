@@ -232,7 +232,6 @@ class AlphaBetaAgent(agent.Agent):
                 else:
                     return 0
 
-
         return points
 
 
