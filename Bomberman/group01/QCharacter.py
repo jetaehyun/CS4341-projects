@@ -97,7 +97,7 @@ class QCharacter(CharacterEntity):
 					reward = -50
 
 			else:
-				reward = ((distanceToExit(wrld, self) ** 0.5) * 10) - ((distanceToMonster(wrld, self) ** 0.5) * 5)
+				reward = ((distanceToExit(wrld, self) ** 0.1) * 10) - ((distanceToMonster(wrld, self) ** 0.1) * 5)
 
 			if exploring is False:
 				self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)

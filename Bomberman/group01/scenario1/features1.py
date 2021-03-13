@@ -71,4 +71,28 @@ def anyDroppedBombs(wrld, character):
 		return 0
 
 
+def distanceToSmartMonster(wrld, character):
+	monsters = findAll(wrld, 2)
+
+	if len(monsters) == 0: 
+		return 0
+
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+
+	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
+
+	pos = (character.x, character.y)
+	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
+
+	if monstersEntity.name == "selfpreserving":
+		if distance <= 2:
+			return ((3 - distance) / 3)
+
+	elif monstersEntity.name == "aggressive":
+		if distance <= 4:
+			return ((5 - distance) / 5)
+
+	return 0
+
+
 

@@ -6,7 +6,7 @@ from sensed_world import SensedWorld
 from events import Event
 
 ALPHA = 0.2
-GAMMA = 0.1
+GAMMA = 0
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation
@@ -57,6 +57,9 @@ class QLearner:
 			y = move[1]
 			place_bomb = move[2]
 
+			if self.validMove(my_wrld, character, (x, y)) is False:
+				continue
+
 			my_wrld.me(character).move(x, y)
 
 			if place_bomb is True:
@@ -74,11 +77,11 @@ class QLearner:
 				for event in next_events:
 					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
 						#print('CHARACTETR DIED')
-						curr_q = float('-inf')
+						curr_q = -5000
 
 
 					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
-						curr_q = float('inf')
+						curr_q = 5000
 
 			if curr_q > maxQ:
 				maxQ = curr_q
@@ -118,7 +121,7 @@ class QLearner:
 	# -------------------------------------------------------------------------- 
 	def updateWeights(self, character, prime_wrld, wrld, r):
 		delta = None 
-		
+
 		if prime_wrld is not None:
 			delta = (r + (GAMMA * self.Q_Function(prime_wrld, character))) - self.Q_Function(wrld, character)
 
@@ -127,3 +130,19 @@ class QLearner:
 
 		for i in range(len(self.features)):
 			self.weights[i] += (ALPHA * delta * self.features[i](wrld, character))
+
+
+	def validMove(self, wrld, character, direction):
+		dx = character.x + direction[0]
+		dy = character.y + direction[1]
+
+		if dx < 0 or dx >= wrld.width():
+			return False 
+
+		if dy < 0 or dy >= wrld.height():
+			return False 
+
+		if wrld.wall_at(dx, dy) is True:
+			return False
+
+		return True
