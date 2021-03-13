@@ -77,8 +77,8 @@ class QCharacter(CharacterEntity):
 
 			x, y, place_bomb = best_action
 
-			x, y = self.bomb_handler(wrld, x, y)
-			x, y = self.explosion_handler(wrld, x, y)
+			#x, y = self.bomb_handler(wrld, x, y)
+			#x, y = self.explosion_handler(wrld, x, y)
 
 			self.move(x, y)
 

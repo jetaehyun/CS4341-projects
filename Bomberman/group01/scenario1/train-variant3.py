@@ -16,7 +16,7 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
 
 #weights = [0.07454250024312192, -1.3927287666669574, 0.5408097345211125, -42.307289465625345, -12.534558900002617]
 #weights = [48.22191700745971, -3.960068253593247, -6.948051352419573, -7.29968753572757, 5.742455559360193]
