@@ -19,7 +19,7 @@ from QCharacter import QCharacter
 from features import *
 
 numOfWins =0
-features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs, bomb_to_wall]
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs, bomb_to_wall, inRadius]
 weights = None
 
 qlearner = QLearner(weights, features)
@@ -50,5 +50,8 @@ for i in range(0, 100):
 
 	g.go(1)
 	print(g.world.scores["me"])
+
+	print('MY WEIGHTS')
+	print(qlearner.weights)
 
 
