@@ -23,11 +23,11 @@ from monsters.selfpreserving_monster import SelfPreservingMonster
 
 numOfWins =0
 features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
-weights = None
+weights = [99.01502595145853, -3.024368630487915, -24.227424565497664, -4.647379985530353, -1.0585944409653059]
 
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 200):
+for i in range(0, 10):
 	print('Iteration #', i)
 
 	# Create the game
@@ -46,7 +46,7 @@ for i in range(0, 200):
                                "C",  # avatar
                                0, 0,  # position
                                qlearner,
-                               True,
+                               False,
                                i)
 
 	#Uncomment this if you want the interactive character
