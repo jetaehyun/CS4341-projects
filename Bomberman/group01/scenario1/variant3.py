@@ -16,9 +16,10 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
 
-weights = [125.9826968405752, -3.684196497884573, -24.163511632425205, -3.7929051702149574, 7.238705261114704]
+weights = [159.78738293256993, -0.6215573402097863, -18.636221001030794, -3.554655669452952, -1.3020421285039028, 2.9151051402250623]
+
 
 
 numOfWins = 0
