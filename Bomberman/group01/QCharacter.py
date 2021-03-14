@@ -6,7 +6,8 @@ from entity import CharacterEntity
 from sensed_world import SensedWorld
 from events import Event
 import QLearner
-from features1 import *
+#from features1 import *
+from features2 import *
 
 class QCharacter(CharacterEntity):
 

@@ -25,7 +25,7 @@ features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMo
 
 #weights = [158.2321605318441, -1.8480947526392106, -19.85272152516951, 0.47593996481356093, -20.806451798407036, 2.8326522788742654]
 #weights = [-0.0014731353844448809, 0.63982395598296, -19.88923508228701, -22.022121698144286, -0.26396478487768343]
-
+weights = None
 
 qlearner = QLearner(weights, features)
 prev_wrld = None

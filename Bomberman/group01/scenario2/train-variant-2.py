@@ -1,11 +1,13 @@
 # This is necessary to find the main code
 import sys
+import random
+
 sys.path.insert(0, '../../bomberman')
 sys.path.insert(1, '..')
 
 # Import necessary stuff
 from game import Game
-from monsters.selfpreserving_monster import SelfPreservingMonster
+from monsters.stupid_monster import StupidMonster
 from sensed_world import SensedWorld
 
 # TODO This is your code!
@@ -14,34 +16,33 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features1 import *
+from features2 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster,distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
+numOfWins =0
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
+weights = [151.3165613674901, -2.5215911378156255, -23.430249878167054, -0.1671006070009438, 3.6843296791750113]
 
-weights = [161.31270273074898, -2.6793054860092815, -29.175498908105542, 0.0, -3.112468405754644, -5.95941013266402]
-#weights = [182.6988963919609, -0.06697338907055363, -25.595194698516, -22.38475360886873, -1.6742679285951199]
-#weights = [178.6559472181669, -1.0851218606775932, -30.45498158628978, -22.38871482591737, -2.978455290846071]
 qlearner = QLearner(weights, features)
 prev_wrld = None
-numOfWins = 0
 for i in range(0, 10):
 	print('Iteration #', i)
 
 	# Create the game
+	random.seed(random.randint(0,290344))
 	g = Game.fromfile('map.txt')
 
 	# TODO Add your character
 
-	g.add_monster(SelfPreservingMonster("agressive", # name
-										"A",              # avatar
-                                    	3, 13,             # position
-                                    	2))                 # detection range
+	g.add_monster(StupidMonster("stupid", # name
+                            "S",      # avatar
+                            3, 9      # position
+	))
 
 	q_character = QCharacter("me", # name
                                "C",  # avatar
                                0, 0,  # position
                                qlearner,
-                               True,
+                               False,
                                i)
 
 	#Uncomment this if you want the interactive character
@@ -51,7 +52,6 @@ for i in range(0, 10):
 	print(g.world.scores["me"])
 	wrld = SensedWorld.from_world(g.world)
 	#q_character.updateCharacterWeights(wrld, False, True)
-
 	score = g.world.scores["me"]
 	if score > 400:
 		numOfWins += 1
