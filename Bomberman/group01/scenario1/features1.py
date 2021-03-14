@@ -82,15 +82,15 @@ def distanceToSmartMonster(wrld, character):
 	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
 
 	pos = (character.x, character.y)
-	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
+	distance = len(perform_aStar(wrld, pos, nearest_monster, True))
 
 	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 3:
-			return ((4 - distance) / 4)
+		if distance <= 4:
+			return ((5 - distance) / 5)
 
 	return 0
 
