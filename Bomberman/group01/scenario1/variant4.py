@@ -1,5 +1,5 @@
 # This is necessary to find the main code
-import sys
+import sys, random
 sys.path.insert(0, '../../bomberman')
 sys.path.insert(1, '..')
 
@@ -16,9 +16,12 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius]
 
-weights = [141.6733937363201, -1.6213092213778664, -27.40908559544783, -5.915412854211306, -0.5104189450712372, -1.034971144456712]
+#weights = [153.37129032836498, 1.4101562732491393, -24.963437153837837, 8.135352174334818, 0.9973300252676423, -7.757569354872357, 3.0587245528269946]
+weights = [144.14094178190507, 0.4379853830563545, -22.449838439565607, -0.7183460474753041, -3.1462212960977953, -2.314635091655976, 5.8287875713647335, -4.8618194453497425]
+
+
 
 qlearner = QLearner(weights, features)
 prev_wrld = None
@@ -26,6 +29,7 @@ N = 50
 numOfWins = 0
 for i in range(0, N):
 	print('Iteration #', i)
+	random.randint(0, 1000)
 
 	# Create the game
 	g = Game.fromfile('map.txt')
@@ -53,6 +57,8 @@ for i in range(0, N):
 
 	if score > 400:
 		numOfWins += 1
+
+	print("{}, {:.2f}%".format(g.world.scores["me"], numOfWins/(i+1)*100))
 
 print(f'WON: {numOfWins} out of {N}')
 print(f'WIN PERCENTAGE: {numOfWins / N}')

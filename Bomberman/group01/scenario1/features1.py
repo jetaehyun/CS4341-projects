@@ -84,6 +84,7 @@ def distanceToSmartMonster(wrld, character):
 	pos = (character.x, character.y)
 	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
 
+	'''
 	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
 			return ((3 - distance) / 3)
@@ -91,6 +92,54 @@ def distanceToSmartMonster(wrld, character):
 	elif monstersEntity.name == "aggressive":
 		if distance <= 3:
 			return ((4 - distance) / 4)
+	'''
+
+	if distance <= 3:
+		return ((4 - distance) / 4)
+
+	return 0
+
+
+def monsterFromExit(wrld, character):
+	monsters = findAll(wrld, 2)
+	exit = findAll(wrld, 0)
+
+	if len(monsters) == 0 or len(exit) == 0:
+		return 0
+
+	nearest_exit = findNearestEntity(wrld, character, exit)
+
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+
+	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
+
+	pos = (nearest_monster[0], nearest_monster[1])
+
+	distance = float(perform_a_star(wrld, pos, nearest_exit))
+
+	return (1 / (distance + 1)) ** 2
+
+
+def __inWorld(wrld, dx, dy):
+	if dx < 0 or dx >= wrld.width():
+		return False 
+
+	if dy < 0 or dy >= wrld.height():
+		return False
+
+	return True 
+
+def inRadius(wrld, character):
+	radius = [-3, 0, 3]
+
+	for i in range(len(radius)):
+		for j in range(len(radius)):
+			dx = character.x + radius[i]
+			dy = character.y + radius[j]
+
+			if __inWorld(wrld, dx, dy) is True:
+				if wrld.monsters_at(dx, dy):
+					return 1
 
 	return 0
 
