@@ -84,15 +84,107 @@ def distanceToSmartMonster(wrld, character):
 	pos = (character.x, character.y)
 	distance = len(perform_aStar(wrld, pos, nearest_monster, True))
 
+	'''
 	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 4:
-			return ((5 - distance) / 5)
+		if distance <= 3:
+			return ((4 - distance) / 4)
+	'''
+
+	if distance <= 3:
+		return ((4 - distance) / 4)
 
 	return 0
 
 
+def monsterFromExit(wrld, character):
+	monsters = findAll(wrld, 2)
+	exit = findAll(wrld, 0)
 
+	if len(monsters) == 0 or len(exit) == 0:
+		return 0
+
+	nearest_exit = findNearestEntity(wrld, character, exit)
+
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+
+	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
+
+	pos = (nearest_monster[0], nearest_monster[1])
+
+	distance = float(perform_a_star(wrld, pos, nearest_exit))
+
+	return (1 / (distance + 1)) ** 2
+
+
+def __inWorld(wrld, dx, dy):
+	if dx < 0 or dx >= wrld.width():
+		return False 
+
+	if dy < 0 or dy >= wrld.height():
+		return False
+
+	return True 
+
+def inRadius(wrld, character):
+	radius = [-3, 0, 3]
+
+	for i in range(len(radius)):
+		for j in range(len(radius)):
+			dx = character.x + radius[i]
+			dy = character.y + radius[j]
+
+			if __inWorld(wrld, dx, dy) is True:
+				if wrld.monsters_at(dx, dy):
+					return 1
+
+	return 0
+
+def distanceBombToMonster(wrld, character):
+	
+	monsters = findAll(wrld, 2)
+	bomb = findAll(wrld, 1)
+
+	if len(monsters) == 0 or len(bomb) == 0: 
+		return 0
+
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+	nearest_bomb  = findNearestEntity(wrld, character, bomb)
+
+	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
+	pos = (nearest_bomb[0], nearest_bomb[1])
+ 
+	distance = float(perform_a_star(wrld, pos, nearest_monster))
+ 
+	return (1 / (distance + 1)) ** 2
+	
+def monsterToNearestWall(wrld, character):
+	monsters = findAll(wrld, 2)
+	walls = findAll(wrld, 3)
+	 
+	if len(monsters) == 0 or len(walls) == 0:
+		return 0
+
+	nearest_monster = findNearestEntity(wrld, character, monsters)
+	nearest_wall = findNearestEntity(wrld, character, walls)
+ 	
+	pos = (nearest_monster[0], nearest_monster[1])
+ 
+	distance = float(perform_a_star(wrld, pos, nearest_wall))
+	return (1 / (distance + 1)) ** 2
+
+def distanceBetweenMonsters(wrld, character):
+    monsters = findAll(wrld, 2)
+    
+    if len(monsters) < 2:
+        return 0
+    
+    monster1 = monsters[0]
+    monster2 = monsters[1]
+    
+    distance = float(perform_a_star(wrld, monster1, monster2))
+    
+    return (1 / (distance+1)) ** 2
