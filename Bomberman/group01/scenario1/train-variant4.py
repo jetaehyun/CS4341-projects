@@ -16,7 +16,7 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster,distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius]
 
 weights = [161.31270273074898, -2.6793054860092815, -29.175498908105542, 0.0, -3.112468405754644, -5.95941013266402]
 #weights = [182.6988963919609, -0.06697338907055363, -25.595194698516, -22.38475360886873, -1.6742679285951199]
@@ -32,7 +32,7 @@ for i in range(0, 10):
 
 	# TODO Add your character
 
-	g.add_monster(SelfPreservingMonster("agressive", # name
+	g.add_monster(SelfPreservingMonster("aggressive", # name
 										"A",              # avatar
                                     	3, 13,             # position
                                     	2))                 # detection range

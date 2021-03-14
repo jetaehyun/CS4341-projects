@@ -6,7 +6,7 @@ from sensed_world import SensedWorld
 from events import Event
 
 ALPHA = 0.2
-GAMMA = 0
+GAMMA = 0.01
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation
