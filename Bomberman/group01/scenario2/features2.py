@@ -100,12 +100,19 @@ def total_number_of_walls(wrld,character):
 
 	return (1/(len(walls)+1))**2
 
-def distance_of_bomb_to_wall(wrld,character):
+
+def bomb_to_wall(wrld,character):
 	distance  = 0
-	if len(findAll(wrld, 1)) > 0:
-		bombs = findAll(wrld,1)
-		nearest_bomb = findNearestEntity(wrld,character,bombs)
-		walls = findAll(wrld,3)
-		nearest_wall = findNearestEntity(wrld, nearest_bomb,walls)
-		distance = float(perform_aStar(wrld,nearest_bomb,nearest_wall))
-	return distance
+	bombs = findAll(wrld, 1)
+	walls = findAll(wrld, 3)
+
+	if len(bombs) == 0 or len(walls) == 0:
+		return 0
+
+	nearest_bomb = findNearestEntity(wrld, character, bombs)
+	nearest_wall = findNearestEntity(wrld, character, walls)
+
+	pos = (nearest_bomb[0], nearest_bomb[1])
+	distance = float(perform_a_star(wrld, pos, nearest_wall))
+
+	return (1 / (distance + 1)) ** 2

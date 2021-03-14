@@ -159,5 +159,21 @@ def monsterToBomb(wrld, character):
 
 	return (1 / (distance + 1)) ** 2
 
+def bomb_to_wall(wrld,character):
+	distance  = 0
+	bombs = findAll(wrld, 1)
+	walls = findAll(wrld, 3)
+
+	if len(bombs) == 0 or len(walls) == 0:
+		return 0
+
+	nearest_bomb = findNearestEntity(wrld, character, bombs)
+	nearest_wall = findNearestEntity(wrld, character, walls)
+
+	pos = (nearest_bomb[0], nearest_bomb[1])
+	distance = float(perform_aStar(wrld, pos, nearest_wall))
+
+	return (1 / (distance + 1)) ** 2
+
 
 
