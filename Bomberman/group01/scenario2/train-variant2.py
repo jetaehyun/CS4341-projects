@@ -16,7 +16,7 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features2 import *
+from features import *
 
 numOfWins =0
 features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs, bomb_to_wall]
@@ -24,7 +24,7 @@ weights = None
 
 qlearner = QLearner(weights, features)
 
-for i in range(0, 10):
+for i in range(0, 100):
 	print('Iteration #', i)
 
 	# Create the game
