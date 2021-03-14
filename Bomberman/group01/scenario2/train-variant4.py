@@ -19,8 +19,10 @@ from features import *
 features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb]
 
 weights = None
+
 qlearner = QLearner(weights, features)
 
+numOfWins = 0
 for i in range(0, 200):
 	print('Iteration #', i)
 
@@ -40,6 +42,7 @@ for i in range(0, 200):
                                qlearner,
                                True,
                                i)
+
 
 	#Uncomment this if you want the interactive character
 	g.add_character(q_character)
