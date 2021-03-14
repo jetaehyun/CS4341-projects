@@ -18,7 +18,7 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features2 import *
+from features import *
 from monsters.selfpreserving_monster import SelfPreservingMonster
 
 numOfWins =0

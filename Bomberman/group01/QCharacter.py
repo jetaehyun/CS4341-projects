@@ -6,7 +6,6 @@ from entity import CharacterEntity
 from sensed_world import SensedWorld
 from events import Event
 import QLearner
-#from features1 import *
 from features import *
 
 class QCharacter(CharacterEntity):
@@ -98,6 +97,7 @@ class QCharacter(CharacterEntity):
 					reward = -50
 
 			else:
+				pos = (self.x, self.y)
 				reward = ((distanceToExit(wrld, self) ** 0.1) * 10) - ((distanceToMonster(wrld, self) ** 0.1) * 5)
 
 			if exploring is False:

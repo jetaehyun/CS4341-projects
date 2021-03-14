@@ -11,8 +11,8 @@ from queue import PriorityQueue
 #
 # @Returns None: nothing found, position tuple (x,y)
 # --------------------------------------------------------------------------
-def findNearestEntity(wrld, character, entities):
-	x, y = character.x, character.y
+def findNearestEntity(wrld, pos, entities):
+	x, y = pos[0], pos[1]
 	width, height = wrld.width(), wrld.height()
 	
 	nearest_entity = entities[0]
