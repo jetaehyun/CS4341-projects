@@ -194,23 +194,28 @@ def bomb_to_wall(wrld,character):
 
 
 def anyMonsters(wrld, character):
-    monsters = findAll(wrld, 2)
-    
-    if len(monsters) < 2:
-        return 1
-    
-    return 0
+	monsters = findAll(wrld, 2)
+	
+	if len(monsters) < 2:
+		return 1
+	
+	return 0
 
 
-def distanceBetweenMonsters(wrld, character):
-    monsters = findAll(wrld, 2)
-    
-    if len(monsters) < 2:
-        return 0
-    
-    monster1 = monsters[0][0]
-    monster2 = monsters[0][1]
-    
-    distance = float(perform_a_star(wrld, monster1, monster2))
-    
-    return (1 / (distance+1)) ** 2
+def distanceToWall(wrld, character):
+	walls = findAll(wrld, 3)
+	
+	if len(walls) == 0:
+		return 0
+
+	for i in walls:
+		xPos, yPos = i[0], i[1]
+  
+		if character.y - yPos < 0:
+			walls.remove(i)
+ 
+	pos = (character.x, character.y)
+	nearest_wall = findNearestEntity(wrld, pos, walls)
+	distance = float(perform_a_star(wrld, pos, nearest_wall))
+
+	return (1 / (distance + 1))
