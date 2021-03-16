@@ -111,7 +111,7 @@ class Game:
             #self.draw()
             step()
             self.world.next_decisions()
-        colorama.deinit()
+        #colorama.deinit()
 
     ###################
     # Private methods #

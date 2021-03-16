@@ -52,7 +52,7 @@ def findAll(wrld, entityFlag):
 	return entities
 
 
-def perform_a_star(wrld, start, destination):
+def perform_a_star(wrld, start, destination, includeWalls=True):
 	frontier = PriorityQueue()
 	frontier.put(start, 0)
 	came_from = {}
@@ -76,9 +76,13 @@ def perform_a_star(wrld, start, destination):
 
 			if x < 0 or x >= wrld.width() or y < 0 or y >= wrld.height(): # out of bounds
 				continue
-				
-			if wrld.wall_at(x, y): # wall or monster(s)
-				cost = 9999
+			
+			if includeWalls is True:
+				if wrld.wall_at(x, y): # wall or monster(s)
+					cost = 10
+
+				else:
+					cost = 1
 
 			else:
 				cost = 1

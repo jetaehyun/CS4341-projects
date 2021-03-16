@@ -48,21 +48,46 @@ def distanceToMonster(wrld, character):
 	pos = (character.x, character.y)
 
 	nearest_monster = findNearestEntity(wrld, pos, monsters)
-
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
+
+	'''
+	if distance > 200:
+		distance = float(perform_a_star(wrld, pos, nearest_monster, False))
+	'''
 
 	return (1 / (distance + 1)) ** 2
 
 
+def distanceToWall(wrld, character):
+	walls = findAll(wrld, 3)
+
+	if len(walls) == 0:
+		return 0
+
+	pos = (character.x, character.y)
+
+	nearest_wall = findNearestEntity(wrld, pos, walls)
+
+	distance = float(perform_a_star(wrld, pos, nearest_wall))
+
+	return (1 / (distance + 1)) ** 2
+
 	
 def inBombExplosionRange(wrld, character):
    
-	for i in range(3):
-		if wrld.explosion_at(character.x, character.y) is not None:
-			return 1
+	if wrld.me(character) is None:
+		return 1
 
-		wrld, events = wrld.next()
+	x, y = character.x, character.y
+
+	if wrld.explosion_at(x, y) is not None:
+		return 1
+
+	wrld, events = wrld.next()
+
+	if wrld.explosion_at(x, y) is not None:
+		return 1
 
 	return 0
 
@@ -147,6 +172,20 @@ def inRadius(wrld, character):
 
 	return 0
 
+def inRadius1(wrld, character):
+	radius = [-1, 0, 1]
+
+	for i in range(len(radius)):
+		for j in range(len(radius)):
+			dx = character.x + radius[i]
+			dy = character.y + radius[j]
+
+			if __inWorld(wrld, dx, dy) is True:
+				if wrld.monsters_at(dx, dy):
+					return 1
+
+	return 0
+
 def monsterToBomb(wrld, character):
 	monsters = findAll(wrld, 2)
 	bombs = findAll(wrld, 1)
@@ -181,7 +220,10 @@ def bomb_to_wall(wrld,character):
 	bombs = findAll(wrld, 1)
 	walls = findAll(wrld, 3)
 
-	if len(bombs) == 0 or len(walls) == 0:
+	if len(walls) == 0:
+		return 1
+
+	if len(bombs) == 0:
 		return 0
 
 	pos = (bombs[0][0], bombs[0][1])
@@ -191,6 +233,7 @@ def bomb_to_wall(wrld,character):
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
 
 	return (1 / (distance + 1)) ** 2
+
 
 
 def anyMonsters(wrld, character):
@@ -219,3 +262,46 @@ def distanceToWall(wrld, character):
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
 
 	return (1 / (distance + 1))
+
+def distanceBetweenMonsters(wrld, character):
+    monsters = findAll(wrld, 2)
+    
+    if len(monsters) < 2:
+        return 0
+    
+    monster1 = monsters[0][0]
+    monster2 = monsters[0][1]
+    
+    distance = float(perform_a_star(wrld, monster1, monster2))
+    
+    return (1 / (distance+1)) ** 2
+
+def bombTimer(wrld, character):
+	bombs = findAll(wrld, 1)
+
+	if len(bombs) == 0:
+		return 0
+
+	pos = (character.x, character.y)
+	nearest_bomb = findNearestEntity(wrld, pos, bombs)
+
+	bombEntity = wrld.bomb_at(nearest_bomb[0], nearest_bomb[1])
+
+	return (1 / float(bombEntity.timer + 1)) ** 2
+
+
+def bombDestroysWall(wrld, character):
+	explosions = findAll(wrld, 4)
+	walls = findAll(wrld, 3)
+
+	if len(explosions) == 0:
+		return 0
+
+	for explosion in explosions:
+		x, y = explosion[0], explosion[0]
+
+		if wrld.wall_at(x, y):
+			return 1
+
+	return 0
+

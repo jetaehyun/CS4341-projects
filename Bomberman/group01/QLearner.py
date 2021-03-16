@@ -6,7 +6,7 @@ from sensed_world import SensedWorld
 from events import Event
 
 ALPHA = 0.2
-GAMMA = 0.01
+GAMMA = 0.1
 
 ###
 # Class Description: defining blueprint for an object to perform Q-Learning using Feature Representation
@@ -80,7 +80,7 @@ class QLearner:
 						curr_q = -5000
 
 
-					elif event.tpe == Event.CHARACTER_FOUND_EXIT:
+					if event.tpe == Event.CHARACTER_FOUND_EXIT:
 						curr_q = 5000
 
 			if curr_q > maxQ:
@@ -121,9 +121,8 @@ class QLearner:
 	# -------------------------------------------------------------------------- 
 	def updateWeights(self, character, prime_wrld, wrld, r):
 		delta = None 
-
 		if prime_wrld is not None:
-			delta =  (r + ( GAMMA * self.Q_Function(prime_wrld, character)) -self.Q_Function(wrld, character))
+			delta =  (r + ( GAMMA * self.Q_Function(prime_wrld, character)) - self.Q_Function(wrld, character))
 
 		else:
 			delta = r - self.Q_Function(wrld, character)

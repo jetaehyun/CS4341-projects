@@ -34,11 +34,30 @@ class RealWorld(World):
         self.update_scores()
         self.manage_events()
 
+        '''
+        print('REAL WORLD NEXT')
+        self.count += 1
+        print(self.count)
+        print(self.events)
+        input()
+        '''
+
+        for event in self.events:
+            if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
+                event.character.updateCharacterWeights(SensedWorld.from_world(self), False, True)
+            if event.tpe == Event.CHARACTER_FOUND_EXIT:
+                event.character.updateCharacterWeights(SensedWorld.from_world(self), True, False)
+
+        for i, clist in self.characters.items():
+            for c in clist:
+                c.updateCharacterWeights(SensedWorld.from_world(self), False, False)
+
         return (self, self.events)
 
     def next_decisions(self):
         self.aientity_do(self.monsters)
         self.aientity_do(self.characters)
+
 
     def aientity_do(self, entities):
         """Call AI to get actions for next step"""

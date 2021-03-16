@@ -4,6 +4,7 @@ sys.path.insert(0, '../bomberman')
 
 from entity import CharacterEntity
 from sensed_world import SensedWorld
+from real_world import RealWorld
 from events import Event
 import QLearner
 from features import *
@@ -20,6 +21,7 @@ class QCharacter(CharacterEntity):
 		self.epsilon = 1 / (self.iteration + 1) ** 0.5
 		self.prev_wrld = None
 		self.best_wrld = None
+		self.count = 0
 
 
 	def do(self, wrld):
@@ -56,17 +58,19 @@ class QCharacter(CharacterEntity):
 				if place_bomb is True:
 					self.place_bomb()
 
-			
-			next_wrld, next_events = SensedWorld.from_world(wrld).next()
-
-			for event in next_events:
+			'''
+			for event in self.events:
 				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
-					self.updateCharacterWeights(next_wrld, exploringFlag, False, True)
+					event.character.updateCharacterWeights(SensedWorld.from_world(self), False, True)
 
-				elif event.tpe == Event.CHARACTER_FOUND_EXIT:
-					self.updateCharacterWeights(next_wrld, exploringFlag, True, True)
+				if event.tpe == Event.CHARACTER_FOUND_EXIT:
+					event.character.updateCharacterWeights(SensedWorld.from_world(self), True, False)
 
-			self.updateCharacterWeights(next_wrld, exploringFlag, False, False)
+			for i, clist in self.characters.items():
+				for c in clist:
+					c.updateCharacterWeights(SensedWorld.from_world(self), False, False)
+			'''
+			
 
 			
 
@@ -86,27 +90,28 @@ class QCharacter(CharacterEntity):
 				self.place_bomb()
 
 
-	def updateCharacterWeights(self, wrld, exploring, win, exitConition):
+	def updateCharacterWeights(self, wrld, win, lose):
 		reward = 0
 
-		if self.train is True:
-			if exitConition is True:
-				if win is True:
-					reward = 100
-				else:
-					reward = -50
+		if self.train is True:	
+			if win is True:
+				reward = 100
+
+			elif lose is True:
+				reward = -50
 
 			else:
 				pos = (self.x, self.y)
-				reward = ((distanceToExit(wrld, self) ** 0.1) * 10) - ((distanceToMonster(wrld, self) ** 0.1) * 5)
+				reward = (((distanceToExit(wrld, self)** 0.1) * 10) - ((distanceToMonster(wrld, self)** 0.1) * 5)) - ((self.world_timer(wrld) ** 0.1))
 
-			if exploring is False:
-				self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
-
-			else:
-				self.q_learner.updateWeights(self, None, wrld, reward)
+			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
 
 
+	def world_timer(self, wrld):
+
+		world_timer = wrld.time + 1
+
+		return (1 / world_timer) ** 2
 	def can_move(self, wrld, x, y):
 		dx = self.x + x 
 		dy = self.y + y
