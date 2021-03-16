@@ -19,7 +19,7 @@ from QCharacter import QCharacter
 from features import *
 
 numOfWins =0
-features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs, bomb_to_wall, inRadius]
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs, bomb_to_wall]
 weights = None
 
 qlearner = QLearner(weights, features)
