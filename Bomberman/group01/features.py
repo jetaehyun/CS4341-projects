@@ -115,7 +115,7 @@ def distanceToSmartMonster(wrld, character):
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
 
-	if monstersEntity.name == "selfpreserving":
+	if monstersEntity.name == "selfpreserving" or monstersEntity.name == "stupid":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
