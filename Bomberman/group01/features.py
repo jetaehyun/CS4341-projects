@@ -115,7 +115,7 @@ def distanceToSmartMonster(wrld, character):
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
 
-	if monstersEntity.name == "selfpreserving":
+	if monstersEntity.name == "selfpreserving" or monstersEntity.name == "stupid":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
@@ -237,13 +237,31 @@ def bomb_to_wall(wrld,character):
 
 
 def anyMonsters(wrld, character):
-    monsters = findAll(wrld, 2)
-    
-    if len(monsters) < 2:
-        return 1
-    
-    return 0
+	monsters = findAll(wrld, 2)
+	
+	if len(monsters) < 2:
+		return 1
+	
+	return 0
 
+
+def distanceToWall(wrld, character):
+	walls = findAll(wrld, 3)
+	
+	if len(walls) == 0:
+		return 0
+
+	for i in walls:
+		xPos, yPos = i[0], i[1]
+  
+		if character.y - yPos < 0:
+			walls.remove(i)
+ 
+	pos = (character.x, character.y)
+	nearest_wall = findNearestEntity(wrld, pos, walls)
+	distance = float(perform_a_star(wrld, pos, nearest_wall))
+
+	return (1 / (distance + 1))
 
 def distanceBetweenMonsters(wrld, character):
     monsters = findAll(wrld, 2)

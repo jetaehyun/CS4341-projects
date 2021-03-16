@@ -21,9 +21,7 @@ from features import *
 features = [distanceToExit, distanceToBomb, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs,
             monsterFromExit, inRadius, monsterToBomb, monsterToNearestWall]
 
-# best result 7/10 >= 80%
-# [84.97696334172039, -0.08781776652353387, -14.86882125034955, -2.8169998761614785, 4.728037089732384, -1.3839415969552675, -2.4985137898174625, -1.7450048143550225, 9.318307041174288]
-weights = [84.97696334172039, -0.08781776652353387, -14.86882125034955, -2.8169998761614785, 4.728037089732384, -1.3839415969552675, -2.4985137898174625, -1.7450048143550225, 9.318307041174288]
+weights = None
 qlearner = QLearner(weights, features)
 prev_wrld = None
 N = 10
