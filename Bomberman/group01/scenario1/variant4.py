@@ -24,7 +24,7 @@ weights = [142.83436052987622, 2.3935722386778173, -14.693930403334434, 0.064425
 
 qlearner = QLearner(weights, features)
 prev_wrld = None
-N = 50
+N = 10
 numOfWins = 0
 for i in range(0, N):
 	print('Iteration #', i)

@@ -57,23 +57,9 @@ class QCharacter(CharacterEntity):
 
 				if place_bomb is True:
 					self.place_bomb()
-
-			'''
-			for event in self.events:
-				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
-					event.character.updateCharacterWeights(SensedWorld.from_world(self), False, True)
-
-				if event.tpe == Event.CHARACTER_FOUND_EXIT:
-					event.character.updateCharacterWeights(SensedWorld.from_world(self), True, False)
-
-			for i, clist in self.characters.items():
-				for c in clist:
-					c.updateCharacterWeights(SensedWorld.from_world(self), False, False)
-			'''
 			
 
 			
-
 		else:
 			# use the converged values 
 			
@@ -98,7 +84,7 @@ class QCharacter(CharacterEntity):
 				reward = 100
 
 			elif lose is True:
-				reward = -50
+				reward = -100
 
 			else:
 				pos = (self.x, self.y)
@@ -112,6 +98,8 @@ class QCharacter(CharacterEntity):
 		world_timer = wrld.time + 1
 
 		return (1 / world_timer) ** 2
+
+
 	def can_move(self, wrld, x, y):
 		dx = self.x + x 
 		dy = self.y + y

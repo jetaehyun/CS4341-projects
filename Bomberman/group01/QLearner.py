@@ -79,7 +79,6 @@ class QLearner:
 						#print('CHARACTETR DIED')
 						curr_q = -5000
 
-
 					if event.tpe == Event.CHARACTER_FOUND_EXIT:
 						curr_q = 5000
 

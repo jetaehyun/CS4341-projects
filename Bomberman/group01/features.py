@@ -81,13 +81,11 @@ def inBombExplosionRange(wrld, character):
 
 	x, y = character.x, character.y
 
-	if wrld.explosion_at(x, y) is not None:
-		return 1
+	for i in range(2):
+		if wrld.explosion_at(x, y) is not None:
+			return 1
 
-	wrld, events = wrld.next()
-
-	if wrld.explosion_at(x, y) is not None:
-		return 1
+		wrld, events = wrld.next()
 
 	return 0
 
@@ -200,6 +198,7 @@ def monsterToBomb(wrld, character):
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
 
 	return (1 / (distance + 1)) ** 2
+	
 
 def monsterToNearestWall(wrld, character):
 	monsters = findAll(wrld, 2)
