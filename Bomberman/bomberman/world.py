@@ -28,6 +28,7 @@ class World:
         self.scores = {}
         # Events
         self.events = []
+        self.count = 0
 
     @classmethod
     def from_params(cls, width, height, max_time, bomb_time, expl_duration, expl_range):
