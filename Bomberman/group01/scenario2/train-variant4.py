@@ -16,14 +16,13 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from StateCharacter import StateCharacter
 from features import *
-numOfWins = 0
-features = [inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
-weights = None
 
+features = [distanceToExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
+weights = None
 
 qlearner = QLearner(weights, features)
 
-for i in range(0, 10):
+for i in range(0, 200):
     print('Iteration #', i)
 
     # Create the game
@@ -42,19 +41,15 @@ for i in range(0, 10):
                               "C",  # avatar
                               0, 0,  # position
                               qlearner,
-                              False,
+                              True,
                               i
     )
 
     g.add_character(state_character)
 
     g.go(1)
-
     print(g.world.scores["me"])
-    score = g.world.scores["me"]
-    if score > 400:
-        numOfWins += 1
-    print(f'WIN PERCENTAGE: {numOfWins / (i + 1)}')
+
 
     print('MY WEIGHTS')
     print(qlearner.weights)
