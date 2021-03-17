@@ -52,7 +52,7 @@ class StateCharacter(CharacterEntity):
 				x = random.choice([-1, 1])
 				self.move(x, -1)
 
-			elif allMonstersDead(wrld):
+			elif allMonstersDead(wrld) or safePathToExitWithMonster(wrld, (self.x, self.y)):
 				self.a_star(wrld)
 
 			else:
@@ -77,12 +77,17 @@ class StateCharacter(CharacterEntity):
 
 			nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
 
-			distance = float(perform_a_star(wrld, pos, nearest_monster_tuple))
+			distance = len(perform_aStar(wrld, pos, nearest_monster_tuple, True))
 
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
-			if distance > 8:
-				return True
+			if nearest_monster.name != "aggressive":
+    				if distance > 2:
+					return True
+
+			else:
+				if distance > 8:
+					return True
 
 			return False 
 
@@ -169,7 +174,7 @@ class StateCharacter(CharacterEntity):
 	def a_star(self, wrld):
 		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
 
-		if search == None:
+		if len(search) == 0:
 			self.move(0, 1)
 			return
 
