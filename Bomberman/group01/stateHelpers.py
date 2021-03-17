@@ -71,6 +71,29 @@ def explosion_handler(wrld, pos):
 
 	return x, y 
 
+def explosion_handler2(wrld, pos, delta):
+	x, y = delta[0], delta[1]
+	bombs = findAll(wrld, 1)
+
+	for bomb in bombs:
+		dx = pos[0] + x 
+		dy = pos[1] + y
+
+		escape_directions = [-1, 1] 
+
+		if dx == bomb[0]:
+			x = escape_directions[random.randint(0, 1)] if x == 0 else (x * -1)
+
+			if can_move(wrld, pos, (x, y)) is False:
+				x *= -1
+
+		if dy == bomb[1]:
+			y = escape_directions[random.randint(0, 1)] if y == 0 else (y * -1)
+
+			if can_move(wrld, pos, (x, y)) is False:
+				y *= -1
+
+	return (x, y)
 
 def wallInPath(wrld, pos, delta):
 	currX, currY = pos[0], pos[1]
@@ -158,3 +181,13 @@ def allMonstersDead(wrld):
 	monsters = findAll(wrld, 2)
 
 	return True if len(monsters) == 0 else False 
+
+
+def characterInWallRow(wrld, pos):
+	walls = findAll(wrld, 3)
+
+	nearest_wall = findNearestEntity(wrld, pos, walls)
+
+	wall_row = nearest_wall[1]
+
+	return pos[1] == wall_row

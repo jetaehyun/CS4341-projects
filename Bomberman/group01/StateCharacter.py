@@ -30,6 +30,7 @@ class StateCharacter(CharacterEntity):
 		self.iterations = 0
 		self.pastMoves = []
 		self.qLearning = False
+		self.bomb = False
 
 
 	def do(self, wrld):
@@ -48,7 +49,8 @@ class StateCharacter(CharacterEntity):
 
 			elif wallInPath(wrld, (self.x, self.y), (0, 1)):
 				self.place_bomb()
-				self.move(1, -1)
+				x = random.choice([-1, 1])
+				self.move(x, -1)
 
 			elif allMonstersDead(wrld):
 				self.a_star(wrld)
@@ -57,8 +59,13 @@ class StateCharacter(CharacterEntity):
 				self.move(0, 1)
 
 		else:
-			self.qLearning = True
-			self.perform_qLearning(wrld)
+			if characterInWallRow(wrld, (self.x, self.y)):
+				self.place_bomb()
+				self.move(0, -1)
+
+			else:
+				self.qLearning = True
+				self.perform_qLearning(wrld)
 
 
 	def safeCondition(self, wrld):
@@ -74,13 +81,8 @@ class StateCharacter(CharacterEntity):
 
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
-			if nearest_monster.name != "aggressive":
-				if distance > 2:
-					return True
-
-			else:
-				if distance >= 3:
-					return True
+			if distance > 8:
+				return True
 
 			return False 
 
@@ -102,6 +104,9 @@ class StateCharacter(CharacterEntity):
 				x = random.choice(allowed_direction)
 				y = random.choice(allowed_direction)
 				place_bomb = random.choice(bomb_actions)
+
+				x, y = bomb_handler(wrld, (self.x, self.y), (x, y))
+				#x, y = explosion_handler2(wrld, (self.x, self.y), (x, y))
 
 				self.move(x, y)
 

@@ -12,8 +12,20 @@ from monsters.selfpreserving_monster import SelfPreservingMonster
 sys.path.insert(1, '../groupNN')
 from testcharacter import TestCharacter
 
+from QLearner import QLearner
+from QCharacter import QCharacter
+from StateCharacter import StateCharacter
+from features import *
+
 # Create the game
-random.seed(123) # TODO Change this if you want different random choices
+
+features = [inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster, inRadius3]
+weights = [-44.6520034043336, 1.6721923695682053, 2.41678308288769, 0.19562856322164715, -0.010541500133580444, 2.316504343037947, -9.051171383704874, -0.4823988871411091]
+
+
+qlearner = QLearner(weights, features)
+
+#random.seed(123) # TODO Change this if you want different random choices
 g = Game.fromfile('map.txt')
 g.add_monster(SelfPreservingMonster("aggressive", # name
                                     "A",          # avatar
@@ -21,11 +33,16 @@ g.add_monster(SelfPreservingMonster("aggressive", # name
                                     2             # detection range
 ))
 
-# TODO Add your character
-g.add_character(TestCharacter("me", # name
+state_character = StateCharacter("me", # name
                               "C",  # avatar
-                              0, 0  # position
-))
+                              0, 0,  # position
+                              qlearner,
+                              False,
+                              0
+)
 
-# Run!
-g.go()
+# TODO Add your character
+g.add_character(state_character)
+
+g.go(1)
+print(g.world.scores["me"])

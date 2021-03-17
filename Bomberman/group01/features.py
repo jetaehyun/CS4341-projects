@@ -163,7 +163,7 @@ def __inWorld(wrld, dx, dy):
 
 
 def inRadius(wrld, character):
-	radius = [-2, -1, 0, 1, 2]
+	radius = [i for i in range(-8, 9, 1)]
 
 	for i in range(len(radius)):
 		for j in range(len(radius)):
@@ -178,6 +178,20 @@ def inRadius(wrld, character):
 
 def inRadius1(wrld, character):
 	radius = [-1, 0, 1]
+
+	for i in range(len(radius)):
+		for j in range(len(radius)):
+			dx = character.x + radius[i]
+			dy = character.y + radius[j]
+
+			if __inWorld(wrld, dx, dy) is True:
+				if wrld.monsters_at(dx, dy):
+					return 1
+
+	return 0
+
+def inRadius3(wrld, character):
+	radius = [-3, 0, 3]
 
 	for i in range(len(radius)):
 		for j in range(len(radius)):
