@@ -23,10 +23,7 @@ def can_move(wrld, pos, delta):
 	dx = pos[0] + delta[0] 
 	dy = pos[1] + delta[1]
 
-	if dx < 0 or dx >= wrld.width():
-		return False 
-
-	if dy < 0 or dy >= wrld.height():
+	if inGrid(wrld, pos, delta) is False:
 		return False 
 
 	if wrld.wall_at(dx, dy) is True:
@@ -80,10 +77,23 @@ def wallInPath(wrld, pos, delta):
 
 	newX, newY = currX + delta[0], currY + delta[1]
 
-	if wrld.wall_at(newX, newY):
-		return True 
+	if inGrid(wrld, pos, delta):
+		if wrld.wall_at(newX, newY):
+			return True 
 
 	return False 
+
+def inGrid(wrld, pos, delta):
+	dx = pos[0] + delta[0] 
+	dy = pos[1] + delta[1]
+
+	if dx < 0 or dx >= wrld.width():
+		return False 
+
+	if dy < 0 or dy >= wrld.height():
+		return False 
+
+	return True
 
 
 def completeRowOfWalls(wrld, pos):
