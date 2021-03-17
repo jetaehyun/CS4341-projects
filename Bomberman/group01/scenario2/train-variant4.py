@@ -17,7 +17,7 @@ from QCharacter import QCharacter
 from StateCharacter import StateCharacter
 from features import *
 
-features = [distanceToExit, inBombExplosionRange, distanceToMonster, monsterToBomb, bomb_to_wall, distanceToWall, bombTimer, allWall]
+features = [distanceToExit, inBombExplosionRange, distanceToMonster, monsterToBomb, bomb_to_wall, distanceToWall, bombTimer, distanceToSmartMonster]
 weights = None
 qlearner = QLearner(weights, features)
 
