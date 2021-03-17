@@ -83,7 +83,7 @@ class StateCharacter(CharacterEntity):
 
 			if nearest_monster.name != "aggressive":
     				if distance > 2:
-					return True
+    					return True
 
 			else:
 				if distance > 8:

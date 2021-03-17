@@ -24,25 +24,31 @@ weights = [-44.6520034043336, 1.6721923695682053, 2.41678308288769, 0.1956285632
 
 
 qlearner = QLearner(weights, features)
-
-#random.seed(123) # TODO Change this if you want different random choices
-g = Game.fromfile('map.txt')
-g.add_monster(SelfPreservingMonster("aggressive", # name
+N = 10
+numOfWins = 0
+for i in range(0, N): 
+	g = Game.fromfile('map.txt')
+	g.add_monster(SelfPreservingMonster("aggressive", # name
                                     "A",          # avatar
                                     3, 13,        # position
                                     2             # detection range
-))
+	))
 
-state_character = StateCharacter("me", # name
+	state_character = StateCharacter("me", # name
                               "C",  # avatar
                               0, 0,  # position
                               qlearner,
                               False,
                               0
-)
+	)
 
-# TODO Add your character
-g.add_character(state_character)
+	# TODO Add your character
+	g.add_character(state_character)
 
-g.go(1)
-print(g.world.scores["me"])
+	g.go(1)
+	score = g.world.scores["me"]
+
+	if score > 0:
+		numOfWins += 1
+
+	print("{}, {:.2f}%".format(g.world.scores["me"], numOfWins/(i+1)*100))

@@ -185,30 +185,32 @@ def allMonstersDead(wrld):
 
 
 def characterInWallRow(wrld, pos):
-    	walls = findAll(wrld, 3)
+	walls = findAll(wrld, 3)
 
 	nearest_wall = findNearestEntity(wrld, pos, walls)
 
 	wall_row = nearest_wall[1]
 
 	return pos[1] == wall_row
+
+
 def safePathToExitWithMonster(wrld, pos):
-    monsters = findAll(wrld, 2)
-    exit = findAll(wrld, 0)
-    
-    charToExit = perform_aStar(wrld, pos, exit[0], True)
-    
-    if len(charToExit) == 0:
-        return False
-    
-    nearest_monster = findNearestEntity(wrld, pos, monsters)
-    monstToExit = perform_aStar(wrld, nearest_monster, exit[0], True)
-    
-    if len(monstToExit) > len(charToExit):
-        return True
-    
-    return False
-    
-    
-    
-    
+	monsters = findAll(wrld, 2)
+	exit = findAll(wrld, 0)
+	
+	charToExit = perform_aStar(wrld, pos, exit[0], True)
+	
+	if len(charToExit) == 0:
+		return False
+	
+	nearest_monster = findNearestEntity(wrld, pos, monsters)
+	monstToExit = perform_aStar(wrld, nearest_monster, exit[0], True)
+	
+	if len(monstToExit) > len(charToExit):
+		return True
+	
+	return False
+	
+	
+	
+	
