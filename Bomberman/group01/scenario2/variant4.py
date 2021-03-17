@@ -19,14 +19,16 @@ from features import *
 
 # Create the game
 
-features = [inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster, inRadius3]
-weights = [-44.6520034043336, 1.6721923695682053, 2.41678308288769, 0.19562856322164715, -0.010541500133580444, 2.316504343037947, -9.051171383704874, -0.4823988871411091]
+features = [distanceToExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
+weights = [0.026307211952499653, -49.703088641849014, 3.8945078776391067, -1.3830224890124843, -0.20801889428318396, 0.008660961882211698, 0.27812312272866896, -4.494002911481876]
+
 
 
 qlearner = QLearner(weights, features)
 N = 10
 numOfWins = 0
 for i in range(0, N): 
+	random.seed(random.randint(0, 100))
 	g = Game.fromfile('map.txt')
 	g.add_monster(SelfPreservingMonster("aggressive", # name
                                     "A",          # avatar

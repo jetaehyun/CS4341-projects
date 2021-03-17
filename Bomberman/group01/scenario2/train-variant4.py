@@ -17,12 +17,12 @@ from QCharacter import QCharacter
 from StateCharacter import StateCharacter
 from features import *
 
-features = [inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
+features = [distanceToExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
 weights = None
 
 qlearner = QLearner(weights, features)
 
-for i in range(0, 100):
+for i in range(0, 200):
     print('Iteration #', i)
 
     # Create the game
