@@ -35,36 +35,13 @@ def can_move(wrld, pos, delta):
 
 def bomb_handler(wrld, pos, delta):
 	x, y = delta[0], delta[1]
-	bombs = findAll(wrld, 1)
-	# monsters = findAll(wrld, 2)
-	# monstToChara = False
- 
-	# if len(monsters) > 0:
-	# 	nearest_monster = findNearestEntity(wrld, pos, monsters)
-	# 	pathToMonst = len(perform_aStar(wrld, pos, nearest_monster, True))
-	
-	# 	if pathToMonst != 0 and pathToMonst > 8:
-	# 		monstToChara = True
-	
+	bombs = findAll(wrld, 1)	
 
 	for bomb in bombs:
 		dx = pos[0] + x 
 		dy = pos[1] + y
 
 		escape_directions = [-1, 1] 
-  
-		# if monstToChara is True:
-		# 	# distX = pos[0] - nearest_monster[0]
-		# 	distY = pos[1] - nearest_monster[1]
-   
-		# 	if distY < 0:
-		# 		x = 1
-		# 		y = 1
-				
-		# 		if can_move(wrld, pos, (x, y)) is False:
-		# 			y *= -1
-	 
-		# 	return (x,y)
 
 		if dx == bomb[0]:
 			x = escape_directions[random.randint(0, 1)] if x == 0 else (x * -1)
@@ -75,8 +52,8 @@ def bomb_handler(wrld, pos, delta):
 		if dy == bomb[1]:
 			y = escape_directions[random.randint(0, 1)] if y == 0 else (y * -1)
 
-			# if can_move(wrld, pos, (x, y)) is False:
-			# 	y *= -1
+			if can_move(wrld, pos, (x, y)) is False:
+				y *= -1
 
 	return (x, y)
 
@@ -235,5 +212,34 @@ def safePathToExitWithMonster(wrld, pos):
 	return False
 	
 	
-	
-	
+def monsterPastCharacter(wrld, pos):
+    monsters = findAll(wrld, 2)
+    walls = findAll(wrld, 3)
+    
+    if len(monsters) == 0 or len(walls) == 0:
+        return 0
+    
+    nearest_monster = findNearestEntity(wrld, pos, monsters)
+    
+    MonstaY = nearest_monster[1]
+    charaY = pos[1]
+    
+    if charaY - MonstaY > 1:
+        return True
+    
+    return False
+
+def lastWall(wrld, pos):
+    walls = findAll(wrld, 3)
+    
+    if len(walls) == 0:
+        return 0
+    
+    wallRev = walls[::-1]
+    
+    for i in wallRev:
+        path = perform_aStar(wrld, pos, i, True)
+        if len(path) != 0:
+            return i
+    
+    return (0,0)

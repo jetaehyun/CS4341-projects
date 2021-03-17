@@ -18,21 +18,12 @@ from QLearner import QLearner
 from StateCharacter import StateCharacter
 from features import *
 
-# best one
-#[88.75619516596633, -5.46920048853008, -9.9417931693591, -2.9892287300876355, 14.574786014483674, 0.3802116660555037, -2.0073190227696367, 3.5183743748331446, 1.3715697237187943, 9.211555562667932, -2.423505317476378, -13.737615575176452]
-# features = [distanceToExit, distanceToBomb, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs,
-#             monsterFromExit, inRadius, monsterToBomb, bombDestroysWall, bombTimer,
-#             monsterToNearestWall, doesPathToExitExist]
-# weights = [88.75619516596633, -5.46920048853008, -9.9417931693591, -2.9892287300876355, 14.574786014483674, 0.3802116660555037, -2.0073190227696367, 3.5183743748331446, 1.3715697237187943, 9.211555562667932, -2.423505317476378, -13.737615575176452]
+features = [distanceToSmartMonster, monsterInLineOfSight, stuckInCorner, bombTimer]
 
-
-features = [distanceToExit, inBombExplosionRange,distanceToStupidMonster, distanceToSmartMonster, anyDroppedBombs, inRadius, bombTimer, total_number_of_walls]
-#[-52.78006702872462, 0.5148877100366913, 2.11238592786106, 0.13990307547126168, -0.03447161086977752]
-# weights = [-47.90193974134428, -2.623272706735263, 2.833456615840688, -0.9204928157561079, 0.03698300081441763]
 weights = None
 qlearner = QLearner(weights, features)
 prev_wrld = None
-N = 200
+N = 100
 numOfWins = 0
 seeds = []
 

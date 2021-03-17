@@ -116,6 +116,10 @@ def distanceToSmartMonster(wrld, character):
 
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
+	path = len(perform_aStar(wrld, pos, nearest_monster, True))
+ 
+	if path == 0:
+		return 0
 
 	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
@@ -409,4 +413,69 @@ def allWall(wrld, character):
 	return (count / 8)
 
 
+def huggingWall(wrld, character):
+	surrounds = [(1,1),(1,-1),(-1,1),(1,0),(-1,0),(0,1),(0,-1),(-1,-1)]
+	
+	for i in surrounds:
+		if __inWorld(wrld, character.x+i[0], character.y+i[1]) is False:
+			continue
+		if wrld.wall_at(character.x+i[0], character.y+i[1]) is not None:
+			return 1
 
+	return 0
+
+def stuckInCorner(wrld, character):
+	atCorner = False
+	
+	x, y = character.x, character.y
+	
+	if x == 0 and y - 1 < 0:
+	 	atCorner = True
+  	
+	elif x == wrld.width() - 1 and y - 1 < 0:
+	 	atCorner = True
+  
+	elif x == 0 and wrld.wall_at(x, y - 1) is True:
+	 	atCorner = True
+  
+	elif x == wrld.width() - 1 and wrld.wall_at(x, y - 1) is True:
+	 	atCorner = True
+  
+	if atCorner is True:
+	 	return 1
+
+	return 0
+
+def monsterInLineOfSight(wrld, character):
+    monsters = findAll(wrld, 2)
+    surrounds = [(1,1),(1,-1),(-1,1),(1,0),(-1,0),(0,1),(0,-1),(-1,-1)]
+
+    if len(monsters) == 0:
+        return 0
+    
+    pos = (character.x, character.y)
+    nearest_monster = findNearestEntity(wrld, pos, monsters)
+    
+    distance = perform_aStar(wrld, pos, nearest_monster, True)
+    
+    if len(distance) == 0:
+        return 0
+    
+    for i in surrounds:
+        x, y = character.x, character.y
+        
+        for j in range(8):
+            x += i[0]
+            y += i[1]
+            
+            if __inWorld(wrld, x, y) is False:
+                continue
+            
+            if wrld.wall_at(x, y) is True:
+                continue
+            
+            if wrld.monsters_at(x, y) is not None:
+                return 1
+            
+            
+    return 0

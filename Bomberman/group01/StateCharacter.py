@@ -55,12 +55,19 @@ class StateCharacter(CharacterEntity):
 			elif allMonstersDead(wrld) or safePathToExitWithMonster(wrld, (self.x, self.y)):
 				self.a_star(wrld)
 
+			elif monsterPastCharacter(wrld, (self.x, self.y)) is True:
+				goTo = perform_aStar(wrld, (self.x, self.y), lastWall(wrld, (self.x, self.y)), False)
+				self.move(goTo[0], goTo[1])
 			else:
 				self.move(0, 1)
 
 		else:
 			if characterInWallRow(wrld, (self.x, self.y)):
 				self.place_bomb()
+				# directions = [(1,1),(1,-1),(-1,1),(-1,-1)]
+				# for i in directions:
+				# 	if can_move(wrld, (self.x,self.y), i) and wrld.wall_at(self.x+i[0],self.y+i[1]) is None:
+				# 		self.move(i[0], i[1])
 				self.move(0, -1)
 
 			else:
@@ -72,6 +79,10 @@ class StateCharacter(CharacterEntity):
 		result = allMonstersTrapped(wrld)
 
 		if result is False:
+      
+			if monsterPastCharacter(wrld, (self.x, self.y)):
+				return True
+			
 			monsters = findAll(wrld, 2)
 			pos = (self.x, self.y)
 
