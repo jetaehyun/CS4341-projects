@@ -22,6 +22,8 @@ class QCharacter(CharacterEntity):
 		self.prev_wrld = None
 		self.best_wrld = None
 		self.count = 0
+		self.iterations = 0
+		self.pastMoves = []
 
 
 	def do(self, wrld):
@@ -57,23 +59,9 @@ class QCharacter(CharacterEntity):
 
 				if place_bomb is True:
 					self.place_bomb()
-
-			'''
-			for event in self.events:
-				if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
-					event.character.updateCharacterWeights(SensedWorld.from_world(self), False, True)
-
-				if event.tpe == Event.CHARACTER_FOUND_EXIT:
-					event.character.updateCharacterWeights(SensedWorld.from_world(self), True, False)
-
-			for i, clist in self.characters.items():
-				for c in clist:
-					c.updateCharacterWeights(SensedWorld.from_world(self), False, False)
-			'''
 			
 
 			
-
 		else:
 			# use the converged values 
 			
@@ -81,13 +69,38 @@ class QCharacter(CharacterEntity):
 
 			x, y, place_bomb = best_action
 
-			#x, y = self.bomb_handler(wrld, x, y)
-			#x, y = self.explosion_handler(wrld, x, y)
+			if self.iterations == 20:
+				self.pastMoves = []
+				self.count = 0
+				self.iterations = 0
+
+
+			dx = self.x + x 
+			dy = self.y + y 
+
+			if (dx, dy) in self.pastMoves:
+				self.count += 1
+
+			else:
+				self.pastMoves.append((dx, dy))
+
+
+			if self.count == 10:
+				self.count = 0
+				self.pastMoves = []
+				y = 1
+
+				x, y = self.bomb_handler(wrld, x, y)
+				x, y = self.explosion_handler(wrld, x, y)
 
 			self.move(x, y)
+			self.iterations += 1
+
+
 
 			if place_bomb is True:
 				self.place_bomb()
+
 
 
 	def updateCharacterWeights(self, wrld, win, lose):
@@ -98,7 +111,7 @@ class QCharacter(CharacterEntity):
 				reward = 100
 
 			elif lose is True:
-				reward = -50
+				reward = -100
 
 			else:
 				pos = (self.x, self.y)
@@ -112,6 +125,8 @@ class QCharacter(CharacterEntity):
 		world_timer = wrld.time + 1
 
 		return (1 / world_timer) ** 2
+
+
 	def can_move(self, wrld, x, y):
 		dx = self.x + x 
 		dy = self.y + y

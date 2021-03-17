@@ -106,3 +106,5 @@ def perform_a_star(wrld, start, destination, includeWalls=True):
 	my_path[::-1] 
 
 	return cost_so_far[destination]
+
+	

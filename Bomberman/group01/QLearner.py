@@ -57,8 +57,10 @@ class QLearner:
 			y = move[1]
 			place_bomb = move[2]
 
+			
 			if self.validMove(my_wrld, character, (x, y)) is False:
 				continue
+			
 
 			my_wrld.me(character).move(x, y)
 
@@ -78,7 +80,6 @@ class QLearner:
 					if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
 						#print('CHARACTETR DIED')
 						curr_q = -5000
-
 
 					if event.tpe == Event.CHARACTER_FOUND_EXIT:
 						curr_q = 5000
@@ -140,8 +141,5 @@ class QLearner:
 
 		if dy < 0 or dy >= wrld.height():
 			return False 
-
-		if wrld.wall_at(dx, dy) is True:
-			return False
 
 		return True
