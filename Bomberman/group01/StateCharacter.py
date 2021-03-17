@@ -63,7 +63,28 @@ class StateCharacter(CharacterEntity):
 
 	def safeCondition(self, wrld):
 		result = allMonstersTrapped(wrld)
-		return allMonstersTrapped(wrld)
+
+		if result is False:
+			monsters = findAll(wrld, 2)
+			pos = (self.x, self.y)
+
+			nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
+
+			distance = float(perform_a_star(wrld, pos, nearest_monster_tuple))
+
+			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
+
+			if nearest_monster.name != "aggressive":
+				if distance > 2:
+					return True
+
+			else:
+				if distance >= 3:
+					return True
+
+			return False 
+
+		return True
 
 
 	def perform_qLearning(self, wrld):
@@ -144,7 +165,7 @@ class StateCharacter(CharacterEntity):
 		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
 
 		if len(search) == 0:
-			self.move(0,1)
+			self.move(0, 1)
 			return
 
 		self.move(search[0], search[1])
