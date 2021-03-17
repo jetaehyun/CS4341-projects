@@ -21,26 +21,38 @@ features = [distanceToExit, inBombExplosionRange, distanceToMonster, monsterToBo
 weights = None
 qlearner = QLearner(weights, features)
 
-# Create the game
-random.seed(123) # TODO Change this if you want different random choices
-g = Game.fromfile('map.txt')
+for i in range(0, 100):
+    print('Iteration #', i)
 
-g.add_monster(SelfPreservingMonster("aggressive", # name
+    # Create the game
+    #random.seed(random.randint(0, 1000))distanceToBomb, distanceToBomb, 
+    g = Game.fromfile('map.txt')
+
+    # TODO Add your character
+
+    g.add_monster(SelfPreservingMonster("aggressive", # name
                                     "A",          # avatar
                                     3, 13,        # position
                                     2             # detection range
-))
+	))
 
-# TODO Add your character
-g.add_character(StateCharacter("me", # name
+    state_character = StateCharacter("me", # name
                               "C",  # avatar
                               0, 0,  # position
                               qlearner,
                               True,
-                              0
-))
+                              i
+    )
 
-# Run!
-g.go(1)
+    g.add_character(state_character)
+
+    g.go(1)
+    print(g.world.scores["me"])
+
+
+    print('MY WEIGHTS')
+    print(qlearner.weights)
+
+
 
 

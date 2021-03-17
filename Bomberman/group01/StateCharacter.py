@@ -8,6 +8,7 @@ from real_world import RealWorld
 from events import Event
 import QLearner
 
+from features import *
 from helpers import *
 from stateHelpers import *
 
@@ -33,6 +34,7 @@ class StateCharacter(CharacterEntity):
 	def do(self, wrld):
 		
 		if self.safeCondition(wrld) is True:
+			self.qLearning = False
 			if foundBomb(wrld):
 				x, y = bomb_handler(wrld, (self.x, self.y), (0, 0))
 
@@ -51,9 +53,63 @@ class StateCharacter(CharacterEntity):
 				self.move(0, 1)
 
 		else:
-			print('NOT SAFE')
-			input()
-			self.move(0, 0)
+			self.qLearning = True
+			self.perform_qLearning(wrld)
+
+
+	def safeCondition(self, wrld):
+		result = allMonstersTrapped(wrld)
+		return allMonstersTrapped(wrld)
+
+
+	def perform_qLearning(self, wrld):
+		self.prev_wrld = SensedWorld.from_world(wrld)
+
+		if self.train is True:
+			exploringFlag = False
+			best_wrld = None
+			if random.random() < self.epsilon:
+				exploringFlag = True
+				# choose random move
+				allowed_direction = [-1, 0, 1]
+				bomb_actions = [False, True]
+
+				x = random.choice(allowed_direction)
+				y = random.choice(allowed_direction)
+				place_bomb = random.choice(bomb_actions)
+
+				self.move(x, y)
+
+				if place_bomb is True:
+					self.place_bomb()
+
+				
+
+			else:
+				maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
+
+				x, y, place_bomb = best_action
+
+				self.move(x, y)
+
+				if place_bomb is True:
+					self.place_bomb()
+			
+
+			
+		else:
+			# use the converged values 
+
+			maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
+
+			x, y, place_bomb = best_action
+
+
+			self.move(x, y)
+
+			if place_bomb is True:
+				self.place_bomb()
+
 
 	def updateCharacterWeights(self, wrld, win, lose):
 		reward = 0
@@ -70,12 +126,6 @@ class StateCharacter(CharacterEntity):
 				reward = (((distanceToExit(wrld, self)** 0.1) * 10) - ((distanceToMonster(wrld, self)** 0.1) * 5)) #- ((self.world_timer(wrld) ** 0.1))
 
 			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
-
-
-	def safeCondition(self, wrld):
-		result = allMonstersTrapped(wrld)
-		print('TRAPPED:', result)
-		return allMonstersTrapped(wrld)
 
 		
 

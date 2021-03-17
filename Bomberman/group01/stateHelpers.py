@@ -46,14 +46,12 @@ def bomb_handler(wrld, pos, delta):
 		escape_directions = [-1, 1] 
 
 		if dx == bomb[0]:
-			print('IN SAME X')
 			x = escape_directions[random.randint(0, 1)] if x == 0 else (x * -1)
 
 			if can_move(wrld, pos, (x, y)) is False:
 				x *= -1
 
 		if dy == bomb[1]:
-			print('IN SAME Y')
 			y = escape_directions[random.randint(0, 1)] if y == 0 else (y * -1)
 
 			if can_move(wrld, pos, (x, y)) is False:
@@ -107,11 +105,10 @@ def topWall(wrld, pos):
 		pos = (currX, dy)
 
 		if completeRowOfWalls(wrld, pos) is True:
-			print(f'FOUND COMPLETE ROW AT ROW: {dy}')
 			return True 
 
 	return False 
-	
+
 
 def bottomWall(wrld, pos):
 	currX, currY = pos[0], pos[1]
@@ -122,7 +119,6 @@ def bottomWall(wrld, pos):
 		pos = (currX, dy)
 
 		if completeRowOfWalls(wrld, pos) is True:
-			print(f'FOUND COMPLETE ROW AT ROW: {dy}')
 			return True 
 
 
