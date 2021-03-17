@@ -82,7 +82,7 @@ class StateCharacter(CharacterEntity):
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
 			if nearest_monster.name != "aggressive":
-    				if distance > 2:
+				if distance > 2:
     					return True
 
 			else:
@@ -187,7 +187,6 @@ class StateCharacter(CharacterEntity):
 				if wrld.exit_at(w, h):
 					return (w, h)
 
-		
 
 
 
