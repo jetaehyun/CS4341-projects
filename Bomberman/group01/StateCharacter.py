@@ -50,7 +50,7 @@ class StateCharacter(CharacterEntity):
 				self.place_bomb()
 				self.move(1, -1)
 
-			elif allMonstersDead(wrld):
+			elif allMonstersDead(wrld) or safePathToExitWithMonster(wrld, (self.x, self.y)):
 				self.a_star(wrld)
 
 			else:
@@ -70,7 +70,7 @@ class StateCharacter(CharacterEntity):
 
 			nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
 
-			distance = float(perform_a_star(wrld, pos, nearest_monster_tuple))
+			distance = len(perform_aStar(wrld, pos, nearest_monster_tuple, True))
 
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
@@ -79,7 +79,7 @@ class StateCharacter(CharacterEntity):
 					return True
 
 			else:
-				if distance >= 3:
+				if distance > 8:
 					return True
 
 			return False 

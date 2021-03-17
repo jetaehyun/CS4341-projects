@@ -13,6 +13,7 @@ from sensed_world import SensedWorld
 from events import Event
 
 from helpers import *
+from patrick_star import perform_aStar, _heuristic
 
 def foundBomb(wrld):
 	bombs = findAll(wrld, 1)
@@ -158,3 +159,25 @@ def allMonstersDead(wrld):
 	monsters = findAll(wrld, 2)
 
 	return True if len(monsters) == 0 else False 
+
+
+def safePathToExitWithMonster(wrld, pos):
+    monsters = findAll(wrld, 2)
+    exit = findAll(wrld, 0)
+    
+    charToExit = perform_aStar(wrld, pos, exit[0], True)
+    
+    if len(charToExit) == 0:
+        return False
+    
+    nearest_monster = findNearestEntity(wrld, pos, monsters)
+    monstToExit = perform_aStar(wrld, nearest_monster, exit[0], True)
+    
+    if len(monstToExit) > len(charToExit):
+        return True
+    
+    return False
+    
+    
+    
+    

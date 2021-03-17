@@ -122,9 +122,8 @@ def distanceToSmartMonster(wrld, character):
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		return (1/(distance+1)) **2
-		# if distance <= 3:
-		# 	return ((4 - distance) / 4)
+		if distance <= 3:
+			return ((4 - distance) / 4)
 
 	return 0
 
@@ -182,7 +181,7 @@ def __inWorld(wrld, dx, dy):
 
 
 def inRadius(wrld, character):
-	radius = [-2, -1, 0, 1, 2]
+	radius = [-7,-6-5, -4,-3, -2, -1, 0, 1, 2, 3,4,5,6,7]
 
 	for i in range(len(radius)):
 		for j in range(len(radius)):
