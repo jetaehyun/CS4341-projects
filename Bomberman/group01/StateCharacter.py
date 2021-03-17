@@ -198,7 +198,6 @@ class StateCharacter(CharacterEntity):
 				if wrld.exit_at(w, h):
 					return (w, h)
 
-		
 
 
 

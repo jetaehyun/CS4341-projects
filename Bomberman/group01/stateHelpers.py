@@ -212,6 +212,7 @@ def safePathToExitWithMonster(wrld, pos):
 	return False
 	
 	
+<<<<<<< HEAD
 def monsterPastCharacter(wrld, pos):
     monsters = findAll(wrld, 2)
     walls = findAll(wrld, 3)
@@ -243,3 +244,30 @@ def lastWall(wrld, pos):
             return i
     
     return (0,0)
+=======
+def monsters_current_path(wrld, pos,character):
+	my_wrld = SensedWorld.from_world(wrld)
+	monsters = findAll(wrld, 2)
+	if len(monsters) > 0:
+		nearest_monster = findNearestEntity(wrld, pos, monsters)
+	else:
+		return None
+
+	next_wrld, next_events = my_wrld.next()
+	if next_wrld.me(character) is not None:
+		next_monster = findAll(next_wrld,2)
+		if len(next_monster)>0:
+			next_nearest_monster = findNearestEntity(next_wrld,pos,next_monster)
+
+
+			delta_coords = ((next_nearest_monster[0] - nearest_monster[0]),(next_nearest_monster[1]-nearest_monster[1]))
+			return delta_coords
+	else:
+		return None
+
+
+
+
+
+	
+>>>>>>> 5f897a41fa73fca297313b95205b2cab2851b542
