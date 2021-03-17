@@ -14,18 +14,18 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features1 import *
+from features import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
-
-weights = [159.78738293256993, -0.6215573402097863, -18.636221001030794, -3.554655669452952, -1.3020421285039028, 2.9151051402250623]
-
-
+#features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
+features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
+#weights = [159.78738293256993, -0.6215573402097863, -18.636221001030794, -3.554655669452952, -1.3020421285039028, 2.9151051402250623]
+#weights = [191.98886121017304, 3.772476271735364, -18.457315008153348, -11.465459325834754, -87.36783961649446, -7.553717764697351]
+weights = [177.2277174308819, -0.7130756483715992, -33.2426918278861, -72.0519479201516, 4.856841495253258]
 
 numOfWins = 0
 qlearner = QLearner(weights, features)
 prev_wrld = None
-N = 50
+N = 10
 for i in range(0, N):
 	print('Iteration #', i)
 
@@ -55,6 +55,8 @@ for i in range(0, N):
 
 	if score > 400:
 		numOfWins += 1
+
+	print(f'PERCENTAGE: {numOfWins / (i+1)}')
 
 
 print(f'WON: {numOfWins} out of {N}')

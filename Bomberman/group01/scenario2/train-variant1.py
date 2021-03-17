@@ -50,8 +50,7 @@ for i in range(0, 10):
 	score = g.world.scores["me"]
 	if score > 400:
 		numOfWins += 1
-	print(f'WON: {numOfWins} out of 10')
-	print(f'WIN PERCENTAGE: {numOfWins / 10}')
+	print(f'WIN PERCENTAGE: {numOfWins / (i+1)}')
 
 
 

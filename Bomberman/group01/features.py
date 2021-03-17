@@ -191,6 +191,7 @@ def monsterToBomb(wrld, character):
 	if len(monsters) == 0 or len(bombs) == 0:
 		return 0
 
+	# assumes only one bomb at a time
 	pos = (bombs[0][0], bombs[0][1])
 
 	nearest_monster = findNearestEntity(wrld, pos, monsters)

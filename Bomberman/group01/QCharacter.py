@@ -22,6 +22,8 @@ class QCharacter(CharacterEntity):
 		self.prev_wrld = None
 		self.best_wrld = None
 		self.count = 0
+		self.iterations = 0
+		self.pastMoves = []
 
 
 	def do(self, wrld):
@@ -67,13 +69,38 @@ class QCharacter(CharacterEntity):
 
 			x, y, place_bomb = best_action
 
-			#x, y = self.bomb_handler(wrld, x, y)
-			#x, y = self.explosion_handler(wrld, x, y)
+			if self.iterations == 20:
+				self.pastMoves = []
+				self.count = 0
+				self.iterations = 0
+
+
+			dx = self.x + x 
+			dy = self.y + y 
+
+			if (dx, dy) in self.pastMoves:
+				self.count += 1
+
+			else:
+				self.pastMoves.append((dx, dy))
+
+
+			if self.count == 10:
+				self.count = 0
+				self.pastMoves = []
+				y = 1
+
+				x, y = self.bomb_handler(wrld, x, y)
+				x, y = self.explosion_handler(wrld, x, y)
 
 			self.move(x, y)
+			self.iterations += 1
+
+
 
 			if place_bomb is True:
 				self.place_bomb()
+
 
 
 	def updateCharacterWeights(self, wrld, win, lose):
