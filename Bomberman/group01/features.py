@@ -116,8 +116,9 @@ def distanceToSmartMonster(wrld, character):
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 3:
-			return ((4 - distance) / 4)
+		return (1/(distance+1)) **2
+		# if distance <= 3:
+		# 	return ((4 - distance) / 4)
 
 	return 0
 
@@ -231,10 +232,10 @@ def monsterToNearestWall(wrld, character):
  
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
  
-	check = len(perform_aStar(wrld, pos, nearest_wall, True))
+	# check = len(perform_aStar(wrld, pos, nearest_wall, True))
  
-	if check == 0:
-		return 0
+	# if check == 0:
+	# 	return 0
 	return (1 / (distance + 1)) ** 2
 
 
@@ -256,16 +257,6 @@ def bomb_to_wall(wrld,character):
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
 
 	return (1 / (distance + 1)) ** 2
-
-
-
-def anyMonsters(wrld, character):
-	monsters = findAll(wrld, 2)
-	
-	if len(monsters) <= 2:
-		return 1
-	
-	return 0
 
 
 def distanceToWall(wrld, character):
@@ -334,14 +325,49 @@ def doesPathToExitExist(wrld, character):
 	distance = len(perform_aStar(wrld, pos, nearest_exit, True))
 
 	if distance == 0:
-		return 0
+		return 1
 
-	return 1
+	return 0
 
 def monsterInBombExplosionRange(wrld, character):
 	wrld, events = wrld.next()
 	
+	monsterDeath = False
+	characterDeath = False
+ 
 	for e in events:
 		if e.tpe == 1: # monster got hit by a bomb event
-			return 1
+			monsterDeath = True
+		elif e.tpe == 2:
+			characterDeath = True
+   
+	if monsterDeath is False:
+		return 1
+
 	return 0
+
+def diagonalOfBomb(wrld, character):
+	bomb = findAll(wrld, 1)
+	
+	if len(bomb) == 0:
+		return 0
+	
+	directions = [(0,0), (1,0), (-1,0), (0,1), (0,-1)]
+	characterInPath = False
+	 
+	for i in directions:
+		for j in range(4):
+			xPos = bomb[0][0] + (i[0] * j)
+			yPos = bomb[0][1] + (i[1] * j)
+			
+			if __inWorld(wrld, xPos, yPos) is False:
+				continue
+			
+			if xPos == character.x and yPos == character.y:
+				characterInPath = True
+
+	if characterInPath is False:
+		return 1
+
+	return 0
+	
