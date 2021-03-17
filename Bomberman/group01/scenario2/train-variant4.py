@@ -1,5 +1,5 @@
 # This is necessary to find the main code
-import sys
+import sys, random
 sys.path.insert(0, '../../bomberman')
 sys.path.insert(1, '..')
 
@@ -14,43 +14,33 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
+from StateCharacter import StateCharacter
 from features import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb]
-
+features = [distanceToExit, inBombExplosionRange, distanceToMonster, monsterToBomb, bomb_to_wall, distanceToWall, bombTimer, allWall]
 weights = None
-
 qlearner = QLearner(weights, features)
 
-numOfWins = 0
-for i in range(0, 200):
-	print('Iteration #', i)
+# Create the game
+random.seed(123) # TODO Change this if you want different random choices
+g = Game.fromfile('map.txt')
 
-	# Create the game
-	g = Game.fromfile('map.txt')
+g.add_monster(SelfPreservingMonster("aggressive", # name
+                                    "A",          # avatar
+                                    3, 13,        # position
+                                    2             # detection range
+))
 
-	# TODO Add your character
+# TODO Add your character
+g.add_character(StateCharacter("me", # name
+                              "C",  # avatar
+                              0, 0,  # position
+                              qlearner,
+                              True,
+                              0
+))
 
-	g.add_monster(SelfPreservingMonster("aggressive", # name
-										"A",              # avatar
-                                    	3, 13,             # position
-                                    	2))                 # detection range
-
-	q_character = QCharacter("me", # name
-                               "C",  # avatar
-                               0, 0,  # position
-                               qlearner,
-                               True,
-                               i)
-
-
-	#Uncomment this if you want the interactive character
-	g.add_character(q_character)
-
-	g.go(1)
-	print(g.world.scores["me"])
-
-	print('MY WEIGHTS')
-	print(qlearner.weights)
+# Run!
+g.go(1)
 
 

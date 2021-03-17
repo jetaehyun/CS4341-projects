@@ -8,10 +8,11 @@ from real_world import RealWorld
 from events import Event
 import QLearner
 from features import *
+from patrick_star import _aStar, perform_aStar
 
 class QCharacter(CharacterEntity):
 
-	def __init__(self, name, avatar, x, y, q_learner, train, iteration):
+	def __init__(self, name, avatar, x, y, q_learner, train, iteration, stateMachine=False):
 		CharacterEntity.__init__(self, name, avatar, x, y)
 
 		self.q_learner = q_learner
@@ -24,10 +25,14 @@ class QCharacter(CharacterEntity):
 		self.count = 0
 		self.iterations = 0
 		self.pastMoves = []
+		self.identity = "A-Star"
+		self.stateMachine = stateMachine
 
 
 	def do(self, wrld):
+
 		self.prev_wrld = SensedWorld.from_world(wrld)
+		self.identity = "A-Star"
 
 		if self.train is True:
 			exploringFlag = False
@@ -64,7 +69,17 @@ class QCharacter(CharacterEntity):
 			
 		else:
 			# use the converged values 
-			
+
+			if self.stateMachine is True:
+				if self.anyMonstersInLineOfSight(wrld, self.x, self.y) is True:
+					if self.identity == "A-Star":
+						self.identity = "Q-Learning"
+
+				if self.identity == "A-Star":
+					self.seek_path(wrld)
+					return
+
+
 			maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 
 			x, y, place_bomb = best_action
@@ -101,7 +116,46 @@ class QCharacter(CharacterEntity):
 			if place_bomb is True:
 				self.place_bomb()
 
+	# --------------------------------------------------------------------------
+	##
+	# @Brief performs the a star search to the the exit
+	#
+	# @Param wrld world object
+	#
+	# @Returns None
+	# --------------------------------------------------------------------------  	
+	def seek_path(self, wrld):
+		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
 
+		if search == None:
+			return
+
+		self.move(search[0], search[1])
+
+
+	def get_exit_location(self, wrld):
+		for w in range(wrld.width()):
+			for h in range(wrld.height()):
+				if wrld.exit_at(w, h):
+					return (w, h)
+
+
+	def anyMonstersInLineOfSight(self, wrld, x, y):
+		monsters = findAll(wrld, 2)
+
+		if len(monsters) == 0: 
+			return False
+
+		pos = (x, y)
+
+		nearest_monster = findNearestEntity(wrld, pos, monsters)
+
+		distance = float(perform_a_star(wrld, pos, nearest_monster))
+
+		if distance <= 20:
+			return True
+
+		return False
 
 	def updateCharacterWeights(self, wrld, win, lose):
 		reward = 0
@@ -111,7 +165,7 @@ class QCharacter(CharacterEntity):
 				reward = 100
 
 			elif lose is True:
-				reward = -100
+				reward = -50
 
 			else:
 				pos = (self.x, self.y)
