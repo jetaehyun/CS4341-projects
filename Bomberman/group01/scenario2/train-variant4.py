@@ -18,7 +18,7 @@ from StateCharacter import StateCharacter
 from features import *
 numOfWins = 0
 features = [inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb, bomb_to_wall, bombTimer, distanceToMonster]
-weights = [-36.476970561144604, 3.190005912788189, -1.1602933998687899, -1.3968474031607316, -0.03406604380707375, 5.3402404133683525, -12.608421005030356]
+weights = None
 
 
 qlearner = QLearner(weights, features)
