@@ -28,7 +28,7 @@ weights = [173.17464200348178, -1.8397384409939697, -28.549911042490006, -22.392
 
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 100):
+for i in range(0, 10):
 	print('Iteration #', i)
 
 	# Create the game

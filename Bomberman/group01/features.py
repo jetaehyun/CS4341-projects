@@ -49,10 +49,6 @@ def distanceToMonster(wrld, character):
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
 
-	'''
-	if distance > 200:
-		distance = float(perform_a_star(wrld, pos, nearest_monster, False))
-	'''
 
 	return (1 / (distance + 1)) ** 2
 
@@ -74,16 +70,26 @@ def distanceToWall(wrld, character):
 	
 def inBombExplosionRange(wrld, character):
    
-	if wrld.me(character) is None:
-		return 1
-
 	x, y = character.x, character.y
-
+	'''
 	for i in range(2):
 		if wrld.explosion_at(x, y) is not None:
 			return 1
 
 		wrld, events = wrld.next()
+	'''
+
+	if wrld.me(character) is None:
+		return 1
+
+	if wrld.explosion_at(character.x, character.y) is not None:
+		return 1
+
+	wrld, events = wrld.next()
+
+	if wrld.explosion_at(character.x, character.y) is not None:
+		return 1
+
 
 	return 0
 
@@ -240,12 +246,11 @@ def monsterToNearestWall(wrld, character):
 
 
 def bomb_to_wall(wrld,character):
-	distance  = 0
 	bombs = findAll(wrld, 1)
 	walls = findAll(wrld, 3)
 
 	if len(walls) == 0:
-		return 1
+		return 0
 
 	if len(bombs) == 0:
 		return 0
@@ -371,3 +376,24 @@ def diagonalOfBomb(wrld, character):
 
 	return 0
 	
+def allWall(wrld, character):
+	walls = findAll(wrld, 3)
+
+	if len(walls) == 0:
+		return 0
+
+	pos = (character.x, character.y)
+
+	nearest_wall = findNearestEntity(wrld, pos, walls)
+
+	row = nearest_wall[1]
+	count = 0
+
+	for x in range(wrld.width()):
+		if wrld.wall_at(x, row):
+			count += 1
+
+	return (count / 8)
+
+
+
