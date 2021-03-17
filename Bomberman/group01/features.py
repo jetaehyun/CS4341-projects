@@ -17,9 +17,7 @@ def distanceToExit(wrld, character):
 
 	pos = (character.x, character.y)
 
-	nearest_exit = findNearestEntity(wrld, pos, exit)
-
-	distance = float(perform_a_star(wrld, pos, nearest_exit))
+	distance = float(perform_a_star(wrld, pos, (exit[0][0], exit[0][1])))
 
 	return (1 / (distance + 1)) ** 2
 
@@ -113,9 +111,9 @@ def distanceToSmartMonster(wrld, character):
 	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
 
 	
-	distance = float(perform_a_star(wrld, pos, nearest_monster)) + 1
+	distance = float(perform_a_star(wrld, pos, nearest_monster))
 
-	if monstersEntity.name == "selfpreserving" or monstersEntity.name == "stupid":
+	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
@@ -125,6 +123,26 @@ def distanceToSmartMonster(wrld, character):
 
 	return 0
 
+
+def distanceToStupidMonster(wrld, character):
+	monsters = findAll(wrld, 2)
+
+	if len(monsters) == 0: 
+		return 0
+
+	pos = (character.x, character.y)
+
+	nearest_monster = findNearestEntity(wrld, pos, monsters)
+
+	monstersEntity = wrld.monsters_at(nearest_monster[0], nearest_monster[1])[0]
+	
+	distance = float(perform_a_star(wrld, pos, nearest_monster))
+
+	if monstersEntity.name == "stupid":
+		if distance <= 1:
+			return ((2 - distance) / 2)
+
+	return 0   
 
 def total_number_of_walls(wrld,character):
 	walls = findAll(wrld,3)
@@ -212,6 +230,11 @@ def monsterToNearestWall(wrld, character):
 	pos = (nearest_wall[0], nearest_wall[1]) 	
  
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
+ 
+	check = len(perform_aStar(wrld, pos, nearest_wall, True))
+ 
+	if check == 0:
+		return 0
 	return (1 / (distance + 1)) ** 2
 
 
@@ -239,7 +262,7 @@ def bomb_to_wall(wrld,character):
 def anyMonsters(wrld, character):
 	monsters = findAll(wrld, 2)
 	
-	if len(monsters) < 2:
+	if len(monsters) <= 2:
 		return 1
 	
 	return 0
@@ -261,20 +284,7 @@ def distanceToWall(wrld, character):
 	nearest_wall = findNearestEntity(wrld, pos, walls)
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
 
-	return (1 / (distance + 1))
-
-def distanceBetweenMonsters(wrld, character):
-    monsters = findAll(wrld, 2)
-    
-    if len(monsters) < 2:
-        return 0
-    
-    monster1 = monsters[0][0]
-    monster2 = monsters[0][1]
-    
-    distance = float(perform_a_star(wrld, monster1, monster2))
-    
-    return (1 / (distance+1)) ** 2
+	return (1 / (distance + 1)) ** 2
 
 def bombTimer(wrld, character):
 	bombs = findAll(wrld, 1)
@@ -305,3 +315,33 @@ def bombDestroysWall(wrld, character):
 
 	return 0
 
+
+# def bombDestroysWall(wrld, character):
+# 	wrld, events = wrld.next()
+	
+# 	for e in events:
+# 		if e.tpe == 0:
+# 			return 1
+# 	return 0
+
+
+def doesPathToExitExist(wrld, character):
+	exit = findAll(wrld, 0)
+
+	pos = (character.x, character.y)
+	nearest_exit = findNearestEntity(wrld, pos, exit)
+
+	distance = len(perform_aStar(wrld, pos, nearest_exit, True))
+
+	if distance == 0:
+		return 0
+
+	return 1
+
+def monsterInBombExplosionRange(wrld, character):
+	wrld, events = wrld.next()
+	
+	for e in events:
+		if e.tpe == 1: # monster got hit by a bomb event
+			return 1
+	return 0
