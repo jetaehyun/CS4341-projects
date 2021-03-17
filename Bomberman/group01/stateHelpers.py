@@ -153,3 +153,8 @@ def allMonstersTrapped(wrld):
 			return False 
 
 	return True
+
+def allMonstersDead(wrld):
+	monsters = findAll(wrld, 2)
+
+	return True if len(monsters) == 0 else False 

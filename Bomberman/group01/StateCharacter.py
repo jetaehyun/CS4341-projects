@@ -11,6 +11,7 @@ import QLearner
 from features import *
 from helpers import *
 from stateHelpers import *
+from patrick_star import _aStar, perform_aStar
 
 
 class StateCharacter(CharacterEntity):
@@ -48,6 +49,9 @@ class StateCharacter(CharacterEntity):
 			elif wallInPath(wrld, (self.x, self.y), (0, 1)):
 				self.place_bomb()
 				self.move(1, -1)
+
+			elif allMonstersDead(wrld):
+				self.a_star(wrld)
 
 			else:
 				self.move(0, 1)
@@ -126,6 +130,30 @@ class StateCharacter(CharacterEntity):
 				reward = (((distanceToExit(wrld, self)** 0.1) * 10) - ((distanceToMonster(wrld, self)** 0.1) * 5)) #- ((self.world_timer(wrld) ** 0.1))
 
 			self.q_learner.updateWeights(self, self.prev_wrld, wrld, reward)
+
+
+	# --------------------------------------------------------------------------
+	##
+	# @Brief performs the a star search to the the exit
+	#
+	# @Param wrld world object
+	#
+	# @Returns None
+	# --------------------------------------------------------------------------  	
+	def a_star(self, wrld):
+		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
+
+		if search == None:
+			return
+
+		self.move(search[0], search[1])
+
+
+	def get_exit_location(self, wrld):
+		for w in range(wrld.width()):
+			for h in range(wrld.height()):
+				if wrld.exit_at(w, h):
+					return (w, h)
 
 		
 
