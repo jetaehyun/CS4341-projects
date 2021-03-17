@@ -50,7 +50,7 @@ class StateCharacter(CharacterEntity):
 			elif wallInPath(wrld, (self.x, self.y), (0, 1)):
 				self.place_bomb()
 				x = random.choice([-1, 1])
-				self.move(x, -1)
+				self.move(x, 1)
 
 			elif allMonstersDead(wrld) or safePathToExitWithMonster(wrld, (self.x, self.y)):
 				self.a_star(wrld)
@@ -82,11 +82,11 @@ class StateCharacter(CharacterEntity):
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
 			if nearest_monster.name != "aggressive":
-    				if distance > 2:
+				if distance > 2:
 					return True
 
 			else:
-				if distance > 8:
+				if distance > 7:
 					return True
 
 			return False 

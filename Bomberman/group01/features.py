@@ -122,8 +122,8 @@ def distanceToSmartMonster(wrld, character):
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 3:
-			return ((4 - distance) / 4)
+		if distance <= 8:
+			return ((9 - distance) / 9)
 
 	return 0
 

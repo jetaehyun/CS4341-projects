@@ -36,12 +36,35 @@ def can_move(wrld, pos, delta):
 def bomb_handler(wrld, pos, delta):
 	x, y = delta[0], delta[1]
 	bombs = findAll(wrld, 1)
+	# monsters = findAll(wrld, 2)
+	# monstToChara = False
+ 
+	# if len(monsters) > 0:
+	# 	nearest_monster = findNearestEntity(wrld, pos, monsters)
+	# 	pathToMonst = len(perform_aStar(wrld, pos, nearest_monster, True))
+	
+	# 	if pathToMonst != 0 and pathToMonst > 8:
+	# 		monstToChara = True
+	
 
 	for bomb in bombs:
 		dx = pos[0] + x 
 		dy = pos[1] + y
 
 		escape_directions = [-1, 1] 
+  
+		# if monstToChara is True:
+		# 	# distX = pos[0] - nearest_monster[0]
+		# 	distY = pos[1] - nearest_monster[1]
+   
+		# 	if distY < 0:
+		# 		x = 1
+		# 		y = 1
+				
+		# 		if can_move(wrld, pos, (x, y)) is False:
+		# 			y *= -1
+	 
+		# 	return (x,y)
 
 		if dx == bomb[0]:
 			x = escape_directions[random.randint(0, 1)] if x == 0 else (x * -1)
@@ -52,8 +75,8 @@ def bomb_handler(wrld, pos, delta):
 		if dy == bomb[1]:
 			y = escape_directions[random.randint(0, 1)] if y == 0 else (y * -1)
 
-			if can_move(wrld, pos, (x, y)) is False:
-				y *= -1
+			# if can_move(wrld, pos, (x, y)) is False:
+			# 	y *= -1
 
 	return (x, y)
 
@@ -185,30 +208,32 @@ def allMonstersDead(wrld):
 
 
 def characterInWallRow(wrld, pos):
-    	walls = findAll(wrld, 3)
+	walls = findAll(wrld, 3)
 
 	nearest_wall = findNearestEntity(wrld, pos, walls)
 
 	wall_row = nearest_wall[1]
 
 	return pos[1] == wall_row
+
+
 def safePathToExitWithMonster(wrld, pos):
-    monsters = findAll(wrld, 2)
-    exit = findAll(wrld, 0)
-    
-    charToExit = perform_aStar(wrld, pos, exit[0], True)
-    
-    if len(charToExit) == 0:
-        return False
-    
-    nearest_monster = findNearestEntity(wrld, pos, monsters)
-    monstToExit = perform_aStar(wrld, nearest_monster, exit[0], True)
-    
-    if len(monstToExit) > len(charToExit):
-        return True
-    
-    return False
-    
-    
-    
-    
+	monsters = findAll(wrld, 2)
+	exit = findAll(wrld, 0)
+	
+	charToExit = float(perform_a_star(wrld, pos, exit[0], True))
+	
+	if charToExit == 0:
+		return False
+	
+	nearest_monster = findNearestEntity(wrld, pos, monsters)
+	monstToExit = float(perform_a_star(wrld, nearest_monster, exit[0], True))
+	
+	if monstToExit > charToExit:
+		return True
+	
+	return False
+	
+	
+	
+	
