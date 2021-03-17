@@ -143,7 +143,8 @@ class StateCharacter(CharacterEntity):
 	def a_star(self, wrld):
 		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
 
-		if search == None:
+		if len(search) == 0:
+			self.move(0,1)
 			return
 
 		self.move(search[0], search[1])
