@@ -46,28 +46,45 @@ class StateCharacter4(CharacterEntity):
 		self.state = "go"
 		self.hasMoved = False
 		self.dxdy = (-1, -1)
-		self.bomb_locations = [(0, 2), (7, 2)]
+		self.bomb_locations = [(0, 2, True), (7, 2, True), (7, 6, True), (7, 10, True), (4, 9, False), (7, 12, True), (7, 18, False)]
 		self.location_index = 0
 
 
 	def do(self, wrld):
-     
+		#print(self.state)
 		if self.state == "bomb":
-			self.place_bomb()
-			
-			self.state = "dodge"
+			if self.bomb_locations[self.location_index - 1][2] is True:
+				self.place_bomb()
+
+				self.state = "dodge"
+
+			elif wrld.monsters_at(7, 8):
+				#print("FOUND")
+				self.state = "go"
+
+
 		elif self.state == "dodge":
 			x, y = self.x, self.y
-	
+
+			if self.location_index <= len(self.bomb_locations):
+				if self.bomb_locations[self.location_index - 1][2] is False:
+					#self.location_index = 5
+					self.state = "go"
+					return 
+
 			if can_move(wrld, (x,y), self.dxdy) is True:
 				self.move(self.dxdy[0], self.dxdy[1])
 			else:
-				self.move(1, -1)
+				if self.location_index - 1 == 5:
+					self.move(-1, 1)
+				else:
+					self.move(1, -1)
 
 			self.state = "wait"
     
 		elif self.state == "go":
 			goal = self.bomb_locations[self.location_index]
+			goal = (goal[0], goal[1])
 			self.a_star(wrld, goal)
    
 			if goal[0] == self.x and goal[1] == self.y:
@@ -75,8 +92,13 @@ class StateCharacter4(CharacterEntity):
 				self.location_index += 1
 	
 		else:
+
 			if foundBomb(wrld) is not True:
-				self.state = "go"
+				if foundExplosion(wrld) is not True:
+					self.state = "go"
+
+			
+
 			else:
 				self.move(0,0)
     

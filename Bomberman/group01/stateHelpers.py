@@ -20,6 +20,11 @@ def foundBomb(wrld):
 
 	return False if len(bombs) == 0 else True 
 
+def foundExplosion(wrld):
+	explosions = findAll(wrld, 4)
+
+	return False if len(explosions) == 0 else True 
+
 def can_move(wrld, pos, delta):
 	dx = pos[0] + delta[0] 
 	dy = pos[1] + delta[1]

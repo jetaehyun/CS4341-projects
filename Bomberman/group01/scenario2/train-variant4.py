@@ -21,12 +21,12 @@ features = [distanceToExit, inBombExplosionRange, anyDroppedBombs, inRadius, mon
 weights = None
 
 qlearner = QLearner(weights, features)
-
-for i in range(0, 200):
+numOfWins = 0
+for i in range(0, 10):
     print('Iteration #', i)
 
     # Create the game
-    #random.seed(random.randint(0, 1000))distanceToBomb, distanceToBomb, 
+    random.seed(random.randint(0, 1000))
     g = Game.fromfile('map.txt')
 
     # TODO Add your character
@@ -47,12 +47,14 @@ for i in range(0, 200):
 
     g.add_character(state_character)
 
-    g.go()
-    print(g.world.scores["me"])
+    g.go(1)
+    score = g.world.scores["me"]
+
+    if score > 0:
+      numOfWins += 1
 
 
-    print('MY WEIGHTS')
-    print(qlearner.weights)
+    print("{}, {:.2f}%".format(g.world.scores["me"], numOfWins/(i+1)*100))
 
 
 
