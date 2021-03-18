@@ -3,6 +3,8 @@ import sys
 sys.path.insert(0, '../../bomberman')
 sys.path.insert(1, '..')
 
+from sensed_world import SensedWorld
+
 from patrick_star import perform_aStar, _heuristic
 from queue import PriorityQueue
 
@@ -88,6 +90,28 @@ def inBombExplosionRange(wrld, character):
 	wrld, events = wrld.next()
 
 	if wrld.explosion_at(character.x, character.y) is not None:
+		return 1
+
+
+	return 0
+
+def inMonsterRange(wrld, character):
+	x, y = character.x, character.y
+
+	if wrld.me(character) is None:
+		return 1
+
+	if wrld.monsters_at(character.x, character.y) is not None:
+		return 1
+
+	wrld, events = wrld.next()
+
+	if wrld.monsters_at(character.x, character.y) is not None:
+		return 1
+
+	wrld, events = wrld.next()
+
+	if wrld.monsters_at(character.x, character.y) is not None:
 		return 1
 
 
@@ -411,6 +435,75 @@ def allWall(wrld, character):
 			count += 1
 
 	return (count / 8)
+
+def monsters_current_path(wrld, character):
+	my_wrld = SensedWorld.from_world(wrld)
+	monsters = findAll(wrld, 2)
+
+	if len(monsters) == 0:
+		return 0
+
+	pos = (character.x, character.y)
+	original_nearest_monster = findNearestEntity(wrld, pos, monsters)
+
+	next_wrld, next_events = my_wrld.next()
+	delta_coords = (0, 0)
+
+
+	if next_wrld.me(character) is None:
+		return 0
+
+	monsters = findAll(next_wrld, 2)
+
+	if len(monsters) == 0:
+		return 0
+
+	next_nearest_monster = findNearestEntity(next_wrld, pos, monsters)
+
+	delta_coords = ((next_nearest_monster[0] - original_nearest_monster[0]), (next_nearest_monster[1] - original_nearest_monster[1]))
+
+
+	for i in range(1, 4, 1):
+		newX, newY = original_nearest_monster[0] + (delta_coords[0] * i), original_nearest_monster[1] + (delta_coords[1] * i)
+
+		if character.x == newX and character.y == newY:
+			return 1
+
+	return distanceToMonster(wrld, character)
+
+def character_btw_monster_bomb(wrld, character):
+	monsters = findAll(wrld, 2)
+	bombs = findAll(wrld, 1)
+
+	pos = (character.x, character.y)
+
+	if len(monsters) == 0 or len(bombs) == 0:
+		return 0
+
+	bomb_pos = (bombs[0][0], bombs[0][1])
+
+	nearest_monster = findNearestEntity(wrld, bomb_pos, monsters)
+	nearest_bomb = findNearestEntity(wrld, pos, bombs)
+
+	bomb_dist_to_monster = float(perform_a_star(wrld, bomb_pos, nearest_monster)) + 1
+	char_dist_to_monster = float(perform_a_star(wrld, pos, nearest_monster)) + 1
+
+	bombEntity = wrld.bomb_at(nearest_bomb[0], nearest_bomb[1])
+
+	exit = findAll(wrld, 1)
+
+	closest_exit = findNearestEntity(wrld, pos, exit)
+
+	char_dist_to_exit = float(perform_a_star(wrld, pos, closest_exit)) + 1
+	monster_dist_to_exit = float(perform_a_star(wrld, (nearest_monster[0], nearest_monster[1]), closest_exit)) + 1
+
+	if char_dist_to_monster < bomb_dist_to_monster:
+		if char_dist_to_exit < monster_dist_to_exit:
+			return 0
+
+		return (1 / float(char_dist_to_monster)) ** 2
+
+	return 0
 
 
 def huggingWall(wrld, character):
