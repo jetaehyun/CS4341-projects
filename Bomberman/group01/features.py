@@ -126,8 +126,8 @@ def distanceToSmartMonster(wrld, character):
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 8:
-			return ((9 - distance) / 9)
+		if distance <= 6:
+			return ((7 - distance) / 7)
 
 	return 0
 
@@ -440,11 +440,33 @@ def stuckInCorner(wrld, character):
   
 	elif x == wrld.width() - 1 and wrld.wall_at(x, y - 1) is True:
 	 	atCorner = True
+   
+	elif x == 0 and wrld.wall_at(x+1,y) is True:
+		atCorner = True
   
+	elif x == wrld.width() - 1 and wrld.wall_at(x-1, y) is True:
+		atCorner = True
+  
+	elif wrld.wall_at(x-1, y) and wrld.wall_at(x+1, y) is True:
+		atCorner = True
+     
+       
 	if atCorner is True:
 	 	return 1
 
 	return 0
+
+
+def distanceFromStart(wrld, character):
+    
+    if character.x == 0 and character.y == 0:
+        return 0
+        
+        
+    distance = float(perform_a_star(wrld, (character.x, character.y), (0,0)))
+    
+    return (1/(1+distance)) ** 2
+
 
 def monsterInLineOfSight(wrld, character):
     monsters = findAll(wrld, 2)
@@ -479,3 +501,20 @@ def monsterInLineOfSight(wrld, character):
             
             
     return 0
+
+def monsterPastWall(wrld, character):
+    monsters = findAll(wrld, 2)
+    
+    if len(monsters) == 0 or character.y >= wrld.height() - 1:
+        return 0
+    pos = (character.x, character.y)
+    nearest_monster = findNearestEntity(wrld, pos, monsters)
+    
+    if wrld.wall_at(character.x, character.y+1) is not True:
+        return 0
+    
+    for i in range(8):
+        if wrld.monsters_at(i, character.y+2) is not None:
+            return 1
+    return 0
+    

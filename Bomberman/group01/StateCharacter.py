@@ -45,8 +45,12 @@ class StateCharacter(CharacterEntity):
 			elif explosion_occurring(wrld) is True:
 				x, y = explosion_handler(wrld, (-1, 1))
 
-				self.move(x, y)
-
+				if explosion_will_occur(wrld, (self.x,self.y)) is True:
+					self.move(0,0)
+     
+				else:
+					self.move(x,y)
+     
 			elif wallInPath(wrld, (self.x, self.y), (0, 1)):
 				self.place_bomb()
 				x = random.choice([-1, 1])
@@ -58,6 +62,7 @@ class StateCharacter(CharacterEntity):
 			elif monsterPastCharacter(wrld, (self.x, self.y)) is True:
 				goTo = perform_aStar(wrld, (self.x, self.y), lastWall(wrld, (self.x, self.y)), False)
 				self.move(goTo[0], goTo[1])
+    
 			else:
 				self.move(0, 1)
 
@@ -68,7 +73,11 @@ class StateCharacter(CharacterEntity):
 				# for i in directions:
 				# 	if can_move(wrld, (self.x,self.y), i) and wrld.wall_at(self.x+i[0],self.y+i[1]) is None:
 				# 		self.move(i[0], i[1])
-				self.move(0, -1)
+				if can_move(wrld, (self.x, self.y), (1,1)) is True:
+					self.move(1,1)
+				elif can_move(wrld, (self.x,self.y), (-1,1)) is True:
+					self.move(-1,1)
+				# self.move(0, -1)
 
 			else:
 				self.qLearning = True
@@ -89,7 +98,10 @@ class StateCharacter(CharacterEntity):
 			nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
 
 			distance = len(perform_aStar(wrld, pos, nearest_monster_tuple, True))
-
+	
+			if distance == 0:
+				return True
+   
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
 			if nearest_monster.name != "aggressive":
@@ -97,7 +109,7 @@ class StateCharacter(CharacterEntity):
 					return True
 
 			else:
-				if distance > 7:
+				if distance >= 6:
 					return True
 
 			return False 

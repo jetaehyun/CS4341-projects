@@ -18,12 +18,12 @@ from QLearner import QLearner
 from StateCharacter import StateCharacter
 from features import *
 
-features = [distanceToSmartMonster, monsterInLineOfSight, stuckInCorner, bombTimer]
+features = [monsterInLineOfSight, stuckInCorner, monsterPastWall,inBombExplosionRange, bombTimer, distanceToSmartMonster]
 
-weights = None
+weights = [1.4831881831911438, 0.8931840360913579, 0.6964219975329767, -50.60325121251399, 0.6892064736831113, 0.2416027170828847]
 qlearner = QLearner(weights, features)
 prev_wrld = None
-N = 100
+N = 500
 numOfWins = 0
 seeds = []
 

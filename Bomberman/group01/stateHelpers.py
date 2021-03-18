@@ -72,6 +72,21 @@ def explosion_handler(wrld, pos):
 
 	return x, y 
 
+def explosion_will_occur(wrld, pos):
+    wrldCopy = SensedWorld.from_world(wrld)
+    
+    wrldCopy, events = wrldCopy.next()
+    surrounds = [(1,1),(1,-1),(-1,1),(1,0),(-1,0),(0,1),(0,-1),(-1,-1), (0,0)]
+    
+    for i in surrounds:
+        if inGrid(wrld, pos, i) is True:
+            if wrldCopy.explosion_at(pos[0]+i[0], pos[1]+i[1]) is not None:
+                if i[0] == 0 and i[1] == 0:
+                    return False
+                return True
+
+    return False
+
 def explosion_handler2(wrld, pos, delta):
 	x, y = delta[0], delta[1]
 	bombs = findAll(wrld, 1)
@@ -212,7 +227,6 @@ def safePathToExitWithMonster(wrld, pos):
 	return False
 	
 	
-<<<<<<< HEAD
 def monsterPastCharacter(wrld, pos):
     monsters = findAll(wrld, 2)
     walls = findAll(wrld, 3)
@@ -244,7 +258,8 @@ def lastWall(wrld, pos):
             return i
     
     return (0,0)
-=======
+
+
 def monsters_current_path(wrld, pos,character):
 	my_wrld = SensedWorld.from_world(wrld)
 	monsters = findAll(wrld, 2)
@@ -270,4 +285,3 @@ def monsters_current_path(wrld, pos,character):
 
 
 	
->>>>>>> 5f897a41fa73fca297313b95205b2cab2851b542
