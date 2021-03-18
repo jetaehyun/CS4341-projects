@@ -35,15 +35,15 @@ class StateCharacter(CharacterEntity):
 
 	def do(self, wrld):
 		
-		if self.safeCondition(wrld) is True:
-			self.qLearning = False
+		if self.safeCondition(wrld):
+			self.qLearning = True
 			if foundBomb(wrld):
 				x, y = bomb_handler(wrld, (self.x, self.y), (0, 0))
 
 				self.move(x, y)
 
 			elif explosion_occurring(wrld) is True:
-				x, y = explosion_handler(wrld, (-1, 1))
+				x, y = explosion_handler(wrld, (1, -1))
 
 				self.move(x, y)
 
@@ -59,6 +59,9 @@ class StateCharacter(CharacterEntity):
 				self.move(0, 1)
 
 		else:
+			self.qLearning = True
+			self.perform_qLearning(wrld)
+			'''
 			if characterInWallRow(wrld, (self.x, self.y)):
 				self.place_bomb()
 				self.move(0, -1)
@@ -66,10 +69,31 @@ class StateCharacter(CharacterEntity):
 			else:
 				self.qLearning = True
 				self.perform_qLearning(wrld)
+			'''
 
 
 	def safeCondition(self, wrld):
 		result = allMonstersTrapped(wrld)
+
+		monsters = findAll(wrld, 2)
+
+		if len(monsters) == 0:
+			return True 
+
+		pos = (self.x, self.y)
+
+		nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
+
+		distance = float(perform_a_star(wrld, pos, nearest_monster_tuple)) + 1
+
+
+		if distance >= 15:
+			return True
+
+		return False
+		'''
+		if distance > 20 and result is False:
+			return True
 
 		if result is False:
 			monsters = findAll(wrld, 2)
@@ -81,17 +105,14 @@ class StateCharacter(CharacterEntity):
 
 			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
 
-			if nearest_monster.name != "aggressive":
-				if distance > 2:
-    					return True
-
-			else:
-				if distance > 8:
-					return True
+			if distance > 10:
+				return True
+				
 
 			return False 
 
 		return True
+		'''
 
 
 	def perform_qLearning(self, wrld):
