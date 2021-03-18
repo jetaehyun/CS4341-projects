@@ -42,23 +42,61 @@ class StateCharacter4(CharacterEntity):
 		self.state4 = False			# waiting for monster
 		self.state5 = False			# place bomb
 		self.state6 = False
+  
+		self.state = "go"
+		self.hasMoved = False
+		self.dxdy = (-1, -1)
+		self.bomb_locations = [(0, 2), (7, 2)]
+		self.location_index = 0
 
 
 	def do(self, wrld):
-		if self.state1 is False:
-			self.perform_state_1(wrld)
+     
+		if self.state == "bomb":
+			self.place_bomb()
+			
+			self.state = "dodge"
+		elif self.state == "dodge":
+			x, y = self.x, self.y
+	
+			if can_move(wrld, (x,y), self.dxdy) is True:
+				self.move(self.dxdy[0], self.dxdy[1])
+			else:
+				self.move(1, -1)
 
-		elif self.state1_1 is False:
-			self.perform_state_1_1(wrld)
+			self.state = "wait"
+    
+		elif self.state == "go":
+			goal = self.bomb_locations[self.location_index]
+			self.a_star(wrld, goal)
+   
+			if goal[0] == self.x and goal[1] == self.y:
+				self.state = "bomb"
+				self.location_index += 1
+	
+		else:
+			if foundBomb(wrld) is not True:
+				self.state = "go"
+			else:
+				self.move(0,0)
+    
+     
+			
 
-		elif self.state2 is False:
-			self.perform_state_2(wrld)
+		# if self.state1 is False:
+		# 	self.perform_state_1(wrld)
 
-		elif self.state3 is False:
-			self.perform_state_3(wrld)
+		# elif self.state1_1 is False:
+		# 	self.perform_state_1_1(wrld)
 
-		else: 
-			self.move(0, 0)
+		# elif self.state2 is False:
+		# 	self.perform_state_2(wrld)
+
+		# elif self.state3 is False:
+		# 	self.perform_state_3(wrld)
+
+		# else: 
+		# 	self.move(0, 0)
 
 	def atGoal(self):
 		if self.x == self.goal[0] and self.y == self.goal[1]:
