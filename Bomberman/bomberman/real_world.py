@@ -33,15 +33,8 @@ class RealWorld(World):
         self.events = self.update_bombs() + self.update_monsters() + self.update_characters()
         self.update_scores()
         self.manage_events()
-
+        
         '''
-        print('REAL WORLD NEXT')
-        self.count += 1
-        print(self.count)
-        print(self.events)
-        input()
-        '''
-
         for event in self.events:
             if event.tpe == Event.BOMB_HIT_CHARACTER or event.tpe == Event.CHARACTER_KILLED_BY_MONSTER:
                 event.character.updateCharacterWeights(SensedWorld.from_world(self), False, True)
@@ -51,6 +44,7 @@ class RealWorld(World):
         for i, clist in self.characters.items():
             for c in clist:
                 c.updateCharacterWeights(SensedWorld.from_world(self), False, False)
+        '''
 
         return (self, self.events)
 
