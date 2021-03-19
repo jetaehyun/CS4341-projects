@@ -31,3 +31,5 @@ state_character = StateCharacter4("me", # name
 g.add_character(state_character)
 
 g.go(1)
+
+print(g.world.scores["me"])

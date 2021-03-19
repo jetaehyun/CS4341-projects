@@ -23,5 +23,9 @@ q_character = StateCharacter1("me", # name
 	#Uncomment this if you want the interactive character
 g.add_character(q_character)
 
+
 # Run!
 g.go(1)
+
+print(g.world.scores["me"])
+

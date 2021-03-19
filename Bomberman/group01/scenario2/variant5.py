@@ -43,3 +43,5 @@ g.add_character(q_character)
 
 # Run!
 g.go(1)
+
+print(g.world.scores["me"])
