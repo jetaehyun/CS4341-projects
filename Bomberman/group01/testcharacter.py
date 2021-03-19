@@ -99,3 +99,7 @@ class TestCharacter(CharacterEntity):
         if search == None:
             return
         self.move(search[0], search[1])
+        
+        
+    def updateCharacterWeights(self, wrld, win, lose):
+        return 0
