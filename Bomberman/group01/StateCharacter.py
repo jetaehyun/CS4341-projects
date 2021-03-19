@@ -32,7 +32,7 @@ class StateCharacter(CharacterEntity):
   
 		self.state = "go"
 		self.dxdy = (-1, -1)
-		self.bomb_locations = [(7, 2, True), (7, 2, True), (7, 3, True), (7, 10, True), (4, 9, False), (7, 12, True), (7, 18, False)]
+		self.bomb_locations = [(0, 2, True), (0, 3, True),(1, 3, True), (2, 3,True), (3, 3, True),(4, 3, True),(5, 3, True), (7, 3, True), (7, 10, True), (4, 9, False), (7, 12, True), (7, 18, False)]
 		self.location_index = 0
 
 
@@ -73,10 +73,14 @@ class StateCharacter(CharacterEntity):
 					return 
 
 			if can_move(wrld, (x,y), self.dxdy) is True:
-				self.move(self.dxdy[0], self.dxdy[1])
+				if self.x >= wrld.width() - 1:
+					self.move(-1, -1)
+				else:
+					self.move(1, self.dxdy[1])
     
 			else:
-				if self.location_index - 1 == 5:
+				
+				if self.location_index - 1 == 10:
 					self.move(-1, 1)
 				else:
 					self.move(1, -1)
@@ -100,7 +104,7 @@ class StateCharacter(CharacterEntity):
 			else:
 				self.move(0,0)
 		else:
-			if (distance >= 2 or distance == 0) and self.qLearning is True:
+			if (distance > 3 or distance == 0) and self.qLearning is True:
 				if self.location_index != 0:
 					self.location_index -= 1
      
@@ -171,7 +175,7 @@ class StateCharacter(CharacterEntity):
 				reward = 100
 
 			elif lose is True:
-				reward = -50
+				reward = -500
 
 			else:
 				pos = (self.x, self.y)
