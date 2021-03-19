@@ -20,7 +20,7 @@ g = Game.fromfile('map.txt')
 
 # TODO Add your character
 
-# # Uncomment this if you want the test character
+# # Uncomment this if you want the test characterprint(g.world.scores["me"])
 # g.add_character(TestCharacter("me", # name
 #                               "C",  # avatar
 #                               0, 0,  # position

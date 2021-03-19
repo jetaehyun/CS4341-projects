@@ -16,9 +16,8 @@ from QLearner import QLearner
 from QCharacter import QCharacter
 from features1 import *
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
-
-weights = [177.2277174308819, -0.7130756483715992, -33.2426918278861, -72.0519479201516, 4.856841495253258]
+features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb]
+weights = [142.83436052987622, 2.3935722386778173, -14.693930403334434, 0.0644259835747207, 1.5729782904616798, -7.999804831642161, 2.8070100445367734, -2.030695531139905, 3.82815842223105]
 
 
 qlearner = QLearner(weights, features)
@@ -46,6 +45,8 @@ q_character = QCharacter("me", # name
 g.add_character(q_character)
 
 g.go(1)
+
+print(g.world.scores["me"])
 
 
 

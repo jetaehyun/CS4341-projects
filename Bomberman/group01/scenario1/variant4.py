@@ -46,3 +46,5 @@ q_character = QCharacter("me", # name
 g.add_character(q_character)
 
 g.go(1)
+
+print(g.world.scores["me"])

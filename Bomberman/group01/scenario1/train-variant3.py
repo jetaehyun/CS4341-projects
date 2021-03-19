@@ -17,14 +17,18 @@ from QCharacter import QCharacter
 from features1 import *
 
 
-features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius1, monsterToBomb]
+features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, monsterFromExit, inBombExplosionRange, anyDroppedBombs, inRadius, monsterToBomb]
+weights = [142.83436052987622, 2.3935722386778173, -14.693930403334434, 0.0644259835747207, 1.5729782904616798, -7.999804831642161, 2.8070100445367734, -2.030695531139905, 3.82815842223105]
 
-weights = None
+numOfWins = 0
 qlearner = QLearner(weights, features)
 prev_wrld = None
-for i in range(0, 150):
+N = 10
+
+for i in range(0, N):
 	print('Iteration #', i)
-	random.seed(random.randint(0, 1000))
+	#random.seed(random.randint(0, 1000))
+
 	# Create the game
 	g = Game.fromfile('map.txt')
 
@@ -39,18 +43,21 @@ for i in range(0, 150):
                                "C",  # avatar
                                0, 0,  # position
                                qlearner,
-                               True,
+                               False,
                                i)
 
 	#Uncomment this if you want the interactive character
 	g.add_character(q_character)
 
 	g.go(1)
-	print(g.world.scores["me"])
-	wrld = SensedWorld.from_world(g.world)
-	#q_character.updateCharacterWeights(wrld, False, True)
+	score = g.world.scores["me"]
+	print(score)
 
-	print('MY WEIGHTS')
-	print(qlearner.weights)
+	if score > 400:
+		numOfWins += 1
+
+	print(f'PERCENTAGE: {numOfWins / (i+1)}')
 
 
+print(f'WON: {numOfWins} out of {N}')
+print(f'WIN PERCENTAGE: {numOfWins / N}')

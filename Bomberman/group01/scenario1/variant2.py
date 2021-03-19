@@ -15,6 +15,7 @@ from features1 import *
 
 features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]
 weights = [173.17464200348178, -1.8397384409939697, -28.549911042490006, -22.392729217308883, 0.050295801861828845]
+
 qlearner = QLearner(weights, features)
 # Create the game
  # TODO Change this if you want different random choices
@@ -38,3 +39,5 @@ g.add_character(q_character)
 
 # Run!
 g.go(1)
+
+print(g.world.scores["me"])
