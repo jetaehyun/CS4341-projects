@@ -14,7 +14,7 @@ from sensed_world import SensedWorld
 sys.path.insert(1, '../group01')
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features1 import *
+from features import *
 
 features = [distanceToExit, distanceToBomb, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs,
             monsterFromExit, inRadius, monsterToBomb, monsterToNearestWall]
@@ -23,54 +23,39 @@ weights = [84.97696334172039, -0.08781776652353387, -14.86882125034955, -2.81699
 qlearner = QLearner(weights, features)
 prev_wrld = None
 
+<<<<<<< HEAD
 N = 10
 numOfWins = 0
 seeds = []
+=======
+# Create the game
+g = Game.fromfile('map.txt')
+>>>>>>> 1ad278247197cb109a712c3905c8c99984f1819d
 
-for i in range(0, N):
-    seeds.append(random.seed(random.randint(0, 10000)))
+# TODO Add your character
 
-for i in range(0, N):
-	print('Iteration #', i)
-
-	# Create the game
-	g = Game.fromfile('map.txt')
-
-	# TODO Add your character
-
-	random.seed(seeds[i]) # TODO Change this if you want different random choices
-	# random.seed(123) # TODO Change this if you want different random choices
-	g = Game.fromfile('map.txt')
-	g.add_monster(StupidMonster("selfpreserving", # name
+ # TODO Change this if you want different random choices
+# random.seed(123) # TODO Change this if you want different random choices
+g = Game.fromfile('map.txt')
+g.add_monster(StupidMonster("selfpreserving", # name
         	                    "S",      # avatar
     	                        3, 5,     # position
 	))
-	g.add_monster(SelfPreservingMonster("stupid", # name
+g.add_monster(SelfPreservingMonster("stupid", # name
             	                        "A",          # avatar
         	                            3, 13,        # position
     	                                2             # detection range
 	))
 
-	q_character = QCharacter("me", # name
+q_character = QCharacter("me", # name
                                "C",  # avatar
                                0, 0,  # position
                                qlearner,
                             	False,
-                               i)
+                               1)
 
-	#Uncomment this if you want the interactive character
-	g.add_character(q_character)
+#Uncomment this if you want the interactive character
+g.add_character(q_character)
 
-	g.go(1)
-	score = g.world.scores["me"]
-	print(g.world.scores["me"])
-	wrld = SensedWorld.from_world(g.world)
+g.go(1)
 
-	print('MY WEIGHTS')
-	print(qlearner.weights)
-
-	if score > 400:
-		numOfWins += 1
-
-print(f'WON: {numOfWins} out of {N}')
-print(f'WIN PERCENTAGE: {numOfWins / N}')

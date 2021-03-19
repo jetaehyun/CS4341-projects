@@ -4,17 +4,21 @@ sys.path.insert(0, '../../bomberman')
 sys.path.insert(1, '..')
 
 # Import necessary stuff
-import random
+
 from game import Game
 from monsters.stupid_monster import StupidMonster
 from monsters.selfpreserving_monster import SelfPreservingMonster
-
+from QLearner import QLearner
+from StateCharacter import StateCharacter
+from features import *
 # TODO This is your code!
 sys.path.insert(1, '../groupNN')
-from testcharacter import TestCharacter
 
+features = [distanceToStupidMonster, diagonalOfBomb, monsterToNearestWall]
+weights = [-439.56405095613394, -81.88835388811911, 33.243918944294634]
+qlearner = QLearner(weights, features)
 # Create the game
-random.seed(123) # TODO Change this if you want different random choices
+# TODO Change this if you want different random choices
 g = Game.fromfile('map.txt')
 g.add_monster(StupidMonster("stupid", # name
                             "S",      # avatar
@@ -27,10 +31,15 @@ g.add_monster(SelfPreservingMonster("aggressive", # name
 ))
 
 # TODO Add your character
-g.add_character(TestCharacter("me", # name
-                              "C",  # avatar
-                              0, 0  # position
-))
+q_character = StateCharacter("me", # name
+                               "C",  # avatar
+                               0, 0,  # position
+                               qlearner,
+                            	False,
+                               1)
+
+	#Uncomment this if you want the interactive character
+g.add_character(q_character)
 
 # Run!
-g.go()
+g.go(1)
