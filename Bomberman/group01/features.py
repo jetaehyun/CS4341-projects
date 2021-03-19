@@ -73,13 +73,6 @@ def distanceToWall(wrld, character):
 def inBombExplosionRange(wrld, character):
    
 	x, y = character.x, character.y
-	'''
-	for i in range(2):
-		if wrld.explosion_at(x, y) is not None:
-			return 1
-
-		wrld, events = wrld.next()
-	'''
 
 	if wrld.me(character) is None:
 		return 1
@@ -172,10 +165,6 @@ def distanceToStupidMonster(wrld, character):
 
 	return 0   
 
-def total_number_of_walls(wrld,character):
-	walls = findAll(wrld,3)
-
-	return (1/(len(walls)+1))**2
 
 
 def monsterFromExit(wrld, character):
@@ -358,15 +347,6 @@ def bombDestroysWall(wrld, character):
 	return 0
 
 
-# def bombDestroysWall(wrld, character):
-# 	wrld, events = wrld.next()
-	
-# 	for e in events:
-# 		if e.tpe == 0:
-# 			return 1
-# 	return 0
-
-
 def doesPathToExitExist(wrld, character):
 	exit = findAll(wrld, 0)
 
@@ -476,40 +456,6 @@ def monsters_current_path(wrld, character):
 
 	return distanceToMonster(wrld, character)
 
-def character_btw_monster_bomb(wrld, character):
-	monsters = findAll(wrld, 2)
-	bombs = findAll(wrld, 1)
-
-	pos = (character.x, character.y)
-
-	if len(monsters) == 0 or len(bombs) == 0:
-		return 0
-
-	bomb_pos = (bombs[0][0], bombs[0][1])
-
-	nearest_monster = findNearestEntity(wrld, bomb_pos, monsters)
-	nearest_bomb = findNearestEntity(wrld, pos, bombs)
-
-	bomb_dist_to_monster = float(perform_a_star(wrld, bomb_pos, nearest_monster)) + 1
-	char_dist_to_monster = float(perform_a_star(wrld, pos, nearest_monster)) + 1
-
-	bombEntity = wrld.bomb_at(nearest_bomb[0], nearest_bomb[1])
-
-	exit = findAll(wrld, 1)
-
-	closest_exit = findNearestEntity(wrld, pos, exit)
-
-	char_dist_to_exit = float(perform_a_star(wrld, pos, closest_exit)) + 1
-	monster_dist_to_exit = float(perform_a_star(wrld, (nearest_monster[0], nearest_monster[1]), closest_exit)) + 1
-
-	if char_dist_to_monster < bomb_dist_to_monster:
-		if char_dist_to_exit < monster_dist_to_exit:
-			return 0
-
-		return (1 / float(char_dist_to_monster)) ** 2
-
-	return 0
-
 
 def huggingWall(wrld, character):
 	surrounds = [(1,1),(1,-1),(-1,1),(1,0),(-1,0),(0,1),(0,-1),(-1,-1)]
@@ -521,6 +467,7 @@ def huggingWall(wrld, character):
 			return 1
 
 	return 0
+
 
 def stuckInCorner(wrld, character):
 	atCorner = False

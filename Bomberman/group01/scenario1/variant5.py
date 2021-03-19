@@ -23,8 +23,14 @@ weights = [84.97696334172039, -0.08781776652353387, -14.86882125034955, -2.81699
 qlearner = QLearner(weights, features)
 prev_wrld = None
 
+<<<<<<< HEAD
+N = 10
+numOfWins = 0
+seeds = []
+=======
 # Create the game
 g = Game.fromfile('map.txt')
+>>>>>>> 1ad278247197cb109a712c3905c8c99984f1819d
 
 # TODO Add your character
 
