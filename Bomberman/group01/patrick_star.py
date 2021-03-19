@@ -62,7 +62,7 @@ def _aStar(wrld, x, y, destination):
 			if x1 < 0 or x1 >= wrld.width() or y1 < 0 or y1 >= wrld.height(): # out of bounds
 				continue
 				
-			if wrld.wall_at(x1, y1) or wrld.explosion_at(x1, y1) or wrld.bomb_at(x1, y1): # wall or monster(s)
+			if wrld.wall_at(x1, y1) or wrld.explosion_at(x1, y1): # wall or monster(s)
 				continue
 
 			distStartToCur = sqrt((x1-x)**2 + (y1-y)**2)        # calculate the cost it took to get here from starting node

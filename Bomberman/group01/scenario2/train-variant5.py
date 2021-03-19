@@ -20,11 +20,11 @@ from features import *
 
 # features = [distanceToMonster, distanceToWall, distanceToBomb, inMonsterRange]
 
-features = [distanceToStupidMonster, inBombExplosionRange, monsterToNearestWall, anyDroppedBombs]
+features = [distanceToStupidMonster, diagonalOfBomb, monsterToNearestWall]
 # features = [distanceToStupidMonster, inBombExplosionRange, monsterToNearestWall, anyDroppedBombs]
 # weights = [-8.903161609374699, -22.003626294921453, -13.833462417203572, -3.5812684740503853]
 
-weights = [-15.415840254778718, -30.06852607752073, -2.8751923170201623, 6.995701069382757]
+weights = [-439.56405095613394, -81.88835388811911, 33.243918944294634]
 qlearner = QLearner(weights, features)
 prev_wrld = None
 N = 10
