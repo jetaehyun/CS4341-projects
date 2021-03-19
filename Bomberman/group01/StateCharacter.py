@@ -26,122 +26,92 @@ class StateCharacter(CharacterEntity):
 		self.epsilon = 1 / (self.iteration + 1) ** 0.5
 		self.prev_wrld = None
 		self.best_wrld = None
-		self.count = 0
 		self.iterations = 0
-		self.pastMoves = []
 		self.qLearning = False
 		self.bomb = False
+  
+		self.state = "go"
+		self.dxdy = (-1, -1)
+		self.bomb_locations = [(7, 2, True), (7, 2, True), (7, 3, True), (7, 10, True), (4, 9, False), (7, 12, True), (7, 18, False)]
+		self.location_index = 0
 
 
 	def do(self, wrld):
-		
-		if self.safeCondition(wrld):
-			self.qLearning = True
-			if foundBomb(wrld):
-				x, y = bomb_handler(wrld, (self.x, self.y), (0, 0))
-
-				self.move(x, y)
-
-			elif explosion_occurring(wrld) is True:
-				x, y = explosion_handler(wrld, (1, -1))
-
-				if explosion_will_occur(wrld, (self.x,self.y)) is True:
-					self.move(0,0)
      
-				else:
-					self.move(x,y)
-     
-			elif wallInPath(wrld, (self.x, self.y), (0, 1)):
+		monsters = findAll(wrld, 2)
+		distance = 0
+		nearest_monster = "nothing"
+  
+		if len(monsters) > 0:
+			monster = findNearestEntity(wrld, (self.x,self.y), monsters)
+			distance = len(perform_aStar(wrld, (self.x,self.y), (monster[0], monster[1]), True))
+			nearest_monster = wrld.monsters_at(monster[0], monster[1])[0]
+   
+			# print(distance)
+			if distance <= 2 and distance > 0 and nearest_monster.name != "aggressive":
+				self.state = "qlearn"
+   
+   
+		# print(self.state)
+		if self.state == "bomb":
+			if self.bomb_locations[self.location_index - 1][2] is True:
 				self.place_bomb()
-				x = random.choice([-1, 1])
-				self.move(x, 1)
+				self.state = "dodge"
 
-			elif allMonstersDead(wrld) or safePathToExitWithMonster(wrld, (self.x, self.y)):
-				self.a_star(wrld)
+			elif wrld.monsters_at(7, 8) or len(monsters) == 0:
+				self.location_index = len(self.bomb_locations) - 1       
+				self.state = "go"
 
-			elif monsterPastCharacter(wrld, (self.x, self.y)) is True:
-				goTo = perform_aStar(wrld, (self.x, self.y), lastWall(wrld, (self.x, self.y)), False)
-				self.move(goTo[0], goTo[1])
+
+		elif self.state == "dodge":
+			x, y = self.x, self.y
+
+			if self.location_index <= len(self.bomb_locations):
+				if self.bomb_locations[self.location_index - 1][2] is False:
+					#self.location_index = 5
+					self.state = "go"
+					return 
+
+			if can_move(wrld, (x,y), self.dxdy) is True:
+				self.move(self.dxdy[0], self.dxdy[1])
     
 			else:
-				self.move(0, 1)
+				if self.location_index - 1 == 5:
+					self.move(-1, 1)
+				else:
+					self.move(1, -1)
 
+			self.state = "wait"
+    
+		elif self.state == "go":
+			goal = self.bomb_locations[self.location_index]
+			goal = (goal[0], goal[1])
+			self.a_star(wrld, goal)
+   
+			if goal[0] == self.x and goal[1] == self.y:
+				self.state = "bomb"
+				self.location_index += 1
+	
+		elif self.state == "wait":
+    
+			if foundBomb(wrld) is not True:
+				if foundExplosion(wrld) is not True:
+					self.state = "go"
+			else:
+				self.move(0,0)
 		else:
+			if (distance >= 2 or distance == 0) and self.qLearning is True:
+				if self.location_index != 0:
+					self.location_index -= 1
+     
+				self.state = "go"
+				self.qLearning = False
+				return
+
 			self.qLearning = True
 			self.perform_qLearning(wrld)
-			'''
-			if characterInWallRow(wrld, (self.x, self.y)):
-				self.place_bomb()
-				# directions = [(1,1),(1,-1),(-1,1),(-1,-1)]
-				# for i in directions:
-				# 	if can_move(wrld, (self.x,self.y), i) and wrld.wall_at(self.x+i[0],self.y+i[1]) is None:
-				# 		self.move(i[0], i[1])
-				if can_move(wrld, (self.x, self.y), (1,1)) is True:
-					self.move(1,1)
-				elif can_move(wrld, (self.x,self.y), (-1,1)) is True:
-					self.move(-1,1)
-				# self.move(0, -1)
-
-			else:
-				self.qLearning = True
-				self.perform_qLearning(wrld)
-			'''
-
-
-	def safeCondition(self, wrld):
-		result = allMonstersTrapped(wrld)
-
-		monsters = findAll(wrld, 2)
-
-		if len(monsters) == 0:
-			return True 
-
-		pos = (self.x, self.y)
-
-		nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
-
-		distance = float(perform_a_star(wrld, pos, nearest_monster_tuple)) + 1
-
-
-		if distance >= 15:
-			return True
-
-		return False
-		'''
-		if distance > 20 and result is False:
-			return True
-
-		if result is False:
-      
-			if monsterPastCharacter(wrld, (self.x, self.y)):
-				return True
-			
-			monsters = findAll(wrld, 2)
-			pos = (self.x, self.y)
-
-			nearest_monster_tuple = findNearestEntity(wrld, pos, monsters)
-
-			distance = len(perform_aStar(wrld, pos, nearest_monster_tuple, True))
-	
-			if distance == 0:
-				return True
-   
-			nearest_monster = wrld.monsters_at(nearest_monster_tuple[0], nearest_monster_tuple[1])[0]
-
-			if nearest_monster.name != "aggressive":
-				if distance > 2:
-					return True
-
-			else:
-				if distance >= 6:
-					return True
-
-			return False 
-
-		return True
-		'''
-
-
+    
+    
 	def perform_qLearning(self, wrld):
 		self.prev_wrld = SensedWorld.from_world(wrld)
 
@@ -193,7 +163,6 @@ class StateCharacter(CharacterEntity):
 			if place_bomb is True:
 				self.place_bomb()
 
-
 	def updateCharacterWeights(self, wrld, win, lose):
 		reward = 0
 
@@ -219,11 +188,16 @@ class StateCharacter(CharacterEntity):
 	#
 	# @Returns None
 	# --------------------------------------------------------------------------  	
-	def a_star(self, wrld):
-		search = perform_aStar(wrld, (self.x, self.y), self.get_exit_location(wrld), False)
+	def a_star(self, wrld, dest=None):
+
+		dest = dest if dest is not None else self.get_exit_location(wrld)
+		search = perform_aStar(wrld, (self.x, self.y), dest, False)
 
 		if len(search) == 0:
 			self.move(0, 1)
+			if self.location_index != 0:
+				self.location_index -= 1
+			self.state = "go"
 			return
 
 		self.move(search[0], search[1])

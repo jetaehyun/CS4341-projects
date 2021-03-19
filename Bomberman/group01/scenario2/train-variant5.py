@@ -16,12 +16,15 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from StateCharacter import StateCharacter
-from StateCharacter4 import StateCharacter4
 from features import *
 
-features = [monsterInLineOfSight, stuckInCorner, monsterPastWall,inBombExplosionRange, bombTimer, distanceToSmartMonster]
+# features = [distanceToMonster, distanceToWall, distanceToBomb, inMonsterRange]
 
-weights = [1.4831881831911438, 0.8931840360913579, 0.6964219975329767, -50.60325121251399, 0.6892064736831113, 0.2416027170828847]
+features = [distanceToStupidMonster, inBombExplosionRange, monsterToNearestWall, anyDroppedBombs]
+# features = [distanceToStupidMonster, inBombExplosionRange, monsterToNearestWall, anyDroppedBombs]
+# weights = [-8.903161609374699, -22.003626294921453, -13.833462417203572, -3.5812684740503853]
+
+weights = [-15.415840254778718, -30.06852607752073, -2.8751923170201623, 6.995701069382757]
 qlearner = QLearner(weights, features)
 prev_wrld = None
 N = 10
@@ -52,7 +55,7 @@ for i in range(0, N):
     	                                2             # detection range
 	))
 
-	q_character = StateCharacter4("me", # name
+	q_character = StateCharacter("me", # name
                                "C",  # avatar
                                0, 0,  # position
                                qlearner,

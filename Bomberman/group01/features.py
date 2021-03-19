@@ -171,8 +171,8 @@ def distanceToStupidMonster(wrld, character):
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
 
 	if monstersEntity.name == "stupid":
-		if distance <= 1:
-			return ((2 - distance) / 2)
+		if distance <= 4:
+			return ((5 - distance) / 5)
 
 	return 0   
 
@@ -314,7 +314,7 @@ def distanceToWall(wrld, character):
 	for i in walls:
 		xPos, yPos = i[0], i[1]
   
-		if character.y - yPos < 0:
+		if character.y - yPos > 0:
 			walls.remove(i)
  
 	pos = (character.x, character.y)
