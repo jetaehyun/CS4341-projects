@@ -12,16 +12,9 @@ from sensed_world import SensedWorld
 sys.path.insert(1, '../group01')
 
 # Uncomment this if you want the empty test character
-from QLearner import QLearner
-from QCharacter import QCharacter
-from features import *
+from StateCharacter1 import StateCharacter1
 
-features = [distanceToExit, distanceToBomb, inBombExplosionRange, anyDroppedBombs]
 
-weights = [114.69554463857256, -2.861841880284248,  -6.044985197169929, 8.175889714036572]
-
-qlearner = QLearner(weights, features)
-prev_wrld = None
 numOfWins = 0
 for i in range(0, 10):
 	print('Iteration #', i)
@@ -31,17 +24,13 @@ for i in range(0, 10):
 
 	# TODO Add your character
 
-
-
-	q_character = QCharacter("me", # name
-                               "C",  # avatar
-                               0, 0,  # position
-                               qlearner,
-							   False,
-                               i)
+	state_character = StateCharacter1("me", # name
+                              "C",  # avatar
+                              0, 0,
+                  		)
 
 	#Uncomment this if you want the interactive character
-	g.add_character(q_character)
+	g.add_character(state_character)
 
 	g.go(1)
 	print(g.world.scores["me"])

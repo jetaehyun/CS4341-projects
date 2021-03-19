@@ -14,7 +14,7 @@ from stateHelpers import *
 from patrick_star import _aStar, perform_aStar
 
 
-class StateCharacter4(CharacterEntity):
+class StateCharacter1(CharacterEntity):
 
 	def __init__(self, name, avatar, x, y):
 		CharacterEntity.__init__(self, name, avatar, x, y)
@@ -22,7 +22,7 @@ class StateCharacter4(CharacterEntity):
 		self.state = "go"
 		self.hasMoved = False
 		self.dxdy = (-1, -1)
-		self.bomb_locations = [(0, 2, True), (7, 2, True), (7, 6, True), (7, 10, True), (4, 9, False), (7, 12, True), (7, 18, False)]
+		self.bomb_locations = [(7, 2, True), (7, 6, True), (7, 10, True), (7, 12, True), (7, 18, False)]
 		self.location_index = 0
 
 
@@ -51,7 +51,7 @@ class StateCharacter4(CharacterEntity):
 			if can_move(wrld, (x,y), self.dxdy) is True:
 				self.move(self.dxdy[0], self.dxdy[1])
 			else:
-				if self.location_index - 1 == 5:
+				if self.location_index - 1 == 3:
 					self.move(-1, 1)
 				else:
 					self.move(1, -1)
