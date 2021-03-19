@@ -25,12 +25,12 @@ weights = [136.05318909614874, -29.74172315089922, -3.3317683532687012, 4.451782
 
 
 qlearner = QLearner(weights, features)
-N = 20
+N = 10
 numOfWins = 0
 
 for i in range(0, N):
 	print('Iteration #', i)
-	random.seed(random.randint(0, 100))
+	random.seed(random.randint(0, 1000))
 
 	# Create the game
 	g = Game.fromfile('map.txt')

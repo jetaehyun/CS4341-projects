@@ -14,7 +14,7 @@ sys.path.insert(1, '../group01')
 # Uncomment this if you want the empty test character
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features import *
+from features1 import *
 
 #features = [distanceToExit, distanceToBomb, distanceToMonster, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs]
 features = [distanceToExit, distanceToBomb, distanceToMonster, inBombExplosionRange, anyDroppedBombs]

@@ -140,18 +140,14 @@ def distanceToSmartMonster(wrld, character):
 
 	
 	distance = float(perform_a_star(wrld, pos, nearest_monster))
-	path = len(perform_aStar(wrld, pos, nearest_monster, True))
- 
-	if path == 0:
-		return 0
 
 	if monstersEntity.name == "selfpreserving":
 		if distance <= 2:
 			return ((3 - distance) / 3)
 
 	elif monstersEntity.name == "aggressive":
-		if distance <= 6:
-			return ((7 - distance) / 7)
+		if distance <= 3:
+			return ((4 - distance) / 4)
 
 	return 0
 
@@ -207,6 +203,19 @@ def __inWorld(wrld, dx, dy):
 
 	return True 
 
+def inRadiusOrig(wrld, character):
+	radius = [-2, -1, 0, 1, 2]
+
+	for i in range(len(radius)):
+		for j in range(len(radius)):
+			dx = character.x + radius[i]
+			dy = character.y + radius[j]
+
+			if __inWorld(wrld, dx, dy) is True:
+				if wrld.monsters_at(dx, dy):
+					return 1
+
+	return 0
 
 def inRadius(wrld, character):
 	radius = [i for i in range(-8, 9, 1)]
@@ -279,10 +288,6 @@ def monsterToNearestWall(wrld, character):
  
 	distance = float(perform_a_star(wrld, pos, nearest_wall))
  
-	# check = len(perform_aStar(wrld, pos, nearest_wall, True))
- 
-	# if check == 0:
-	# 	return 0
 	return (1 / (distance + 1)) ** 2
 
 

@@ -102,12 +102,12 @@ class Game:
                 pygame.time.wait(abs(wait))
 
         #colorama.init(autoreset=True)
-        self.display_gui()
+        #self.display_gui()
         #self.draw()
         step()
         while not self.done():
             (self.world, self.events) = self.world.next()
-            self.display_gui()
+            #self.display_gui()
             #self.draw()
             step()
             self.world.next_decisions()

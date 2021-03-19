@@ -24,7 +24,7 @@ weights = [139.78076720937227, 1.4224294781714875, -8.095538475997134, -42.51085
 
 
 qlearner = QLearner(weights, features)
-N = 20
+N = 10
 numOfWins = 0
 
 for i in range(0, N):
