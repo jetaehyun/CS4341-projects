@@ -12,11 +12,11 @@ from QLearner import QLearner
 from StateCharacter import StateCharacter
 from features import *
 # TODO This is your code!
-sys.path.insert(1, '../groupNN')
-
 features = [distanceToStupidMonster, diagonalOfBomb, monsterToNearestWall]
 weights = [-439.56405095613394, -81.88835388811911, 33.243918944294634]
 qlearner = QLearner(weights, features)
+
+
 # Create the game
 # TODO Change this if you want different random choices
 g = Game.fromfile('map.txt')

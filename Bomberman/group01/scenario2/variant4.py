@@ -15,6 +15,7 @@ from features import *
 
 # Create the game
 g = Game.fromfile('map.txt')
+
 g.add_monster(SelfPreservingMonster("aggressive", # name
                                     "A",          # avatar
                                     3, 13,        # position
