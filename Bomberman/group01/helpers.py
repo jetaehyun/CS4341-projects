@@ -21,7 +21,7 @@ def findNearestEntity(wrld, pos, entities):
 		if _heuristic((x,y), entity) < _heuristic((x,y), nearest_entity):
 			nearest_entity = entity
 
-	return entity
+	return nearest_entity
 
 
 def findAll(wrld, entityFlag):

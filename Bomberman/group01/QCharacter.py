@@ -83,7 +83,6 @@ class QCharacter(CharacterEntity):
 			maxQ, best_action, best_wrld = self.q_learner.getBestMove(wrld, self)
 
 			x, y, place_bomb = best_action
-
 			if self.iterations == 20:
 				self.pastMoves = []
 				self.count = 0

@@ -14,7 +14,7 @@ from sensed_world import SensedWorld
 sys.path.insert(1, '../group01')
 from QLearner import QLearner
 from QCharacter import QCharacter
-from features import *
+from features1 import *
 
 features = [distanceToExit, distanceToBomb, distanceToSmartMonster, inBombExplosionRange, anyDroppedBombs,
             monsterFromExit, inRadius, monsterToBomb, monsterToNearestWall]
@@ -23,7 +23,7 @@ weights = [84.97696334172039, -0.08781776652353387, -14.86882125034955, -2.81699
 qlearner = QLearner(weights, features)
 prev_wrld = None
 
-N = 10
+N = 50
 numOfWins = 0
 seeds = []
 
